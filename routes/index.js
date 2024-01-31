@@ -16,5 +16,9 @@ router.get('/customer',function(req,res,next){
   res.render('customer',{ title: 'Sign In' })
 })
 
+/* Customer detail. */
+router.get('/customer-detail',function(req,res,next){
+  res.render('customer-detail',{ title: 'Sign In' })
+})
 
 module.exports = router;
