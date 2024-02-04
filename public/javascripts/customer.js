@@ -27,3 +27,8 @@ $('#update-customer').on('click',function (e) {
     $('#customer-display-button').text('Update')
     customerModel.modal('toggle')
 })
+
+$('#creaet-product').on('click',function(e){
+    e.preventDefault()
+    window.location = '/product'
+})
