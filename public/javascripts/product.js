@@ -34,7 +34,7 @@ $("#add-material").on("click",function(event){
 
 function removeMaterial(materialDataId) {
     if($('#material').find('tr').length == 1){
-        console.log(':::::::::::::::::::::::::')
+        console.log('Cannot Remove Last Row')
         return
     }
     playSound(false)
