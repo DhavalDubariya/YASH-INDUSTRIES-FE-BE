@@ -1,6 +1,7 @@
 // var constant = require("../helpers/consts");
 //Change Log
 var fs = require("fs");
+const { db } = require("../model/user");
 //Crete Access token
 async function makeid(length) {
   var result = "";
@@ -142,6 +143,16 @@ const objValidator = async (array) => {
   return result;
 };
 
+const HistoryGenerator = async(ModuleName,moduleId) => {
+  var getHistory = await ModuleName.findOne({_id:moduleId})
+  if(getHistory != null){
+    getHistory = getHistory.toObject()
+    getHistory["history_id"] = getHistory._id
+    delete getHistory["_id"]
+    await ModuleName.create(getHistory)
+  }
+  return {status:true}
+}
 
 module.exports = {
   makeid: makeid,
@@ -149,7 +160,7 @@ module.exports = {
   formatDateTimeLib: formatDateTimeLib,
   generateOTP: generateOTP,
   expiryTime: expiryTime,
-  
+  HistoryGenerator:HistoryGenerator,
   downloadImage: downloadImage,
   expiryTimeInMin: expiryTimeInMin,
   getExpireTimeStamp: getExpireTimeStamp,

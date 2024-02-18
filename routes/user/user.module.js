@@ -7,10 +7,11 @@ const loginModule = async(req) => {
     var password = req.body.password
     
     var chackLogin = await db.User.findOne({ email,password})
-    if(chackLogin.length == 0){
+    console.log(chackLogin)
+    if(chackLogin == null){
         return {
             status:false,
-            errro:"Invalid Email or Password"
+            error:"Invalid Email or Password"
         }
     }
     chackLogin = chackLogin.toObject()
@@ -24,7 +25,7 @@ const loginModule = async(req) => {
         expireTime:currentDate.setDate(currentDate.getDate() + 1),
         flag_log_out:false
     })
-
+    console.log(chackLogin)
     delete chackLogin["password"]
     // console.log('chackLogin[0]["password"]', chackLogin["password"])
     chackLogin["accee_token"] = token

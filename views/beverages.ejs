@@ -30,6 +30,30 @@
     <link href="assets/css/user.min.css" type="text/css" rel="stylesheet" id="user-style-default">
     <link href="vendors/choices/choices.min.css" rel="stylesheet">
     <link href="vendors/flatpickr/flatpickr.min.css" rel="stylesheet">
+    <style>
+      #loder-body {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.5);;
+        z-index: 9999;
+        display: none;
+      }
+
+      .spinner-border {
+        width: 3rem;
+        height: 3rem;
+        position: absolute;
+        top: 50%;
+        left: 45%;
+      }
+
+      body.blur {
+        filter: blur(5px);
+      }
+    </style>
     <script>
       var phoenixIsRTL = window.config.config.phoenixIsRTL;
       if (phoenixIsRTL) {
@@ -48,7 +72,6 @@
     <link href="vendors/leaflet/leaflet.css" rel="stylesheet">
     <link href="vendors/leaflet.markercluster/MarkerCluster.css" rel="stylesheet">
     <link href="vendors/leaflet.markercluster/MarkerCluster.Default.css" rel="stylesheet">
-
 
     <!-- ===============================================-->
     <!--    JavaScripts-->

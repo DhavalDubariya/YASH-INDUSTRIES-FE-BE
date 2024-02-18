@@ -3,7 +3,15 @@ const userModule = require("./user.module");
 const loginController = async (req, res) => {
   try{
     const result = await userModule.loginModule(req);
-    return res.send(result);
+    if (result.status == true) {
+      res.setHeader(
+        "Set-Cookie",
+        `yi-ssid=${result.data.accee_token}; Domain=localhost;Secure;Path=/;HttpOnly;SameSite=None;`
+      );
+      return res.send(result);
+    } else {
+      return res.send(result);
+    }
   }catch(e){
     console.log(e)
     return res.send({
