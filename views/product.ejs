@@ -90,20 +90,37 @@
                                   
                               </div>
                               <div class="mb-4" >
+                                <div class="row" >
+                                  <div class="col-6" >
+                                    <label class="text-body-highlight fw-bold mb-2" for="product_quantity">Product Quantity (Gm)</label>
+                                    <input class="form-control" type="text" name="product_quantity" id="product_quantity" placeholder="Enter product quantity"
+                                      required />
+                                    <div class="valid-feedback">Looks good!</div>
+                                    <div class="invalid-feedback">Please provide valid quantity.</div>
+                                  </div>
+                                  <div class="col-6" >
+                                    <label class="text-body-highlight fw-bold mb-2" for="runner">Runner (Gm)</label>
+                                    <input class="form-control" type="text" name="runner" id="runner" placeholder="Enter product runner"
+                                      required />
+                                    <div class="valid-feedback">Looks good!</div>
+                                    <div class="invalid-feedback">Please provide valid quantity.</div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="mb-4" >
                                 <label class="text-body-highlight fw-bold mb-2" for="product_name">Material</label>        
                                 <table class="table table-bordered">
                                   <thead>
                                     <tr>
                                       <th style="width:32%;" scope="col">Name</th>
                                       <th style="width:32%;" scope="col">Color</th>
-                                      <th style="width:32%;" scope="col">Quantity</th>
+                                      <th style="width:32%;" scope="col">Quantity (Kg)</th>
                                       <th style="width:4%; padding: 0.325rem !important; cursor: pointer; " id="add-material" scope="col">
                                         <span class="text-success" data-feather="plus-circle" style="height: 18px; width: 18px;"></span>
                                       </th>
                                     </tr>
                                   </thead>
                                   <tbody id="material" >
-                                    
                                     <tr style="padding: 0px !important;" material-data-id="1">
                                       <td style="padding: 0px !important;">
                                         <input style="border-radius: 0px !important;" class="form-control" type="text" name="material_name" id="material_name" placeholder="Name"
@@ -127,7 +144,6 @@
                                         </div>
                                       </td>
                                     </tr>
-                                    
                                   </tbody>
                                 </table>
                               </div>

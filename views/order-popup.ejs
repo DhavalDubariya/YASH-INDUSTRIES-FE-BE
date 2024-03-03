@@ -1,0 +1,29 @@
+<div class="modal fade" id="order-popup" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="orderModel" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content bg-body-highlight p-6">
+      <div class="modal-header border-0 p-0 mb-2">
+        <h3 id="order-display-name" class="mb-0">Create Order</h3><button class="btn btn-sm btn-phoenix-secondary" data-bs-dismiss="modal"
+          aria-label="Close"><span class="fas fa-times text-danger"></span></button>
+      </div>
+      <form class="row g-3 needs-validation" novalidate="" id="order-popup-form" >
+        <input class="form-control" type="text" name="order_id" id="order_id" hidden>
+        <div class="modal-body px-0">
+          <div class="row g-4">
+            
+              <div class="mb-4 col-lg-6">
+                <label class="text-body-highlight fw-bold mb-2" for="order_name">Order Id</label>
+                <input class="form-control" type="text" name="order_name" id="order_name" placeholder="Enter order Name"
+                  required />
+                <div class="valid-feedback">Looks good!</div>
+                <div class="invalid-feedback">Please provide order name.</div>
+              </div>
+            <div class="modal-footer border-0 px-0 pb-0">
+                <button class="btn btn-link text-danger px-3 my-0" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                <button class="btn btn-primary my-0" id="order-display-button" >Create</button></div>
+          </div>
+        </div>
+      </form>
+    </div>
+</div>
+</div>

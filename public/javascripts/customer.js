@@ -4,7 +4,6 @@ $(document).ready(function() {
         var customerPopup = $('#customer-popup')
         var validateForm = customerPopup[0].checkValidity()
         if(validateForm == false){
-            
             return
         }
         var searchParams = new URLSearchParams(window.location.search);
@@ -68,6 +67,7 @@ $(document).ready(function() {
         }
     });
     // showLoader()
+    if(window.location.href.includes('customer-detail') == false){
     $.ajax({
         url: "api/customer/customer",
         type: "GET",
@@ -82,6 +82,7 @@ $(document).ready(function() {
             hideLoader()
         }
         });
+    }
 });
 
 $('#addDealModal [data-bs-dismiss="modal"]').on('click',function (e) {
@@ -105,7 +106,8 @@ $('#update-customer').on('click',function (e) {
 
 $('#creaet-product').on('click',function(e){
     e.preventDefault()
-    window.location = '/product'
+    var customerId = $('#customer-id').val()
+    window.location = `/product?customerId=${customerId}`
 })
 
 function setCustomerDetail(customer) {

@@ -34,4 +34,5 @@ function setCustomer(customerDetail) {
     $("#customer-phonenumber").attr('href',`tel:+91${customerDetail.phone_number}`)
     $("#customer-address").text(customerDetail.address)
     $("#customer-city").text(customerDetail.city)
+    $('#customer-id').val(customerDetail._id)
 }
