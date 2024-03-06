@@ -22,7 +22,6 @@ $(document).ready(async function() {
         
     }
     });
-    setCustomer(customerDetail)
 })
 
 $("#add-material").on("click",function(event){
@@ -138,8 +137,9 @@ $('#customer-product').on('click',function(e){
             i = i + 2
         }
     }
+    var searchParams = new URLSearchParams(window.location.search);
     var customerId = Array.from(searchParams).filter( x => x[0] == "customerId")[0][1]
     forMateForm["customer_id"] = customerId
     forMateForm["material"] = materialArray
-    
+    console.log(forMateForm)
 })
