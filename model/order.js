@@ -17,6 +17,7 @@ const orderSchema = new mongoose.Schema({
       type: String,
       required: false
     },
+    customer_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer',required:true },
     approved_by: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     history_id:  { type: String, default: null },
     flag_deleted: { type: Boolean, default: false },
@@ -25,5 +26,5 @@ const orderSchema = new mongoose.Schema({
   });
   
   // Create and export Order model
-  const Order = mongoose.model('Order', orderSchema);
-  module.exports = Order;
+  module.exports = mongoose.model('Order', orderSchema);
+  
