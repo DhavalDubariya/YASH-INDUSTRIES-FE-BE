@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-
-const orderSchema = new mongoose.Schema({
+var Schema = mongoose.Schema;
+const orderSchema = new Schema({
     order_no: {
       type: Number,
       required: true
@@ -26,5 +26,6 @@ const orderSchema = new mongoose.Schema({
   });
   
   // Create and export Order model
-  module.exports = mongoose.model('Order', orderSchema);
+  const CustomerOrder =  mongoose.model('CustomerOrder', orderSchema);
+  module.exports = CustomerOrder
   

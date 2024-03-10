@@ -4,7 +4,7 @@ const Customer = require('./customer')
 const ChangeLog = require('./changelog')
 const Material = require('./material')
 const Product = require('./product')
-const Order = require('./order')
+const Order  = require('./CustomerOrder')
 
 module.exports = {
     User:User,

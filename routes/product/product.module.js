@@ -35,6 +35,18 @@ const createproductModule = async(req) => {
     var runner = req.body.runner
     var customerId = req.body.customer_id
 
+    var orderNo = req.body.order_no // It's Not Provide By Front End
+    var orderName = req.body.order_name
+    var deliveryDate = req.body.delivery_date
+    var driverName = req.body.driver_name
+    // console.log(req.body);
+    var requireField = [orderNo, orderName]
+    var validate = await libFunction.objValidator(requireField)
+
+    if (validate == false) {
+        return errorMessage("Invalid Params for Order")
+    }
+
     // material array
     var materialArray = req.body.material
 
@@ -53,24 +65,6 @@ const createproductModule = async(req) => {
     
     var changeLogId = await db.ChangeLog.create({ user_id: userId })
     
-    // Order Creation
-    // order id => product id
-    // product id => material
-    // null => error
-
-    // Order Obj Data
-    var orderNo = req.body.order_no
-    var orderName = req.body.order_name
-    var deliveryDate = req.body.delivery_date
-    var driverName = req.body.driver_name
-    // console.log(req.body);
-    var requireField = [orderNo, orderName]
-    var validate = await libFunction.objValidator(requireField)
-
-    if (validate == false) {
-        return errorMessage("Invalid Params for Order")
-    }
-
     // order object
     var orderObj = {
         order_no: orderNo,
@@ -78,7 +72,7 @@ const createproductModule = async(req) => {
         delivery_date: deliveryDate,
         driver_name: driverName,
         customer_id:customerId,
-        change_log_id:changeLogId
+        change_log_id:changeLogId._id
     }
     var createOrder = await db.Order.create(orderObj)
 
@@ -103,8 +97,8 @@ const createproductModule = async(req) => {
         product_name:productName.trim() == "" || undefined ? null : productName.trim(),
         product_qty:productQuantity == "" || undefined ? null : productQuantity,
         runner: runner == "" || undefined ? null : runner,
-        order_id: orderId.trim() == "" || undefined ? null : orderId.trim(),
-        change_log_id:changeLogId.id.trim() = "" || undefined ? null : changeLogId.trim()
+        order_id: orderId == "" || undefined ? null : orderId,
+        change_log_id:changeLogId.id = "" || undefined ? null : changeLogId
     }
     
     var createProduct = await db.Product.create(productObj)
