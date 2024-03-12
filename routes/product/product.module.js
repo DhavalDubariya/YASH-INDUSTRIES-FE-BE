@@ -35,13 +35,29 @@ const createproductModule = async(req) => {
     var runner = req.body.runner
     var customerId = req.body.customer_id
 
-    var orderNo = req.body.order_no // It's Not Provide By Front End
+    var changeLogId = (await db.ChangeLog.create({ user_id: userId }))._id
+    changeLogId = changeLogId.toObject()
+
+    if (changeLogId === null) {
+        return {
+            status: false,
+            message:"changeLogId is not created"
+        }
+    }
+    console.log("-------------- ChangeLogId -------------", changeLogId);
+
+    var orderNo = await db.Order.aggregate([
+        { $group: { _id: null, maxOrderNo: { $max: "$order_no" } } }
+      ]);
+      
+    var newOrderNo = orderNo.length > 0 ? orderNo[0].maxOrderNo + 1 : 1;
+
     var orderName = req.body.order_name
     var deliveryDate = req.body.delivery_date
     var driverName = req.body.driver_name
-    // console.log(req.body);
-    var requireField = [orderNo, orderName]
-    var validate = await libFunction.objValidator(requireField)
+    
+    var requireFieldOrder = [newOrderNo, orderName, userId,changeLogId._id]
+    var validate = await libFunction.objValidator(requireFieldOrder)
 
     if (validate == false) {
         return errorMessage("Invalid Params for Order")
@@ -55,27 +71,25 @@ const createproductModule = async(req) => {
         var materialColor = material.material_color
         var materialQty = material.material_qty
 
-        var requireField = [materialName, materialColor, materialQty]
-        var validate = await libFunction.objValidator(requireField)
+        var requireFieldMaterial = [materialName, materialColor, materialQty]
+        var validate = await libFunction.objValidator(requireFieldMaterial)
 
         if (validate == false) {
             return errorMessage("Invalid Params for Material")
         }
     })
-    
-    var changeLogId = await db.ChangeLog.create({ user_id: userId })
-    
+    console.log(changeLogId);
+    console.log(changeLogId._id);
     // order object
     var orderObj = {
-        order_no: orderNo,
+        order_no: newOrderNo,
         order_name: orderName,
         delivery_date: deliveryDate,
         driver_name: driverName,
-        customer_id:customerId,
+        customer_id: customerId,
         change_log_id:changeLogId._id
     }
     var createOrder = await db.Order.create(orderObj)
-
     if (createOrder == null) {
         return {
             status: false,
@@ -86,8 +100,8 @@ const createproductModule = async(req) => {
     var orderId = createOrder._id // OrderId fetch from order
 
 
-    var requireField = [productName, productQuantity, runner, orderId, changeLogId]
-    var validate = await libFunction.objValidator(requireField)
+    var requireFieldProduct = [productName, productQuantity, runner, orderId]
+    var validate = await libFunction.objValidator(requireFieldProduct)
 
     if (validate == false) {
         return errorMessage("Invalid Params for Product")
