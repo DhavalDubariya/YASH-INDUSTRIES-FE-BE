@@ -35,16 +35,7 @@ const createproductModule = async(req) => {
     var runner = req.body.runner
     var customerId = req.body.customer_id
 
-    var changeLogId = (await db.ChangeLog.create({ user_id: userId }))._id
-    changeLogId = changeLogId.toObject()
-
-    if (changeLogId === null) {
-        return {
-            status: false,
-            message:"changeLogId is not created"
-        }
-    }
-    console.log("-------------- ChangeLogId -------------", changeLogId);
+    var changeLogId = (await db.ChangeLog.create({user_id:userId})).toObject()
 
     var orderNo = await db.Order.aggregate([
         { $group: { _id: null, maxOrderNo: { $max: "$order_no" } } }
@@ -78,8 +69,6 @@ const createproductModule = async(req) => {
             return errorMessage("Invalid Params for Material")
         }
     })
-    console.log(changeLogId);
-    console.log(changeLogId._id);
     // order object
     var orderObj = {
         order_no: newOrderNo,
@@ -132,7 +121,8 @@ const createproductModule = async(req) => {
             material_name: material.material_name,
             material_color: material.material_color,
             material_qty: material.material_qty,
-            product_id:productId
+            product_id:productId,
+            change_log_id: changeLogId._id,
         }
     
         var createMaterial = await db.Material.create(materialObj)

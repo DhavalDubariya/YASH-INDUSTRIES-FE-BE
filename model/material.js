@@ -22,5 +22,5 @@ const materialSchema = new mongoose.Schema({
 });
   
   // Create and export Order model
-  const Material = mongoose.model('Order', materialSchema);
+  const Material = mongoose.model('Material', materialSchema);
   module.exports = Material;
