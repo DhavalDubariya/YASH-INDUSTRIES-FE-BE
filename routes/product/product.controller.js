@@ -6,8 +6,20 @@ const createproductController = async (req, res) => {
   return res.send(result);
 };
 
+const getProductModuleList = async (req, res) => {
+  const result = await productModule.getProductList(req)
+  console.log(result);
+  return res.send(result);
+};
 
+const getProductModule = async (req, res) => {
+  const result = await productModule.getProductModule(req)
+  console.log(result);
+  return res.send(result);
+};
 
 module.exports = {
-  createproductController:createproductController,
+  createproductController: createproductController,
+  getProductModule: getProductModule,
+  getProductModuleList: getProductModuleList,
 }

@@ -148,9 +148,8 @@ const createproductModule = async(req) => {
     //         }
     //     ]
     // }
-
     var createdMaterial = await Promise.all(materialPromise)
-
+    console.log(createdMaterial);
     var responseObj = {
         product_name: createProduct.product_name,
         product_quantity: createProduct.product_qty,
@@ -166,6 +165,63 @@ const createproductModule = async(req) => {
 
 }
 
+const getProductList = async (req) => {
+    var customerId = req.query.customer_id
+    console.log(customerId);
+    if (!customerId) {
+        return {
+            status: false,
+            message:"Customer Id "
+        }
+    }
+    var orderObj = await db.Order.find({ history_id:null,flag_deleted:false})
+    console.log("Order ==== >>>>", orderObj);
+}
+
+const getProductModule = async (req) => {
+    var customerId = req.query.customer_id
+    console.log(customerId);
+    if (!customerId) {
+        return {
+            status: false,
+            message:"Customer Id not found"
+        }
+    }
+    var orderObj = await db.Order.findOne({ customer_id: customerId })
+    console.log("Order ==== >>>>", orderObj);
+    var productObj = await db.Product.findOne({ order_id: orderObj._id })
+    console.log("Product =======>>>>", productObj);
+    console.log("Product Id",productObj._id);
+    var materialObj = await db.Material.find({ product_id: productObj._id })
+    console.log("Material ===== >>>>>>", materialObj);
+
+    var materialPromise = materialObj.map(async (material) => {
+        var customMaterial = {
+            material_name: material.material_name,
+            material_color: material.material_color,
+            material_qty:material.material_qty
+        }
+
+        return customMaterial
+    })
+
+    var materials = await Promise.all(materialPromise)
+    console.log(materials);
+    
+    var obj = {
+        "product_name": productObj.product_name,
+        "product_quantity": productObj.product_qty,
+        "runner": productObj.runner,
+        "customer_id": customerId,
+        "material": materials
+    }
+
+    return obj;
+
+}
+
 module.exports = {
-    createproductModule:createproductModule
+    createproductModule: createproductModule,
+    getProductModule: getProductModule,
+    getProductList:getProductList
 }
