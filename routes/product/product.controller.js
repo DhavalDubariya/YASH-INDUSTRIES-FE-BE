@@ -18,8 +18,14 @@ const getProductModule = async (req, res) => {
   return res.send(result);
 };
 
+const addProductModule = async (req, res) => {
+  const result = await productModule.addProductModule(req)
+  console.log(result);
+}
+
 module.exports = {
   createproductController: createproductController,
   getProductModule: getProductModule,
   getProductModuleList: getProductModuleList,
+  addProductModule: addProductModule,
 }

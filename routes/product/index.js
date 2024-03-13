@@ -6,5 +6,6 @@ const middleware = require("../middleware");
 router.post("/product",middleware.checkAccessToken,productController.createproductController);
 router.get("/product",middleware.checkAccessToken,productController.getProductModuleList);
 router.get("/product-detail", middleware.checkAccessToken, productController.getProductModule);
+router.put("/product", middleware.checkAccessToken, productController.addProductModule);
 
 module.exports = router

@@ -135,19 +135,6 @@ const createproductModule = async(req) => {
         return createMaterial
     })
 
-    // var obj = {
-    //     "product_name": "Dhaval",
-    //     "product_quantity": "1",
-    //     "runner": "1",
-    //     "customer_id": "65d1d3473df68937116f7b2e",
-    //     "material": [
-    //         {
-    //             "material_name": "1",
-    //             "material_color": "1",
-    //             "material_qty": "1"
-    //         }
-    //     ]
-    // }
     var createdMaterial = await Promise.all(materialPromise)
     console.log(createdMaterial);
     var responseObj = {
@@ -175,7 +162,6 @@ const getProductList = async (req) => {
         }
     }
     var orderObj = await db.Order.find({ history_id:null,flag_deleted:false})
-    console.log("Order ==== >>>>", orderObj);
 }
 
 const getProductModule = async (req) => {
@@ -188,12 +174,8 @@ const getProductModule = async (req) => {
         }
     }
     var orderObj = await db.Order.findOne({ customer_id: customerId })
-    console.log("Order ==== >>>>", orderObj);
     var productObj = await db.Product.findOne({ order_id: orderObj._id })
-    console.log("Product =======>>>>", productObj);
-    console.log("Product Id",productObj._id);
     var materialObj = await db.Material.find({ product_id: productObj._id })
-    console.log("Material ===== >>>>>>", materialObj);
 
     var materialPromise = materialObj.map(async (material) => {
         var customMaterial = {
@@ -206,7 +188,6 @@ const getProductModule = async (req) => {
     })
 
     var materials = await Promise.all(materialPromise)
-    console.log(materials);
     
     var obj = {
         "product_name": productObj.product_name,
@@ -220,8 +201,100 @@ const getProductModule = async (req) => {
 
 }
 
+const addProductModule = async (req) => {
+    var orderId = req.query.order_id
+
+    var userId = req.user_id
+    var productName = req.body.product_name
+    var productQuantity = req.body.product_quantity
+    var runner = req.body.runner
+    var changeLogId = (await db.ChangeLog.create({user_id:userId})).toObject()
+
+    var requiredFieldProduct = [productName, productQuantity, runner, changeLogId,orderId]
+    var validate = await libFunction.objValidator(requiredFieldProduct)
+
+    if (!validate) {
+        return errorMessage("Invalid Params for Product")
+    }
+
+    var findProduct = await db.Product.find({ order_id: orderId })
+    
+    if (!findProduct) {
+        return errorMessage("Product Not Found")
+    }
+
+    var productObj = {
+        product_name: productName,
+        product_qty: productQuantity,
+        runner: runner,
+        order_id: orderId,
+        change_log_id: changeLogId,
+    }
+
+    var createProduct = await db.Product.create(productObj)
+
+    if (!createProduct) {
+        return errorMessage("Product is Not Created")
+    }
+
+    var productId = createProduct._id
+    var materialArray = req.body.material
+
+    materialArray.map(async (material) => {
+        
+        var materialName = material.material_name
+        var materialColor = material.material_color
+        var materialQty = material.material_qty
+
+        var requireFieldMaterial = [materialName, materialColor, materialQty]
+        var validate = await libFunction.objValidator(requireFieldMaterial)
+
+        if (validate == false) {
+            return errorMessage("Invalid Params for Material")
+        }
+    })
+
+    var materialPromise = materialArray.map(async (material) => {
+        var materialObj = {
+            material_name: material.material_name,
+            material_color: material.material_color,
+            material_qty: material.material_qty,
+            product_id:productId,
+            change_log_id: changeLogId._id,
+        }
+    
+        var createMaterial = await db.Material.create(materialObj)
+        if (createMaterial === null) {
+            return {
+                status: false,
+                error:"Error while creating material"
+            }
+        }
+        return createMaterial
+    })
+
+    var createdMaterial = await Promise.all(materialPromise)
+
+    var responseObj = {
+        product_name: createProduct.product_name,
+        product_quantity: createProduct.product_qty,
+        runner: createProduct.runner,
+        order_id:orderId,
+    }
+
+    responseObj.material = createdMaterial.map(material => ({
+        material_name: material.material_name,
+        material_color: material.material_color,
+        material_qty:material.material_qty
+    }))
+
+    return responseObj
+
+}
+
 module.exports = {
     createproductModule: createproductModule,
     getProductModule: getProductModule,
-    getProductList:getProductList
+    getProductList: getProductList,
+    addProductModule: addProductModule,
 }
