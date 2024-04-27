@@ -87,12 +87,12 @@ function setOrderList(OrderList) {
         <tr class="hover-actions-trigger btn-reveal-trigger position-static">
         <td class="name align-middle white-space-nowrap ps-0">
           <div class="d-flex align-items-center">
-            <a href="/product?customerId=${customerId}&orderId=${orderId}">
+            <a href="/order-detail?customerId=${customerId}&orderId=${orderId}">
             <div class="avatar avatar-xl me-3 ">
             <div class="avatar-name rounded-circle"><span>#</span></div>
           </div>   
             </a>
-            <div><a class="fs-8 fw-bold" href="#!">#${orderNumber}</a>
+            <div><a class="fs-8 fw-bold" href="#!">   ${orderNumber}</a>
             <!-- <div class="d-flex align-items-center">
                 <p class="mb-0 text-body-highlight fw-semibold fs-9 me-2">VP Accounting</p><span
                   class="badge badge-phoenix badge-phoenix-primary">Pending</span>
@@ -101,7 +101,7 @@ function setOrderList(OrderList) {
           </div>
         </td>
         <td class="align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight"><a
-            class="text-body-highlight" style="font-size: 18px; text-align: center !important ; padding: 0 25px;" ># ${productCount}</a>
+            class="text-body-highlight" style="font-size: 18px; text-align: center !important ; padding: 0 25px;" >${productCount}</a>
         </td>
         <td class="align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight"><a
           class="text-body-highlight" style="font-size: 18px; text-align: center !important ; padding: 0 25px;">${createdBy}</a>

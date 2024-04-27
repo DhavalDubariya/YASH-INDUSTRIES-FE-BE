@@ -186,51 +186,27 @@ const getOrderListModule = async (req) => {
 }
 
 const getProductModule = async (req) => {
-    var customerId = req.query.customer_id
-    console.log(customerId);
-    if (!customerId) {
+    var productId = req.query.productId
+    if (!productId) {
         return {
             status: false,
-            message:"Customer Id not found"
+            message:"Product Id "
         }
     }
-    var orderObj = await db.Order.findOne({ customer_id: customerId })
-    var productObj = await db.Product.findOne({ order_id: orderObj._id }) // Return All Product Of Passed Order Id
-    var materialObj = await db.Material.find({ product_id: productObj._id }) // Return All The Material Of Product Id' From Above Result
-
-    var materialPromise = materialObj.map(async (material) => {
-        var customMaterial = {
-            material_name: material.material_name,
-            material_color: material.material_color,
-            material_qty:material.material_qty
-        }
-
-        return customMaterial
-    })
-
-    var materials = await Promise.all(materialPromise)
+    console.log(productId)
+    var productCount = JSON.parse(JSON.stringify(await db.Product.find({ flag_deleted: false, history_id: null, _id: productId } )))
+    console.log(productCount,'::::::::::::::::::::::::::::')
+    if(productCount.length == 0){
+        return {status:true,data:[]}
+    }
+    productCount = productCount[0]
+    var productMatirial = JSON.parse(JSON.stringify(await db.Material.find({history_id:null,flag_deleted:false,product_id:[productCount._id]} )))
     
-    var obj = {
-        "product_name": productObj.product_name,
-        "product_quantity": productObj.product_qty,
-        "runner": productObj.runner,
-        "customer_id": customerId,
-        "material": materials
-    }
+    // console.log(changeLogId)
+    
+    productCount.material = productMatirial
 
-    var obj = {
-        "customer_id": customerId,
-        "product":[{
-            "product_name": productObj.product_name,
-            "product_quantity": productObj.product_qty,
-            "runner": productObj.runner,
-            "material": materials
-
-        }]
-    }
-
-    return {status:true,data:obj};
-
+    return {status:true,data:productCount}
 }
 
 const addProductModule = async (req) => {
@@ -324,9 +300,66 @@ const addProductModule = async (req) => {
 
 }
 
+const orderDetailModule = async(req) => {
+    var customerId = req.query.customerId
+    var orderId = req.query.orderId
+    console.log(customerId);
+    if (!customerId || !orderId ) {
+        return {
+            status: false,
+            message:"Customer Id "
+        }
+    }
+    var orderObj = JSON.parse(JSON.stringify(await db.Order.find({ history_id:null,flag_deleted:false,customer_id:customerId,_id:orderId})))
+
+    if(orderObj.length == 0){
+        return {
+            status:true,
+            data:[]
+        }
+    }
+
+    var productCount = JSON.parse(JSON.stringify(await db.Product.find({history_id:null,flag_deleted:false,order_id:{ $in: orderObj.map( x => x._id )}} )))
+
+    var changeLogId = JSON.parse(JSON.stringify(await db.ChangeLog.find({_id:{$in:orderObj.map( x => x.change_log_id )}})))
+
+    var userDetail = JSON.parse(JSON.stringify(await db.User.find({_id:{$in:changeLogId.map( x => x.user_id)}})))
+
+    var productMatirial = JSON.parse(JSON.stringify(await db.Material.find({history_id:null,flag_deleted:false,product_id:{ $in: productCount.map( x => x._id )}} )))
+    
+    userDetail = changeLogId.map( x => {
+        var userDetailFilter = userDetail.filter( y => y._id == x.user_id ) 
+        if(userDetailFilter.length != 0 ){
+            x["user_detail"] = userDetailFilter[0]
+            return x
+        }
+    })
+    // console.log(changeLogId)
+    var orderObjMap = await Promise.all(orderObj.map(async x => {
+        x["flag_status"] = x.approved_by != null ? true : false,
+        x["product_count"] = productCount.filter( y => y.order_id == x._id ).length
+        x["user_name"] = userDetail.filter( y => y._id == x.change_log_id)[0]?.user_detail.name
+        x["timestamp"] = await libFunction.formatDateTimeLib(x.timestamp)
+        x["product"] = productCount.map( y => {
+            var materialFilter = productMatirial.filter( z => y._id == z.product_id )
+            y["material"] = materialFilter
+            y["customer_id"] = customerId
+            return y
+        })
+        delete x.history_id
+        delete x.flag_deleted
+        delete x.change_log_id
+        delete x.flag_status
+        return x
+    }))
+    
+    return {status:true,data:orderObjMap[0]}
+}
+
 module.exports = {
     createproductModule: createproductModule,
     getProductModule: getProductModule,
     getOrderListModule: getOrderListModule,
     addProductModule: addProductModule,
+    orderDetailModule:orderDetailModule
 }

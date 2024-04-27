@@ -21,7 +21,12 @@ const getProductModule = async (req, res) => {
 const addProductModule = async (req, res) => {
   const result = await productModule.addProductModule(req)
   // console.log(result);
-  return result
+  return res.send(result);
+}
+
+const orderDetailController = async (req, res) => {
+  const result = await productModule.orderDetailModule(req)
+  return res.send(result);
 }
 
 module.exports = {
@@ -29,4 +34,5 @@ module.exports = {
   getProductModule: getProductModule,
   getOrderListController: getOrderListController,
   addProductModule: addProductModule,
+  orderDetailController:orderDetailController
 }

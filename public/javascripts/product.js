@@ -4,8 +4,9 @@ $(document).ready(async function() {
         window.location = '/customer'
     }
     var customerId = Array.from(searchParams).filter( x => x[0] == "customerId")[0][1]
+    var productId = Array.from(searchParams).filter( x => x[0] == "productId")[0][1]
     await $.ajax({
-    url: `api/customer/customer-detail?customerId=${customerId}`,
+    url: `api/customer/customer-detail?customerId=${customerId}&productId=${productId}`,
     type: "GET",
     contentType: "application/json", // Replace with your data
     success: function(response) {
@@ -22,6 +23,23 @@ $(document).ready(async function() {
         
     }
     });
+
+    await $.ajax({
+        url: `api/product/product-detail?productId=${productId}`,
+        type: "GET",
+        contentType: "application/json", // Replace with your data
+        success: function(response) {
+            if(response.status == true){
+                console.log('Product Detail')
+            }
+        },
+        error: function(xhr, status, error) {
+            // playSound(false)
+        },
+        complete: function() {
+            
+        }
+        });
 })
 
 $("#add-material").on("click",function(event){

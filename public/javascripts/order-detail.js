@@ -1,19 +1,20 @@
 var customerDetail
+var globalData
 $(document).ready(async function() {
     var searchParams = new URLSearchParams(window.location.search);
-    if(Array.from(searchParams).filter( x => x[0] == "customerId" && x[1] != "" ).length == 0){
-        window.location = '/customer'
-    }
-    var customerId = Array.from(searchParams).filter( x => x[0] == "customerId")[0][1]
+    console.log(Array.from(searchParams),'::::::::::::::::::::::::::::::::::')
+    var queryParams = Array.from(searchParams).map( x => { return `${x[0]}=${x[1]}`})
     await $.ajax({
-    url: `api/customer/customer-detail?customerId=${customerId}`,
+    url: `api/product/order-detail?${queryParams.join('&')}`,
     type: "GET",
     contentType: "application/json", // Replace with your data
     success: function(response) {
-        if(response.status == false){
-            window.location = '/customer'
-        }
-        setCustomer(response.data)
+        // if(response.status == false){
+        //     window.location = '/customer'
+        // }
+        setOrderDetail(response.data)
+        setProductList(response.data.product)
+        globalData = response.data.product
     },
     error: function(xhr, status, error) {
         // playSound(false)
@@ -24,98 +25,89 @@ $(document).ready(async function() {
     }
     });
 
-    await $.ajax({
-    url: `api/product/order-list?customer_id=${customerId}`,
-    type: "GET",
-    contentType: "application/json", // Replace with your data
-    success: function(response) {
-        if(response.status == false){
-            window.location = '/customer'
+    $('.material-button').click(function(e){
+        var productId = e.target.getAttribute("data-id")
+        var globalDataFilter = globalData.filter( x => x._id == productId)[0]?.material
+        console.log(globalDataFilter)
+        var materialString = ``
+        for(let i=0;i<globalDataFilter.length;i++){
+            var materialName = globalDataFilter[i].material_name
+            var materialColor = globalDataFilter[i].material_color
+            var materialQty = globalDataFilter[i].material_qty
+            materialString = materialString + `
+
+            <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                <td class="align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight"><b
+                    class="text-body-highlight" style="font-size: 18px; text-align: center !important ; padding: 0 25px;" >
+                    ${materialName}
+                </b>
+                </td>
+                <td class="align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight"><b
+                    class="text-body-highlight" style="font-size: 18px; text-align: center !important ; padding: 0 25px;">${materialColor}</b>
+                </td>
+                <td
+                    class="company align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 border-end border-translucent fw-semibold text-body-highlight" style="font-size: 18px; text-align: center !important ; padding: 0 25px;">
+                    <b>${materialQty}</b>
+                </td>
+            </tr>
+            `
+            $('#material-list').empty()
+            $('#material-list').append(materialString)
         }
-        setOrderList(response.data)
-        // console.log(response.data,'Order List')
-    },
-    error: function(xhr, status, error) {
-        // playSound(false)
-        // window.location = '/customer'
-        console.log(error)
-    },
-    complete: function() {
-        
-    }
-    });
+    })
 })
 
-function setCustomer(customerDetail) {
-    $('#customer-image').text(customerDetail.customer_name[0])
-    $("#company-name").text(customerDetail.customer_name)
-    $("#customer-name").text(customerDetail.company_name)
-    $("#customer-phonenumber").text(customerDetail.phone_number)
-    $("#customer-phonenumber").attr('href',`tel:+91${customerDetail.phone_number}`)
-    $("#customer-address").text(customerDetail.address)
-    $("#customer-city").text(customerDetail.city)
-    $('#customer-id').val(customerDetail._id)
+function setOrderDetail(orderDetail) {
+    $('#order-no').text(orderDetail.order_no)
+    $("#product-count").text(orderDetail.product_count)
+    $("#completions-count").text(orderDetail?.completions_count ? orderDetail?.completions_count : '' )
 }
 
 
-function setOrderList(OrderList) {
-    var customerListString = ''
-    for(let i=0;i<OrderList.length;i++){
-        // {
-        //     "_id": "662cb08b58b7ea8564212535",
-        //     "order_no": 57,
-        //     "order_name": "0.39513977580852067",
-        //     "delivery_date": null,
-        //     "driver_name": null,
-        //     "customer_id": "65d1d3473df68937116f7b2e",
-        //     "approved_by": null,
-        //     "timestamp": "2024-04-27T08:00:11.773Z",
-        //     "__v": 0,
-        //     "product_count": 1,
-        //     "user_name": "Dhaval Dubariya"
-        // }
-        var orderId = OrderList[i]._id
-        var customerId = OrderList[i].customer_id
-        var orderNumber = OrderList[i].order_no
-        var orderName = OrderList[i].order_name
-        var orderId = OrderList[i]._id
-        var createdAt = OrderList[i].timestamp
-        var createdBy = OrderList[i].user_name 
-        var productCount = OrderList[i].product_count
-        customerListString = customerListString +  `
+function setProductList(productList) {
+    var productListString = ''
+    for(let i=0;i<productList.length;i++){
+        var productName = productList[i].product_name
+        var productQty = productList[i].product_qty
+        var runner = productList[i].runner
+        // var materialLength = productList[i]
+        var customerId = productList[i].customer_id
+        var productId = productList[i]._id
+        productListString = productListString +  `
 
         <tr class="hover-actions-trigger btn-reveal-trigger position-static">
         <td class="name align-middle white-space-nowrap ps-0">
-          <div class="d-flex align-items-center">
-            <a href="/product?customerId=${customerId}&orderId=${orderId}">
-            <div class="avatar avatar-xl me-3 ">
-            <div class="avatar-name rounded-circle"><span>#</span></div>
-          </div>   
-            </a>
-            <div><a class="fs-8 fw-bold" href="#!">#${orderNumber}</a>
-            <!-- <div class="d-flex align-items-center">
-                <p class="mb-0 text-body-highlight fw-semibold fs-9 me-2">VP Accounting</p><span
-                  class="badge badge-phoenix badge-phoenix-primary">Pending</span>
-              </div>-->
+          <div class="d-flex align-items-center" style="padding-left:20px" >
+            <div><b class="fs-8 fw-bold">${productName}</b>
             </div>
           </div>
         </td>
         <td class="align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight"><a
-            class="text-body-highlight" style="font-size: 18px; text-align: center !important ; padding: 0 25px;" ># ${productCount}</a>
+            class="text-body-highlight" style="font-size: 18px; text-align: center !important ; padding: 0 25px;" >${productQty}</a>
         </td>
         <td class="align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight"><a
-          class="text-body-highlight" style="font-size: 18px; text-align: center !important ; padding: 0 25px;">${createdBy}</a>
+          class="text-body-highlight" style="font-size: 18px; text-align: center !important ; padding: 0 25px;">${runner}</a>
         </td>
         <td
           class="company align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 border-end border-translucent fw-semibold text-body-highlight">
-          <b>${createdAt}</b>
+          <b>
+          <button class="btn btn-phoenix-primary me-4 material-button" data-bs-toggle="modal" data-bs-target="#product-material"
+          aria-haspopup="true" aria-expanded="false" data-bs-reference="parent" data-id="${productId}"><span
+            class="fas fa-eye me-2"></span>View</button>
+
+            <a class="btn btn-phoenix-success me-4" href="/product?customerId=${customerId}&productId=${productId}" data-id="${productId}"><span
+            class="fas fa-key me-2"></span>Edit</a>
+
+            <button class="btn btn-phoenix-danger me-4 material-button" data-bs-toggle="modal" data-bs-target="#product-material"
+            aria-haspopup="true" aria-expanded="false" data-bs-reference="parent" data-id="${productId}"><span
+            class="fa-solid fa-trash-can me-2"></span>Delete</button>
+          </b>
         </td>
       </tr>
 
         `
         // console.log(customerList)
     }
-    $('#order-list').empty()
-    $('#order-list').append(customerListString)
-    
+    $('#product-list').empty()
+    $('#product-list').append(productListString)
 }

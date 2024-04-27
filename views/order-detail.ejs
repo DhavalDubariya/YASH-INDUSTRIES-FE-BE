@@ -24,13 +24,13 @@
           <ol class="breadcrumb mb-0">
             <li class="breadcrumb-item"><a href="/">Home</a></li>
             <li class="breadcrumb-item"><a href="/customer">Customer</a></li>
-            <li class="breadcrumb-item active">Customer Detail</li>
+            <li class="breadcrumb-item active">Order Detail</li>
           </ol>
         </nav>
         <div class="mb-9">
           <div class="row align-items-center justify-content-between g-3 mb-4">
             <div class="col-auto">
-              <h2 class="mb-0">Customer details</h2>
+              <h2 class="mb-0">Order Detail</h2>
             </div>
             <div class="col-auto">
               <div class="row g-3">
@@ -45,38 +45,18 @@
                 <div class="col-12 col-md-12 col-xxl-12 mb-xxl-12">
                   <div class="card h-100">
                     <div class="card-body d-flex flex-column justify-content-between pb-3">
-                      <div class="row align-items-center g-5 mb-3 text-center text-sm-start">
-                        <div class="col-xl-2 col-md-12 col-sm-12">
-                            <!-- <div class="avatar avatar-5xl">
-                                <img class="rounded-circle" src="../../../assets/img/team/15.webp" alt="" />
-                            </div> -->
-                            <div class="avatar avatar-5xl ">
-                                <div class="avatar-name rounded-circle"><span id="customer-image" >  </span></div>
-                            </div>                              
-                        </div>
-                        <div class="col-xl-5 col-md-6 col-sm-12 ">
-                          <h3 id="company-name" ></h3>
-                          <p class="text-body-secondary" id="customer-name" ></p>
-                          <h3>Phone</h3><a id="customer-phonenumber" class="text-body-secondary" href="tel:#"></a>
-                        </div>
-                        <div class="col-xl-5 col-md-6 col-sm-12 ">
-                            <h3>Address</h3>
-                            <p class="text-body-secondary" id="customer-address"></p>
-                            <h3>City</h3><a id="customer-city" class="text-body-secondary"></a>
-                          </div>
-                      </div>
-                      <div class="d-flex flex-between-center border-top border-dashed pt-4">
+                      <div class="d-flex flex-between-center border-dashed">
                         <div>
-                          <h6>Product</h6>
-                          <p class="fs-7 text-body-secondary mb-0">297</p>
+                          <h6>ORDER ID</h6>
+                          <p class="fs-7 text-body-secondary mb-0"># <b id="order-no" >297</b></p>
                         </div>
                         <div>
-                          <h6>Projects</h6>
-                          <p class="fs-7 text-body-secondary mb-0">56</p>
+                          <h6>PRODUCTS</h6>
+                          <p class="fs-7 text-body-secondary mb-0" id="product-count">56</p>
                         </div>
                         <div>
-                          <h6>Completion</h6>
-                          <p class="fs-7 text-body-secondary mb-0">97</p>
+                          <h6>COMPLETIONS</h6>
+                          <p class="fs-7 text-body-secondary mb-0" id="completions-count" >97</p>
                         </div>
                       </div>
                     </div>
@@ -108,56 +88,6 @@
                       <span class="fas fa-search search-box-icon"></span>
                     </form>
                   </div>
-                  <!-- <div class="flatpickr-input-container me-2"><input class="form-control ps-6 datetimepicker"
-                      id="datepicker" type="text"
-                      data-options='{"dateFormat":"M j, Y","disableMobile":true,"defaultDate":"Mar 1, 2022"}' /><span
-                      class="uil uil-calendar-alt flatpickr-icon text-body-tertiary"></span></div><button
-                    class="btn px-3 btn-phoenix-secondary" type="button" data-bs-toggle="modal"
-                    data-bs-target="#filterModal" data-boundary="window" aria-haspopup="true" aria-expanded="false"
-                    data-bs-reference="parent"><span class="fa-solid fa-filter text-primary"
-                      data-fa-transform="down-3"></span></button>
-                  <div class="modal fade" id="filterModal" tabindex="-1">
-                    <div class="modal-dialog modal-dialog-centered">
-                      <div class="modal-content border border-translucent">
-                        <form id="addEventForm" autocomplete="off">
-                          <div class="modal-header border-translucent p-4">
-                            <h5 class="modal-title text-body-highlight fs-6 lh-sm">Filter</h5><button
-                              class="btn p-1 text-body" type="button" data-bs-dismiss="modal" aria-label="Close"><span
-                                class="fas fa-times fs-9"></span></button>
-                          </div>
-                          <div class="modal-body pt-4 pb-2 px-4">
-                            <div class="mb-3"><label class="fw-bold mb-2 text-body-highlight" for="leadStatus">Lead
-                                Status</label><select class="form-select" id="leadStatus">
-                                <option value="newLead" selected="selected">New Lead</option>
-                                <option value="coldLead">Cold Lead</option>
-                                <option value="wonLead">Won Lead</option>
-                                <option value="canceled">Canceled</option>
-                              </select></div>
-                            <div class="mb-3"><label class="fw-bold mb-2 text-body-highlight" for="createDate">Create
-                                Date</label><select class="form-select" id="createDate">
-                                <option value="today" selected="selected">Today</option>
-                                <option value="last7Days">Last 7 Days</option>
-                                <option value="last30Days">Last 30 Days</option>
-                                <option value="chooseATimePeriod">Choose a time period</option>
-                              </select></div>
-                            <div class="mb-3"><label class="fw-bold mb-2 text-body-highlight"
-                                for="designation">Designation</label><select class="form-select" id="designation">
-                                <option value="VPAccounting" selected="selected">VP Accounting</option>
-                                <option value="ceo">CEO</option>
-                                <option value="creativeDirector">Creative Director</option>
-                                <option value="accountant">Accountant</option>
-                                <option value="executiveManager">Executive Manager</option>
-                              </select></div>
-                          </div>
-                          <div
-                            class="modal-footer d-flex justify-content-end align-items-center px-4 pb-4 border-0 pt-3">
-                            <button class="btn btn-sm btn-phoenix-primary px-4 fs-10 my-0" type="submit"> <span
-                                class="fas fa-arrows-rotate me-2 fs-10"></span>Reset</button><button
-                              class="btn btn-sm btn-primary px-9 fs-10 my-0" type="submit">Done</button></div>
-                        </form>
-                      </div>
-                    </div>
-                  </div> -->
                 </div>
               </div>
             </div>
@@ -166,24 +96,20 @@
                 <thead>
                   <tr>
                     <th class="sort align-middle ps-4 pe-5 text-uppercase border-end border-translucent" scope="col"
-                    data-sort="contact" style="width:20%;"># Order Id</th>
+                    data-sort="contact" style="width:20%;"># PRODUCT</th>
                     <th class="sort align-middle ps-4 pe-5 text-uppercase border-end border-translucent" scope="col"
-                    data-sort="contact" style="width:20%;"># Product</th>
+                    data-sort="contact" style="width:20%;"># quantity (Gm)</th>
                     <th class="sort align-middle ps-4 pe-5 text-uppercase border-end border-translucent" scope="col"
-                    data-sort="contact" style="width:20%;">
-                      <div class="d-inline-flex flex-center">
-                        <span># CREATED BY</span>
-                      </div>
-                    </th>
+                    data-sort="contact" style="width:20%;"># Runner (Gm)</th>
                     <th class="sort align-middle ps-4 pe-5 text-uppercase border-end border-translucent" scope="col"
                       data-sort="contact" style="width:20%;">
                       <div class="d-inline-flex flex-center">
-                        <span># CREATED AT</span>
+                        <span>Edit / Delete</span>
                       </div>
                     </th>
                   </tr>
                 </thead>
-                <tbody class="list" id="order-list">
+                <tbody class="list" id="product-list">
                  
 
                 </tbody>
@@ -211,8 +137,39 @@
     </main><!-- ===============================================-->
     <!--    End of Main Content-->
     <!-- ===============================================-->
-    <%- include('./customer-popup/customer-popup') %>
-    <script src="javascripts/customer-detail.js" ></script>
+    <!------------------------------------------ FORM POPUP ---------------------------------------------->
+    <div class="modal fade" id="product-material" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="product-material" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content bg-body-highlight p-6">
+      <div class="modal-header border-0 p-0 mb-2">
+        <h3 id="customer-display-name" class="mb-0">Product Material</h3><button class="btn btn-sm btn-phoenix-secondary" data-bs-dismiss="modal"
+          aria-label="Close"><span class="fas fa-times text-danger"></span></button>
+      </div>
+        <div class="modal-body px-0">
+          <div class="row g-4">
+            <table class="table fs-9 mb-0 leads-table">
+              <thead>
+                <tr>
+                  <th class="sort align-middle ps-4 pe-5 text-uppercase border-end border-translucent" scope="col"
+                  data-sort="contact" style="width:20%;"># Name</th>
+                  <th class="sort align-middle ps-4 pe-5 text-uppercase border-end border-translucent" scope="col"
+                  data-sort="contact" style="width:20%;"># Color</th>
+                  <th class="sort align-middle ps-4 pe-5 text-uppercase border-end border-translucent" scope="col"
+                  data-sort="contact" style="width:20%;"># Quantity</th>
+                </tr>
+              </thead>
+              <tbody class="list" id="material-list">
+                  
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+    <script src="javascripts/order-detail.js" ></script>
     </body>
   </body>
 </html>

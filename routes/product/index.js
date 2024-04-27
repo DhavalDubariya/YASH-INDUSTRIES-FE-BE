@@ -8,4 +8,6 @@ router.get("/order-list",middleware.checkAccessToken,productController.getOrderL
 router.get("/product-detail", middleware.checkAccessToken, productController.getProductModule);
 router.put("/product", middleware.checkAccessToken, productController.addProductModule);
 
+router.get("/order-detail",middleware.checkAccessToken, productController.orderDetailController)
+
 module.exports = router
