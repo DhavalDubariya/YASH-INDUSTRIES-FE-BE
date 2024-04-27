@@ -26,4 +26,12 @@ router.get('/product',function(req,res,next){
   res.render('product',{ title: 'Create Product' })
 })
 
+/* Daily Report */
+router.get('/daily-report',function(req,res,next){
+  res.render('daily-report',{ title: 'Daily Report' })
+})
+
+router.get('/order-detail',function(req,res,next){
+  res.render('order-detail',{ title: 'Daily Report' })
+})
 module.exports = router;

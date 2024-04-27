@@ -4,7 +4,7 @@ const productController = require("./product.controller");
 const middleware = require("../middleware");
 
 router.post("/product",middleware.checkAccessToken,productController.createproductController);
-router.get("/product",middleware.checkAccessToken,productController.getProductModuleList);
+router.get("/order-list",middleware.checkAccessToken,productController.getOrderListController);
 router.get("/product-detail", middleware.checkAccessToken, productController.getProductModule);
 router.put("/product", middleware.checkAccessToken, productController.addProductModule);
 

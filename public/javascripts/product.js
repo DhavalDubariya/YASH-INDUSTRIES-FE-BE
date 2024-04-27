@@ -70,7 +70,7 @@ function removeMaterial(materialDataId) {
     $(`[material-data-id="${materialDataId}"]`).remove()
 }
 
-$('#customer-product').on('click',function(e){
+$('#customer-product').on('click',async function(e){
     e.preventDefault()
     var productForm = $('#product-form')
     var validateForm = productForm[0].checkValidity()
@@ -142,4 +142,20 @@ $('#customer-product').on('click',function(e){
     forMateForm["customer_id"] = customerId
     forMateForm["material"] = materialArray
     console.log(forMateForm)
+    $.ajax({
+        type: "POST",
+        url: "api/product/product",
+        data: JSON.stringify(forMateForm),
+        contentType: "application/json",
+        success: function(response){
+            // Handle success
+            console.log("Request successful");
+            console.log(response);
+        },
+        error: function(xhr, status, error){
+            // Handle errors
+            console.log("Request failed");
+            console.log(xhr.responseText);
+        }
+    });
 })
