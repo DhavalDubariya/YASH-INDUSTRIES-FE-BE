@@ -8,6 +8,10 @@ $(document).ready(async function() {
     await $.ajax({
     url: `api/customer/customer-detail?customerId=${customerId}&productId=${productId}`,
     type: "GET",
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': sessionStorage.getItem("yi-ssid")
+    },
     contentType: "application/json", // Replace with your data
     success: function(response) {
         if(response.status == false){
@@ -27,7 +31,11 @@ $(document).ready(async function() {
     await $.ajax({
         url: `api/product/product-detail?productId=${productId}`,
         type: "GET",
-        contentType: "application/json", // Replace with your data
+        contentType: "application/json",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': sessionStorage.getItem("yi-ssid")
+        }, // Replace with your data
         success: function(response) {
             if(response.status == true){
                 console.log('Product Detail')
@@ -138,6 +146,10 @@ $('#customer-product').on('click',async function(e){
         url: "api/product/product",
         data: JSON.stringify(forMateForm),
         contentType: "application/json",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': sessionStorage.getItem("yi-ssid")
+        },
         success: function(response){
             // Handle success
             console.log("Request successful");

@@ -14,6 +14,10 @@ $(document).ready(function() {
             url: "api/customer/customer",
             type: "POST",
             contentType: "application/json",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': sessionStorage.getItem("yi-ssid")
+            },
             data: JSON.stringify(keyValueObject(form)), // Replace with your data
             success: function(response) {
                 console.log(response)
@@ -43,7 +47,11 @@ $(document).ready(function() {
             url: "api/customer/customer",
             type: "PUT",
             contentType: "application/json",
-            data: JSON.stringify(form), // Replace with your data
+            data: JSON.stringify(form),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': sessionStorage.getItem("yi-ssid")
+            }, // Replace with your data
             success: function(response) {
                 console.log(response)
                 if(response.status == false){
@@ -71,7 +79,11 @@ $(document).ready(function() {
     $.ajax({
         url: "api/customer/customer",
         type: "GET",
-        contentType: "application/json", // Replace with your data
+        contentType: "application/json",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': sessionStorage.getItem("yi-ssid")
+        }, // Replace with your data
         success: function(response) {
             setCustomerDetail(response.data)
         },

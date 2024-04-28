@@ -7,7 +7,11 @@ $(document).ready(async function() {
     await $.ajax({
     url: `api/product/order-detail?${queryParams.join('&')}`,
     type: "GET",
-    contentType: "application/json", // Replace with your data
+    contentType: "application/json",
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': sessionStorage.getItem("yi-ssid")
+    }, // Replace with your data
     success: function(response) {
         // if(response.status == false){
         //     window.location = '/customer'

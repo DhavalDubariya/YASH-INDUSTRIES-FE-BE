@@ -8,7 +8,11 @@ $(document).ready(async function() {
     await $.ajax({
     url: `api/customer/customer-detail?customerId=${customerId}`,
     type: "GET",
-    contentType: "application/json", // Replace with your data
+    contentType: "application/json",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem("yi-ssid")
+    }, // Replace with your data
     success: function(response) {
         if(response.status == false){
             window.location = '/customer'
@@ -27,7 +31,11 @@ $(document).ready(async function() {
     await $.ajax({
     url: `api/product/order-list?customer_id=${customerId}`,
     type: "GET",
-    contentType: "application/json", // Replace with your data
+    contentType: "application/json",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem("yi-ssid")
+    }, // Replace with your data
     success: function(response) {
         if(response.status == false){
             window.location = '/customer'

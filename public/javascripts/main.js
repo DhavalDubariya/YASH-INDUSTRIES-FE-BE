@@ -53,6 +53,10 @@ $(document).ready(function(){
     url: "api/user/me",
     type: "GET",
     contentType: "application/json",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem("yi-ssid")
+    },
     // Replace with your data
     success: function(response) {
       userDetail = response.data

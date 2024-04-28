@@ -20,6 +20,7 @@ $('#login-button').on('click',function (event) {
             $('#login-message').attr('style', 'color: red !important')
             $('#login-message').text(response.error)
           }  
+          sessionStorage.setItem("yi-ssid",response.data.accee_token);
           document.cookie = response.data.accee_token
           window.location = '/'
         },
