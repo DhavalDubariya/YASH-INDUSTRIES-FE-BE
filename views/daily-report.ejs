@@ -23,156 +23,463 @@
         <nav class="mb-2" aria-label="breadcrumb">
           <ol class="breadcrumb mb-0">
             <li class="breadcrumb-item"><a href="/">Home</a></li>
-            <li class="breadcrumb-item"><a href="/daily-report">Daily Report</a></li>
-            <!-- <li class="breadcrumb-item active">Product</li> -->
+            <li class="breadcrumb-item active">Daily Report</li>
           </ol>
         </nav>
-        <div class="mb-9">
-          <div class="row align-items-center justify-content-between g-3 mb-4">
-            <div class="col-auto">
-              <h2 class="mb-0">Daily Report</h2>
-            </div>
-            <div class="col-auto">
-              <div class="row g-3">
-                <!-- <div class="col-auto"><button class="btn btn-phoenix-danger"><span class="fa-solid fa-trash-can me-2"></span>Delete</button></div>
-                <div class="col-auto"><button class="btn btn-phoenix-success" id="update-customer" ><span class="fas fa-key me-2"></span>Edit</button></div> -->
-              </div>
-            </div>
-          </div>
-          <div class="row g-5">
-            <div class="col-12">
-              <div class="row g-3 g-xxl-0 h-100">
-                <div class="col-12 col-md-12 col-xxl-12 mb-xxl-12">
-                  <div>
-                    <div>
-
- 
-
-                        <div class="row g-4">
-                          <form id="product-form" class="needs-validation" novalidate="" >
-                            <div class="col-lg-12">
-                              <div class="mb-4">
-                                <label class="text-body-highlight fw-bold mb-2" for="product_name">Product Name</label>
-                                <input class="form-control" type="date" name="product_name" id="product_name" placeholder="Enter product name"
-                                  required />
-                                <div class="valid-feedback">Looks good!</div>
-                                <div class="invalid-feedback">Please provide customer name.</div>
-                              </div>
-                              <div class="mb-4" >
-                                <label class="text-body-highlight fw-bold mb-2" for="product_name">Upload Image</label>
-                                <div class="dropzone dropzone-multiple p-0" id="dropzone" data-dropzone="data-dropzone" data-options='{"url":"valid/url","maxFiles":1,"dictDefaultMessage":"Choose or Drop a file here"}'>
-                                    <div class="fallback">
-                                        <input type="file" name="file" required/>
-                                        <div class="valid-feedback">Looks good!</div>
-                                        <div class="invalid-feedback">Please provide color.</div>
-                                    </div>
-                                    <div class="dz-message" data-dz-message="data-dz-message">
-                                      <div class="dz-message-text"><img class="me-2" src="../../../assets/img/icons/cloud-upload.svg" width="25" alt="" />Drop your file here</div>
-                                    </div>
-                                    <div class="dz-preview dz-preview-multiple m-0 d-flex flex-column">
-                                      <div class="d-flex pb-3 border-bottom border-translucent media px-2">
-                                        <div class="border p-2 rounded-2 me-2"><img class="rounded-2 dz-image" src="../../../assets/img/icons/file.png" alt="..." data-dz-thumbnail="data-dz-thumbnail" /></div>
-                                        <div class="flex-1 d-flex flex-between-center">
-                                          <div>
-                                            <h6 data-dz-name="data-dz-name"></h6>
-                                            <div class="d-flex align-items-center">
-                                              <p class="mb-0 fs-9 text-body-quaternary lh-1" data-dz-size="data-dz-size"></p>
-                                              <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress=""></span></div>
-                                            </div>
-                                            <!-- <span class="fs-10 text-danger" data-dz-errormessage="data-dz-errormessage"></span> -->
-                                          </div>
-                                          <div class="dropdown">
-                                            <button href="#!" data-dz-remove="data-dz-remove" class="btn btn-link text-body-quaternary btn-phoenix-danger dropdown-toggle btn-reveal dropdown-caret-none">
-                                                <span style="font-size: 20px; color: #EC1F00;" class="fa-solid fa-trash-can "></span>
-                                            </button>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  
-                              </div>
-                              <div class="mb-4" >
-                                <div class="row" >
-                                  <div class="col-6" >
-                                    <label class="text-body-highlight fw-bold mb-2" for="product_quantity">Product Quantity (Gm)</label>
-                                    <input class="form-control" type="text" name="product_quantity" id="product_quantity" placeholder="Enter product quantity"
-                                      required />
-                                    <div class="valid-feedback">Looks good!</div>
-                                    <div class="invalid-feedback">Please provide valid quantity.</div>
-                                  </div>
-                                  <div class="col-6" >
-                                    <label class="text-body-highlight fw-bold mb-2" for="runner">Runner (Gm)</label>
-                                    <input class="form-control" type="text" name="runner" id="runner" placeholder="Enter product runner"
-                                      required />
-                                    <div class="valid-feedback">Looks good!</div>
-                                    <div class="invalid-feedback">Please provide valid quantity.</div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="mb-4" >
-                                <label class="text-body-highlight fw-bold mb-2" for="product_name">Material</label>        
-                                <table class="table table-bordered">
-                                  <thead>
-                                    <tr>
-                                      <th style="width:32%;" scope="col">Name</th>
-                                      <th style="width:32%;" scope="col">Color</th>
-                                      <th style="width:32%;" scope="col">Quantity (Kg)</th>
-                                      <th style="width:4%; padding: 0.325rem !important; cursor: pointer; " id="add-material" scope="col">
-                                        <span class="text-success" data-feather="plus-circle" style="height: 18px; width: 18px;"></span>
-                                      </th>
-                                    </tr>
-                                  </thead>
-                                  <tbody id="material" >
-                                    <tr style="padding: 0px !important;" material-data-id="1">
-                                      <td style="padding: 0px !important;">
-                                        <input style="border-radius: 0px !important;" class="form-control" type="text" name="material_name" id="material_name" placeholder="Name"
-                                          required />
-                                        <div class="valid-feedback">Looks good!</div>
-                                        <div class="invalid-feedback">Please provide material name.</div>
-                                      </td>
-                                      <td style="padding: 0px !important;">
-                                        <input style="border-radius: 0px !important;" class="form-control" type="text" name="material_color" id="material_color" placeholder="Color"
-                                          required />
-                                        <div class="valid-feedback">Looks good!</div>
-                                        <div class="invalid-feedback">Please provide color.</div>
-                                      </td style="padding: 0px !important;">
-                                      <td style="padding: 0px !important;">
-                                        <input style="border-radius: 0px !important;" class="form-control" pattern="^[1-9]\d*$" type="number" name="material_qty" id="material_qty" placeholder="Quantity" required />
-                                      <div class="valid-feedback">Looks good!</div>
-                                      <div class="invalid-feedback">Please provide quantity.</div></td>
-                                      <td style="padding: 0.325rem; cursor: pointer;" onclick="removeMaterial(1)">
-                                        <div>
-                                          <span class="text-danger" data-feather="minus-circle" style="height: 18px; width: 18px;"></span>
-                                        </div>
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </div>
-                              </div>
+        <div class="pb-6">
+          <h2 class="mb-4">4 Products</h2>
+          <div id="lealsTable" data-list='{"valueNames":["name","email","phone","contact","company","date"],"page":10,"pagination":true}'>
+            <div class="row g-3 justify-content-between mb-4">
+              <div class="col-auto">
+                <div class="d-flex">
+                  <div class="flatpickr-input-container me-2"><input class="form-control ps-6 datetimepicker" id="datepicker" type="text"  />
+                    <span class="uil uil-calendar-alt flatpickr-icon text-body-tertiary"></span>
+                  </div>
+                  <button class="btn px-3 btn-phoenix-secondary" type="button" data-bs-toggle="modal" data-bs-target="#filterModal" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent">
+                    <span class="fab fa-slack text-primary"  style="height: 14px;" data-fa-transform="down-3"></span>
+                  </button>
+                  <div class="modal fade" id="filterModal" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content border border-translucent">
+                        <form id="addEventForm" autocomplete="off">
+                          <div class="modal-header border-translucent p-4">
+                            <h5 class="modal-title text-body-highlight fs-6 lh-sm">
+                              Daily Report
+                            </h5><button class="btn p-1 text-body" type="button" data-bs-dismiss="modal" aria-label="Close"><span class="fas fa-times fs-9"></span></button>
+                          </div>
+                          <div class="modal-body pt-4 pb-2 px-4">
+                            <div class="mb-3"><label class="fw-bold mb-2 text-body-highlight" for="leadStatus">CUSTOMER</label>
+                              <select class="form-select" id="single-select-field" data-placeholder="Choose one thing">
+                                <option>SELECT CUSTOMER</option>
+                                <option>Reactive</option>
+                                <option>Solution</option>
+                                <option>Conglomeration</option>
+                                <option>Algoritm</option>
+                                <option>Holistic</option>
+                            </select>
                             </div>
-                            
-                            <div class="modal-footer border-0 px-0 pb-0">
-                                <button class="btn btn-link text-danger px-3 my-0" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
-                                <button class="btn btn-primary my-0" id="customer-product" >Create</button>
+                            <div class="mb-3"><label class="fw-bold mb-2 text-body-highlight" for="createDate">ORDER</label>
+                              <select class="form-select" id="createDate">
+                                <option>SELECT ORDER</option>
+                                <option value="last7Days">Last 7 Days</option>
+                                <option value="last30Days">Last 30 Days</option>
+                                <option value="chooseATimePeriod">Choose a time period</option>
+                              </select>
+                            </div>
+                            <div class="mb-3"><label class="fw-bold mb-2 text-body-highlight" for="designation">PRODUCT</label>
+                              <select class="form-select" id="designation">
+                                <option>SELECT PRODUCT</option>
+                                <option value="ceo">CEO</option>
+                                <option value="creativeDirector">Creative Director</option>
+                                <option value="accountant">Accountant</option>
+                                <option value="executiveManager">Executive Manager</option>
+                              </select>
                             </div>
                           </div>
-                          <form>
-                      
+                          <div class="modal-footer d-flex justify-content-end align-items-center px-4 pb-4 border-0 pt-3"><button class="btn btn-sm btn-phoenix-primary px-4 fs-10 my-0" type="submit"> <span class="fas fa-arrows-rotate me-2 fs-10"></span>Reset</button><button class="btn btn-sm btn-primary px-9 fs-10 my-0" type="submit">Done</button></div>
+                        </form>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            
+            <div class="table-responsive scrollbar mx-n1 px-1 border-top border-translucent">
+              <table class="table fs-9 mb-0 leads-table">
+                <thead>
+                  <tr>
+                    <th class="white-space-nowrap fs-9 align-middle ps-0" style="max-width:20px; width:18px;">
+                      <div class="form-check mb-0 fs-8"><input class="form-check-input" type="checkbox" data-bulk-select='{"body":"leal-tables-body"}' /></div>
+                    </th>
+                    <th class="sort white-space-nowrap align-middle text-uppercase ps-0" scope="col" data-sort="name" style="width:25%;">Name</th>
+                    <th class="sort align-middle ps-4 pe-5 text-uppercase border-end border-translucent" scope="col" data-sort="email" style="width:15%;">
+                      <div class="d-inline-flex flex-center">
+                        <div class="d-flex align-items-center px-1 py-1 bg-success-subtle rounded me-2"><span class="text-success-dark" data-feather="mail"></span></div><span>Email</span>
+                      </div>
+                    </th>
+                    <th class="sort align-middle ps-4 pe-5 text-uppercase border-end border-translucent" scope="col" data-sort="phone" style="width:15%; min-width: 180px;">
+                      <div class="d-inline-flex flex-center">
+                        <div class="d-flex align-items-center px-1 py-1 bg-primary-subtle rounded me-2"><span class="text-primary-dark" data-feather="phone"></span></div><span>Phone</span>
+                      </div>
+                    </th>
+                    <th class="sort align-middle ps-4 pe-5 text-uppercase border-end border-translucent" scope="col" data-sort="contact" style="width:15%;">
+                      <div class="d-inline-flex flex-center">
+                        <div class="d-flex align-items-center px-1 py-1 bg-info-subtle rounded me-2"><span class="text-info-dark" data-feather="user"></span></div><span>Contact name</span>
+                      </div>
+                    </th>
+                    <th class="sort align-middle ps-4 pe-5 text-uppercase border-end border-translucent" scope="col" data-sort="company" style="width:15%;">
+                      <div class="d-inline-flex flex-center">
+                        <div class="d-flex align-items-center px-1 py-1 bg-warning-subtle rounded me-2"><span class="text-warning-dark" data-feather="grid"></span></div><span>Company name</span>
+                      </div>
+                    </th>
+                    <th class="sort align-middle ps-4 pe-5 text-uppercase" scope="col" data-sort="date" style="width:15%;">Create date</th>
+                    <th class="sort text-end align-middle pe-0 ps-4" scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody class="list" id="leal-tables-body">
+                  <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                    <td class="fs-9 align-middle">
+                      <div class="form-check mb-0 fs-8"><input class="form-check-input" type="checkbox" data-bulk-select-row='{"customer":{"avatar":"/team/32.webp","name":"Anthoney Michael","designation":"VP Accounting","status":{"label":"new lead","type":"badge-phoenix-primary"}},"email":"anth125@gmail.com","phone":"+1-202-555-0126","contact":"Ally Aagaard","company":"Google.inc","date":"Jan 01, 12:56 PM"}' /></div>
+                    </td>
+                    <td class="name align-middle white-space-nowrap ps-0">
+                      <div class="d-flex align-items-center"><a href="#!">
+                          <div class="avatar avatar-xl me-3"><img class="rounded-circle" src="../../assets/img/team/32.webp" alt="" /></div>
+                        </a>
+                        <div><a class="fs-8 fw-bold" href="#!">Anthoney Michael</a>
+                          <div class="d-flex align-items-center">
+                            <p class="mb-0 text-body-highlight fw-semibold fs-9 me-2">VP Accounting</p><span class="badge badge-phoenix badge-phoenix-primary">new lead</span>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="email align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent"><a class="text-body-highlight" href="mailto:anth125@gmail.com">anth125@gmail.com</a></td>
+                    <td class="phone align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent"><a class="text-body-highlight" href="tel:+1-202-555-0126">+1-202-555-0126</a></td>
+                    <td class="contact align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight">Ally Aagaard</td>
+                    <td class="company align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 border-end border-translucent fw-semibold text-body-highlight">Google.inc</td>
+                    <td class="date align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 text-body-tertiary">Jan 01, 12:56 PM</td>
+                    <td class="align-middle white-space-nowrap text-end pe-0 ps-4">
+                      <div class="btn-reveal-trigger position-static"><button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs-10"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end py-2"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                    <td class="fs-9 align-middle">
+                      <div class="form-check mb-0 fs-8"><input class="form-check-input" type="checkbox" data-bulk-select-row='{"customer":{"avatar":"/team/33.webp","name":"Jacob Russell","designation":"Executive Manager","status":{"label":"Cancelled","type":"badge-phoenix-secondary"}},"email":"jacob@yahoo.com","phone":"+1-202-555-0135","contact":"Alex Abadi","company":"Google.inc","date":"Dec 31, 11:51 PM"}' /></div>
+                    </td>
+                    <td class="name align-middle white-space-nowrap ps-0">
+                      <div class="d-flex align-items-center"><a href="#!">
+                          <div class="avatar avatar-xl me-3"><img class="rounded-circle" src="../../assets/img/team/33.webp" alt="" /></div>
+                        </a>
+                        <div><a class="fs-8 fw-bold" href="#!">Jacob Russell</a>
+                          <div class="d-flex align-items-center">
+                            <p class="mb-0 text-body-highlight fw-semibold fs-9 me-2">Executive Manager</p><span class="badge badge-phoenix badge-phoenix-secondary">Cancelled</span>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="email align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent"><a class="text-body-highlight" href="mailto:jacob@yahoo.com">jacob@yahoo.com</a></td>
+                    <td class="phone align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent"><a class="text-body-highlight" href="tel:+1-202-555-0135">+1-202-555-0135</a></td>
+                    <td class="contact align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight">Alex Abadi</td>
+                    <td class="company align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 border-end border-translucent fw-semibold text-body-highlight">Google.inc</td>
+                    <td class="date align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 text-body-tertiary">Dec 31, 11:51 PM</td>
+                    <td class="align-middle white-space-nowrap text-end pe-0 ps-4">
+                      <div class="btn-reveal-trigger position-static"><button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs-10"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end py-2"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                    <td class="fs-9 align-middle">
+                      <div class="form-check mb-0 fs-8"><input class="form-check-input" type="checkbox" data-bulk-select-row='{"customer":{"avatar":"/team/34.webp","name":"Diego Anthony","designation":"CEO","status":{"label":"In progress","type":"badge-phoenix-info"}},"email":"diego20@hotmail.com","phone":"+44 1632 960970","contact":"Lyla Nicole","company":"Adobe Inc.","date":"Dec 29, 02:11 AM"}' /></div>
+                    </td>
+                    <td class="name align-middle white-space-nowrap ps-0">
+                      <div class="d-flex align-items-center"><a href="#!">
+                          <div class="avatar avatar-xl me-3"><img class="rounded-circle" src="../../assets/img/team/34.webp" alt="" /></div>
+                        </a>
+                        <div><a class="fs-8 fw-bold" href="#!">Diego Anthony</a>
+                          <div class="d-flex align-items-center">
+                            <p class="mb-0 text-body-highlight fw-semibold fs-9 me-2">CEO</p><span class="badge badge-phoenix badge-phoenix-info">In progress</span>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="email align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent"><a class="text-body-highlight" href="mailto:diego20@hotmail.com">diego20@hotmail.com</a></td>
+                    <td class="phone align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent"><a class="text-body-highlight" href="tel:+441632960970">+44 1632 960970</a></td>
+                    <td class="contact align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight">Lyla Nicole</td>
+                    <td class="company align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 border-end border-translucent fw-semibold text-body-highlight">Adobe Inc.</td>
+                    <td class="date align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 text-body-tertiary">Dec 29, 02:11 AM</td>
+                    <td class="align-middle white-space-nowrap text-end pe-0 ps-4">
+                      <div class="btn-reveal-trigger position-static"><button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs-10"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end py-2"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                    <td class="fs-9 align-middle">
+                      <div class="form-check mb-0 fs-8"><input class="form-check-input" type="checkbox" data-bulk-select-row='{"customer":{"avatar":"/team/35.webp","name":"Austin James","designation":"Creative Director","status":{"label":"Cold lead","type":"badge-phoenix-warning"}},"email":"austin@sni.it","phone":"+44 1632 960970","contact":"Kylia Abbott","company":"Facebook","date":"Dec 28, 10:56 PM"}' /></div>
+                    </td>
+                    <td class="name align-middle white-space-nowrap ps-0">
+                      <div class="d-flex align-items-center"><a href="#!">
+                          <div class="avatar avatar-xl me-3"><img class="rounded-circle" src="../../assets/img/team/35.webp" alt="" /></div>
+                        </a>
+                        <div><a class="fs-8 fw-bold" href="#!">Austin James</a>
+                          <div class="d-flex align-items-center">
+                            <p class="mb-0 text-body-highlight fw-semibold fs-9 me-2">Creative Director</p><span class="badge badge-phoenix badge-phoenix-warning">Cold lead</span>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="email align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent"><a class="text-body-highlight" href="mailto:austin@sni.it">austin@sni.it</a></td>
+                    <td class="phone align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent"><a class="text-body-highlight" href="tel:+441632960970">+44 1632 960970</a></td>
+                    <td class="contact align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight">Kylia Abbott</td>
+                    <td class="company align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 border-end border-translucent fw-semibold text-body-highlight">Facebook</td>
+                    <td class="date align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 text-body-tertiary">Dec 28, 10:56 PM</td>
+                    <td class="align-middle white-space-nowrap text-end pe-0 ps-4">
+                      <div class="btn-reveal-trigger position-static"><button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs-10"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end py-2"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                    <td class="fs-9 align-middle">
+                      <div class="form-check mb-0 fs-8"><input class="form-check-input" type="checkbox" data-bulk-select-row='{"customer":{"avatar":"/team/24.webp","name":"Sarah Lynn","designation":"Accountant","status":{"label":"won lead","type":"badge-phoenix-success"}},"email":"sarah@technext.it","phone":"+1-202-555-0177","contact":"Bryce Abbott","company":"Twitter","date":"Dec 27, 11:43 PM"}' /></div>
+                    </td>
+                    <td class="name align-middle white-space-nowrap ps-0">
+                      <div class="d-flex align-items-center"><a href="#!">
+                          <div class="avatar avatar-xl me-3"><img class="rounded-circle" src="../../assets/img/team/24.webp" alt="" /></div>
+                        </a>
+                        <div><a class="fs-8 fw-bold" href="#!">Sarah Lynn</a>
+                          <div class="d-flex align-items-center">
+                            <p class="mb-0 text-body-highlight fw-semibold fs-9 me-2">Accountant</p><span class="badge badge-phoenix badge-phoenix-success">won lead</span>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="email align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent"><a class="text-body-highlight" href="mailto:sarah@technext.it">sarah@technext.it</a></td>
+                    <td class="phone align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent"><a class="text-body-highlight" href="tel:+1-202-555-0177">+1-202-555-0177</a></td>
+                    <td class="contact align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight">Bryce Abbott</td>
+                    <td class="company align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 border-end border-translucent fw-semibold text-body-highlight">Twitter</td>
+                    <td class="date align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 text-body-tertiary">Dec 27, 11:43 PM</td>
+                    <td class="align-middle white-space-nowrap text-end pe-0 ps-4">
+                      <div class="btn-reveal-trigger position-static"><button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs-10"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end py-2"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                    <td class="fs-9 align-middle">
+                      <div class="form-check mb-0 fs-8"><input class="form-check-input" type="checkbox" data-bulk-select-row='{"customer":{"avatar":"/team/29.webp","name":"Reyna Denise","designation":"Executive Manager","status":{"label":"new lead","type":"badge-phoenix-info"}},"email":"reyna99@gmail.com","phone":"+44 1632 960958","contact":"Jase Adams","company":"Twitter","date":"Dec 25, 12:55 PM"}' /></div>
+                    </td>
+                    <td class="name align-middle white-space-nowrap ps-0">
+                      <div class="d-flex align-items-center"><a href="#!">
+                          <div class="avatar avatar-xl me-3"><img class="rounded-circle" src="../../assets/img/team/29.webp" alt="" /></div>
+                        </a>
+                        <div><a class="fs-8 fw-bold" href="#!">Reyna Denise</a>
+                          <div class="d-flex align-items-center">
+                            <p class="mb-0 text-body-highlight fw-semibold fs-9 me-2">Executive Manager</p><span class="badge badge-phoenix badge-phoenix-info">new lead</span>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="email align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent"><a class="text-body-highlight" href="mailto:reyna99@gmail.com">reyna99@gmail.com</a></td>
+                    <td class="phone align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent"><a class="text-body-highlight" href="tel:+441632960958">+44 1632 960958</a></td>
+                    <td class="contact align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight">Jase Adams</td>
+                    <td class="company align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 border-end border-translucent fw-semibold text-body-highlight">Twitter</td>
+                    <td class="date align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 text-body-tertiary">Dec 25, 12:55 PM</td>
+                    <td class="align-middle white-space-nowrap text-end pe-0 ps-4">
+                      <div class="btn-reveal-trigger position-static"><button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs-10"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end py-2"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                    <td class="fs-9 align-middle">
+                      <div class="form-check mb-0 fs-8"><input class="form-check-input" type="checkbox" data-bulk-select-row='{"customer":{"avatar":"/team/65.webp","name":"Roy Anderson","designation":"System Admin","status":{"label":"Canceled","type":"badge-phoenix-secondary"}},"email":"andersonroy@netflix.chill","phone":"+1-613-555-0109","contact":"Jim Aldridge","company":"Google.inc","date":"Dec 24, 09:52 PM"}' /></div>
+                    </td>
+                    <td class="name align-middle white-space-nowrap ps-0">
+                      <div class="d-flex align-items-center"><a href="#!">
+                          <div class="avatar avatar-xl me-3"><img class="rounded-circle" src="../../assets/img/team/65.webp" alt="" /></div>
+                        </a>
+                        <div><a class="fs-8 fw-bold" href="#!">Roy Anderson</a>
+                          <div class="d-flex align-items-center">
+                            <p class="mb-0 text-body-highlight fw-semibold fs-9 me-2">System Admin</p><span class="badge badge-phoenix badge-phoenix-secondary">Canceled</span>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="email align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent"><a class="text-body-highlight" href="mailto:andersonroy@netflix.chill">andersonroy@netflix.chill</a></td>
+                    <td class="phone align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent"><a class="text-body-highlight" href="tel:+1-613-555-0109">+1-613-555-0109</a></td>
+                    <td class="contact align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight">Jim Aldridge</td>
+                    <td class="company align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 border-end border-translucent fw-semibold text-body-highlight">Google.inc</td>
+                    <td class="date align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 text-body-tertiary">Dec 24, 09:52 PM</td>
+                    <td class="align-middle white-space-nowrap text-end pe-0 ps-4">
+                      <div class="btn-reveal-trigger position-static"><button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs-10"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end py-2"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                    <td class="fs-9 align-middle">
+                      <div class="form-check mb-0 fs-8"><input class="form-check-input" type="checkbox" data-bulk-select-row='{"customer":{"avatar":"/team/63.webp","name":"Emily Beazley","designation":"Marketing Executive","status":{"label":"New Lead","type":"badge-phoenix-info"}},"email":"beazley1@gmail.com","phone":"+61 1900 654 321","contact":"Zackry Aldridge","company":"Instagram","date":"Dec 22, 08:45 PM"}' /></div>
+                    </td>
+                    <td class="name align-middle white-space-nowrap ps-0">
+                      <div class="d-flex align-items-center"><a href="#!">
+                          <div class="avatar avatar-xl me-3"><img class="rounded-circle" src="../../assets/img/team/63.webp" alt="" /></div>
+                        </a>
+                        <div><a class="fs-8 fw-bold" href="#!">Emily Beazley</a>
+                          <div class="d-flex align-items-center">
+                            <p class="mb-0 text-body-highlight fw-semibold fs-9 me-2">Marketing Executive</p><span class="badge badge-phoenix badge-phoenix-info">New Lead</span>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="email align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent"><a class="text-body-highlight" href="mailto:beazley1@gmail.com">beazley1@gmail.com</a></td>
+                    <td class="phone align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent"><a class="text-body-highlight" href="tel:+611900654321">+61 1900 654 321</a></td>
+                    <td class="contact align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight">Zackry Aldridge</td>
+                    <td class="company align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 border-end border-translucent fw-semibold text-body-highlight">Instagram</td>
+                    <td class="date align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 text-body-tertiary">Dec 22, 08:45 PM</td>
+                    <td class="align-middle white-space-nowrap text-end pe-0 ps-4">
+                      <div class="btn-reveal-trigger position-static"><button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs-10"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end py-2"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                    <td class="fs-9 align-middle">
+                      <div class="form-check mb-0 fs-8"><input class="form-check-input" type="checkbox" data-bulk-select-row='{"customer":{"avatar":"/team/31.webp","name":"Layla Beckstrand","designation":"Junior Executive","status":{"label":"cold lead","type":"badge-phoenix-warning"}},"email":"layla@live.com","phone":"+36 55 116 068","contact":"Daniel Alexander","company":"Linkedin","date":"Dec 20, 06:32 PM"}' /></div>
+                    </td>
+                    <td class="name align-middle white-space-nowrap ps-0">
+                      <div class="d-flex align-items-center"><a href="#!">
+                          <div class="avatar avatar-xl me-3"><img class="rounded-circle" src="../../assets/img/team/31.webp" alt="" /></div>
+                        </a>
+                        <div><a class="fs-8 fw-bold" href="#!">Layla Beckstrand</a>
+                          <div class="d-flex align-items-center">
+                            <p class="mb-0 text-body-highlight fw-semibold fs-9 me-2">Junior Executive</p><span class="badge badge-phoenix badge-phoenix-warning">cold lead</span>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="email align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent"><a class="text-body-highlight" href="mailto:layla@live.com">layla@live.com</a></td>
+                    <td class="phone align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent"><a class="text-body-highlight" href="tel:+3655116068">+36 55 116 068</a></td>
+                    <td class="contact align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight">Daniel Alexander</td>
+                    <td class="company align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 border-end border-translucent fw-semibold text-body-highlight">Linkedin</td>
+                    <td class="date align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 text-body-tertiary">Dec 20, 06:32 PM</td>
+                    <td class="align-middle white-space-nowrap text-end pe-0 ps-4">
+                      <div class="btn-reveal-trigger position-static"><button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs-10"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end py-2"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                    <td class="fs-9 align-middle">
+                      <div class="form-check mb-0 fs-8"><input class="form-check-input" type="checkbox" data-bulk-select-row='{"customer":{"avatar":"/team/26.webp","name":"Olivia Bensinger","designation":"Chief Tech Officer","status":{"label":"won lead","type":"badge-phoenix-success"}},"email":"olivia1986@gmail.com","phone":"+44 1632 960248","contact":"Sam Alimentato","company":"Google.inc","date":"Dec 19, 10:44 PM"}' /></div>
+                    </td>
+                    <td class="name align-middle white-space-nowrap ps-0">
+                      <div class="d-flex align-items-center"><a href="#!">
+                          <div class="avatar avatar-xl me-3"><img class="rounded-circle" src="../../assets/img/team/26.webp" alt="" /></div>
+                        </a>
+                        <div><a class="fs-8 fw-bold" href="#!">Olivia Bensinger</a>
+                          <div class="d-flex align-items-center">
+                            <p class="mb-0 text-body-highlight fw-semibold fs-9 me-2">Chief Tech Officer</p><span class="badge badge-phoenix badge-phoenix-success">won lead</span>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="email align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent"><a class="text-body-highlight" href="mailto:olivia1986@gmail.com">olivia1986@gmail.com</a></td>
+                    <td class="phone align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent"><a class="text-body-highlight" href="tel:+441632960248">+44 1632 960248</a></td>
+                    <td class="contact align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight">Sam Alimentato</td>
+                    <td class="company align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 border-end border-translucent fw-semibold text-body-highlight">Google.inc</td>
+                    <td class="date align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 text-body-tertiary">Dec 19, 10:44 PM</td>
+                    <td class="align-middle white-space-nowrap text-end pe-0 ps-4">
+                      <div class="btn-reveal-trigger position-static"><button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs-10"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end py-2"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                    <td class="fs-9 align-middle">
+                      <div class="form-check mb-0 fs-8"><input class="form-check-input" type="checkbox" data-bulk-select-row='{"customer":{"avatar":"/team/73.webp","name":"Emily Beazley","designation":"Marketing Executive","status":{"label":"New Lead","type":"badge-phoenix-info"}},"email":"beazley1@gmail.com","phone":"+61 1900 654 321","contact":"Zackry Aldridge","company":"Instagram","date":"Dec 22, 08:45 PM"}' /></div>
+                    </td>
+                    <td class="name align-middle white-space-nowrap ps-0">
+                      <div class="d-flex align-items-center"><a href="#!">
+                          <div class="avatar avatar-xl me-3"><img class="rounded-circle" src="../../assets/img/team/73.webp" alt="" /></div>
+                        </a>
+                        <div><a class="fs-8 fw-bold" href="#!">Emily Beazley</a>
+                          <div class="d-flex align-items-center">
+                            <p class="mb-0 text-body-highlight fw-semibold fs-9 me-2">Marketing Executive</p><span class="badge badge-phoenix badge-phoenix-info">New Lead</span>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="email align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent"><a class="text-body-highlight" href="mailto:beazley1@gmail.com">beazley1@gmail.com</a></td>
+                    <td class="phone align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent"><a class="text-body-highlight" href="tel:+611900654321">+61 1900 654 321</a></td>
+                    <td class="contact align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight">Zackry Aldridge</td>
+                    <td class="company align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 border-end border-translucent fw-semibold text-body-highlight">Instagram</td>
+                    <td class="date align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 text-body-tertiary">Dec 22, 08:45 PM</td>
+                    <td class="align-middle white-space-nowrap text-end pe-0 ps-4">
+                      <div class="btn-reveal-trigger position-static"><button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs-10"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end py-2"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                    <td class="fs-9 align-middle">
+                      <div class="form-check mb-0 fs-8"><input class="form-check-input" type="checkbox" data-bulk-select-row='{"customer":{"avatar":"/team/75.webp","name":"Roy Anderson","designation":"System Admin","status":{"label":"Canceled","type":"badge-phoenix-secondary"}},"email":"andersonroy@netflix.chill","phone":"+1-613-555-0109","contact":"Jim Aldridge","company":"Google.inc","date":"Dec 24, 09:52 PM"}' /></div>
+                    </td>
+                    <td class="name align-middle white-space-nowrap ps-0">
+                      <div class="d-flex align-items-center"><a href="#!">
+                          <div class="avatar avatar-xl me-3"><img class="rounded-circle" src="../../assets/img/team/75.webp" alt="" /></div>
+                        </a>
+                        <div><a class="fs-8 fw-bold" href="#!">Roy Anderson</a>
+                          <div class="d-flex align-items-center">
+                            <p class="mb-0 text-body-highlight fw-semibold fs-9 me-2">System Admin</p><span class="badge badge-phoenix badge-phoenix-secondary">Canceled</span>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="email align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent"><a class="text-body-highlight" href="mailto:andersonroy@netflix.chill">andersonroy@netflix.chill</a></td>
+                    <td class="phone align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent"><a class="text-body-highlight" href="tel:+1-613-555-0109">+1-613-555-0109</a></td>
+                    <td class="contact align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight">Jim Aldridge</td>
+                    <td class="company align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 border-end border-translucent fw-semibold text-body-highlight">Google.inc</td>
+                    <td class="date align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 text-body-tertiary">Dec 24, 09:52 PM</td>
+                    <td class="align-middle white-space-nowrap text-end pe-0 ps-4">
+                      <div class="btn-reveal-trigger position-static"><button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs-10"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end py-2"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="row align-items-center justify-content-end py-4 pe-0 fs-9">
+              <div class="col-auto d-flex">
+                <p class="mb-0 d-none d-sm-block me-3 fw-semibold text-body" data-list-info="data-list-info"></p><a class="fw-semibold" href="#!" data-list-view="*">View all<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a><a class="fw-semibold d-none" href="#!" data-list-view="less">View Less<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
+              </div>
+              <div class="col-auto d-flex"><button class="page-link" data-list-pagination="prev"><span class="fas fa-chevron-left"></span></button>
+                <ul class="mb-0 pagination"></ul><button class="page-link pe-0" data-list-pagination="next"><span class="fas fa-chevron-right"></span></button>
+              </div>
+            </div>
           </div>
         </div>
-        
+        <footer class="footer position-absolute">
+          <div class="row g-0 justify-content-between align-items-center h-100">
+            <div class="col-12 col-sm-auto text-center">
+              <p class="mb-0 mt-2 mt-sm-0 text-body">Thank you for creating with Phoenix<span class="d-none d-sm-inline-block"></span><span class="d-none d-sm-inline-block mx-1">|</span><br class="d-sm-none" />2023 &copy;<a class="mx-1" href="https://themewagon.com/">Themewagon</a></p>
+            </div>
+            <div class="col-12 col-sm-auto text-center">
+              <p class="mb-0 text-body-tertiary text-opacity-85">v1.14.0</p>
+            </div>
+          </div>
+        </footer>
       </div>
     </main><!-- ===============================================-->
     <!--    End of Main Content-->
     <!-- ===============================================-->
-    <!-- <script src="/javascripts/product.js" ></script> -->
+    <script src="/javascripts/daily-report.js" ></script>
   </body>
 </html>

@@ -357,11 +357,37 @@ const orderDetailModule = async(req) => {
     return {status:true,data:orderObjMap[0]}
 }
 
+const getCustomerOrderModule = async(req) => {
+
+    var customerDetail = JSON.parse(JSON.stringify(await db.Customer.find({history_id:null,flag_deleted:false})))
+
+    var orderDetail = JSON.parse(JSON.stringify(await db.Order.find({history_id:null,flag_deleted:false})))
+
+    var productDetail = JSON.parse(JSON.stringify(await db.Product.find({history_id:null,flag_deleted:false})))
+
+    var result = customerDetail.map( x => {
+        var orderDetailFilter = orderDetail.filter( y => x._id == y.customer_id )
+            var orderDetailFilterMap = orderDetailFilter?.map( y => {
+                var productDetailFilter = productDetail?.filter( z => z.order_id == y._id )
+                y["product"] = productDetailFilter
+                if(productDetailFilter.length != 0){
+                    return y
+                }
+            }).filter( x => x != null )
+            x["order"] = orderDetailFilterMap
+            if(orderDetailFilterMap.length != 0){
+                return x
+            }
+    }).filter( x => x != null )
+
+    return {status:true,data:result}
+}
 
 module.exports = {
     createproductModule: createproductModule,
     getProductModule: getProductModule,
     getOrderListModule: getOrderListModule,
     updateProductModule: updateProductModule,
-    orderDetailModule:orderDetailModule
+    orderDetailModule:orderDetailModule,
+    getCustomerOrderModule:getCustomerOrderModule
 }

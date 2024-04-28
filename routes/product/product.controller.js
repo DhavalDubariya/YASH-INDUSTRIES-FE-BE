@@ -29,10 +29,16 @@ const orderDetailController = async (req, res) => {
   return res.send(result);
 }
 
+const getCustomerOrderController = async(req,res) => {
+  const result = await productModule.getCustomerOrderModule(req)
+  return res.send(result);
+}
+
 module.exports = {
   createproductController: createproductController,
   getProductModule: getProductModule,
   getOrderListController: getOrderListController,
   updateProductController: updateProductController,
-  orderDetailController:orderDetailController
+  orderDetailController:orderDetailController,
+  getCustomerOrderController:getCustomerOrderController
 }
