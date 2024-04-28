@@ -120,9 +120,11 @@ $('#customer-product').on('click',async function(e){
     }
     var searchParams = new URLSearchParams(window.location.search);
     var customerId = Array.from(searchParams).filter( x => x[0] == "customerId")[0][1]
-    var productId = Array.from(searchParams).filter( x => x[0] == "productId")[0][1]
+    var productId = Array.from(searchParams).filter( x => x[0] == "productId").length == 0 ? undefined : Array.from(searchParams).filter( x => x[0] == "productId")[0][1]
+    var orderId = Array.from(searchParams).filter( x => x[0] == "orderId").length == 0 ? undefined : Array.from(searchParams).filter( x => x[0] == "orderId")[0][1]
     forMateForm["customer_id"] = customerId
     forMateForm["product_id"] = productId
+    forMateForm["order_id"] = orderId
     forMateForm["material"] = materialArray
     console.log(forMateForm)
     var type = 'POST'

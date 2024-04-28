@@ -20,25 +20,8 @@ const createproductModule = async(req) => {
     var productQuantity = req.body.product_quantity
     var runner = req.body.runner
     var customerId = req.body.customer_id
-
+    var orderId = req.body.order_id
     var changeLogId = (await db.ChangeLog.create({user_id:userId})).toObject()
-
-    var orderNo = await db.Order.aggregate([
-        { $group: { _id: null, maxOrderNo: { $max: "$order_no" } } }
-    ]);
-      
-    var newOrderNo = orderNo.length > 0 ? orderNo[0].maxOrderNo + 1 : 1;
-    console.log(req.body,newOrderNo, orderName, userId,changeLogId._id)
-    var orderName = Math.random()
-    var deliveryDate = req.body.delivery_date
-    var driverName = req.body.driver_name
-    
-    var requireFieldOrder = [newOrderNo, orderName, userId,changeLogId._id]
-    var validate = await libFunction.objValidator(requireFieldOrder)
-
-    if (validate == false) {
-        return errorMessage("Invalid Params for Order")
-    }
 
     // material array
     var materialArray = req.body.material
@@ -64,11 +47,33 @@ const createproductModule = async(req) => {
         customer_id: customerId,
         change_log_id:changeLogId._id
     }
-    var createOrder = await db.Order.create(orderObj)
-    if (createOrder == null) {
-        return {
-            status: false,
-            error:"Error while creating order"
+
+    var createOrder = await db.Order.findOne({_id:orderId,history_id:null,flag_deleted:false})
+
+    if(createOrder == null){
+        var orderNo = await db.Order.aggregate([
+            { $group: { _id: null, maxOrderNo: { $max: "$order_no" } } }
+        ]);
+          
+        var newOrderNo = orderNo.length > 0 ? orderNo[0].maxOrderNo + 1 : 1;
+        console.log(req.body,newOrderNo, orderName, userId,changeLogId._id)
+        var orderName = Math.random()
+        var deliveryDate = req.body.delivery_date
+        var driverName = req.body.driver_name
+        
+        var requireFieldOrder = [newOrderNo, orderName, userId,changeLogId._id]
+        var validate = await libFunction.objValidator(requireFieldOrder)
+    
+        if (validate == false) {
+            return errorMessage("Invalid Params for Order")
+        }
+
+        var createOrder = await db.Order.create(orderObj)
+        if (createOrder == null) {
+            return {
+                status: false,
+                error:"Error while creating order"
+            }
         }
     }
 

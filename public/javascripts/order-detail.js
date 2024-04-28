@@ -58,6 +58,8 @@ $(document).ready(async function() {
 })
 
 function setOrderDetail(orderDetail) {
+    $('#customer-id').val(orderDetail.customer_id)
+    $('#order-id').val(orderDetail._id)
     $('#order-no').text(orderDetail.order_no)
     $("#product-count").text(orderDetail.product_count)
     $("#completions-count").text(orderDetail?.completions_count ? orderDetail?.completions_count : '' )
@@ -111,3 +113,10 @@ function setProductList(productList) {
     $('#product-list').empty()
     $('#product-list').append(productListString)
 }
+
+$('#creaet-product').on('click',function(e){
+    e.preventDefault()
+    var customerId = $('#customer-id').val()
+    var orderId = $('#order-id').val()
+    window.location = `/product?customerId=${customerId}&orderId=${orderId}`
+})
