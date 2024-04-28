@@ -142,6 +142,9 @@ $('#customer-product').on('click',async function(e){
             // Handle success
             console.log("Request successful");
             console.log(response);
+            if(response.status == true){
+                window.location = `order-detail?customerId=${response.data.customer_id}&orderId=${response.data.order_id}`
+            }
         },
         error: function(xhr, status, error){
             // Handle errors

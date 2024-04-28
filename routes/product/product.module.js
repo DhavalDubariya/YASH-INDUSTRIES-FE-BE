@@ -39,14 +39,7 @@ const createproductModule = async(req) => {
         }
     })
     // order object
-    var orderObj = {
-        order_no: newOrderNo,
-        order_name: orderName,
-        delivery_date: deliveryDate,
-        driver_name: driverName,
-        customer_id: customerId,
-        change_log_id:changeLogId._id
-    }
+    
 
     var createOrder = await db.Order.findOne({_id:orderId,history_id:null,flag_deleted:false})
 
@@ -67,7 +60,14 @@ const createproductModule = async(req) => {
         if (validate == false) {
             return errorMessage("Invalid Params for Order")
         }
-
+        var orderObj = {
+            order_no: newOrderNo,
+            order_name: orderName,
+            delivery_date: deliveryDate,
+            driver_name: driverName,
+            customer_id: customerId,
+            change_log_id:changeLogId._id
+        }
         var createOrder = await db.Order.create(orderObj)
         if (createOrder == null) {
             return {
@@ -141,7 +141,7 @@ const createproductModule = async(req) => {
         material_qty:material.material_qty
     }))
 
-    return {status:true,data:[]}
+    return {status:true,data:{customer_id:customerId,order_id:orderId}}
 }
 
 const getOrderListModule = async (req) => {
@@ -298,8 +298,7 @@ const updateProductModule = async (req) => {
         return createMaterial
     })
 
-    return {status:true,data:[]}
-
+    return {status:true,data:{customer_id:customerId,order_id:productDetail.order_id}}
 }
 
 const orderDetailModule = async(req) => {
