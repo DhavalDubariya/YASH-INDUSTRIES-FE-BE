@@ -6,7 +6,7 @@ const middleware = require("../middleware");
 router.post("/product",middleware.checkAccessToken,productController.createproductController);
 router.get("/order-list",middleware.checkAccessToken,productController.getOrderListController);
 router.get("/product-detail", middleware.checkAccessToken, productController.getProductModule);
-router.put("/product", middleware.checkAccessToken, productController.addProductModule);
+router.put("/product", middleware.checkAccessToken, productController.updateProductController);
 
 router.get("/order-detail",middleware.checkAccessToken, productController.orderDetailController)
 

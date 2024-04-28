@@ -18,8 +18,8 @@ const getProductModule = async (req, res) => {
   return res.send(result);
 };
 
-const addProductModule = async (req, res) => {
-  const result = await productModule.addProductModule(req)
+const updateProductController = async (req, res) => {
+  const result = await productModule.updateProductModule(req)
   // console.log(result);
   return res.send(result);
 }
@@ -33,6 +33,6 @@ module.exports = {
   createproductController: createproductController,
   getProductModule: getProductModule,
   getOrderListController: getOrderListController,
-  addProductModule: addProductModule,
+  updateProductController: updateProductController,
   orderDetailController:orderDetailController
 }

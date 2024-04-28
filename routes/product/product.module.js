@@ -1,7 +1,8 @@
 const router = require("express").Router();
 const productDb = require('./product.db')
 const libFunction = require('../../helpers/libFunction');
-const db = require('../../model/index')
+const db = require('../../model/index');
+const { json } = require("express");
 
 function errorMessage(params) {
     return {
@@ -24,7 +25,7 @@ const createproductModule = async(req) => {
 
     var orderNo = await db.Order.aggregate([
         { $group: { _id: null, maxOrderNo: { $max: "$order_no" } } }
-      ]);
+    ]);
       
     var newOrderNo = orderNo.length > 0 ? orderNo[0].maxOrderNo + 1 : 1;
     console.log(req.body,newOrderNo, orderName, userId,changeLogId._id)
@@ -193,9 +194,9 @@ const getProductModule = async (req) => {
             message:"Product Id "
         }
     }
-    console.log(productId)
+    // console.log(productId)
     var productCount = JSON.parse(JSON.stringify(await db.Product.find({ flag_deleted: false, history_id: null, _id: productId } )))
-    console.log(productCount,'::::::::::::::::::::::::::::')
+    // console.log(productCount,'::::::::::::::::::::::::::::')
     if(productCount.length == 0){
         return {status:true,data:[]}
     }
@@ -209,47 +210,28 @@ const getProductModule = async (req) => {
     return {status:true,data:productCount}
 }
 
-const addProductModule = async (req) => {
-    var orderId = req.query.order_id
-
+const updateProductModule = async (req) => {
     var userId = req.user_id
     var productName = req.body.product_name
     var productQuantity = req.body.product_quantity
     var runner = req.body.runner
-    var changeLogId = (await db.ChangeLog.create({user_id:userId})).toObject()
+    var customerId = req.body.customer_id
+    var productId = req.body.product_id
 
-    var requiredFieldProduct = [productName, productQuantity, runner, changeLogId,orderId]
-    var validate = await libFunction.objValidator(requiredFieldProduct)
-
-    if (!validate) {
-        return errorMessage("Invalid Params for Product")
+    if(productId == undefined || productId == "" || productId == null ){
+        return errorMessage("Invalid Body")
     }
 
-    var findProduct = await db.Product.find({ order_id: orderId })
-    
-    if (!findProduct) {
+    var productDetail = JSON.parse(JSON.stringify(await db.Product.findOne({history_id:null,flag_deleted:false,_id:productId})))
+
+    if(productDetail == null){
         return errorMessage("Product Not Found")
     }
 
-    var productObj = {
-        product_name: productName,
-        product_qty: productQuantity,
-        runner: runner,
-        order_id: orderId,
-        change_log_id: changeLogId,
-    }
-
-    var createProduct = await db.Product.create(productObj)
-
-    if (!createProduct) {
-        return errorMessage("Product is Not Created")
-    }
-
-    var productId = createProduct._id
+    // material array
     var materialArray = req.body.material
 
-    materialArray.map(async (material) => {
-        
+    materialArray.map(async(material) => {
         var materialName = material.material_name
         var materialColor = material.material_color
         var materialQty = material.material_qty
@@ -262,6 +244,36 @@ const addProductModule = async (req) => {
         }
     })
 
+    var requireFieldProduct = [productName, productQuantity, runner]
+    var validate = await libFunction.objValidator(requireFieldProduct)
+
+    if (validate == false) {
+        return errorMessage("Invalid Params for Product")
+    }
+    await libFunction.HistoryGenerator(db.Product,productDetail._id)
+    var changeLogId = (await db.ChangeLog.create({user_id:userId})).toObject()
+    var productObj = {
+        product_name:productName.trim() == "" || undefined ? null : productName.trim(),
+        product_qty:productQuantity == "" || undefined ? null : productQuantity,
+        runner: runner == "" || undefined ? null : runner,
+        change_log_id:changeLogId._id
+    }
+    
+    var updateProduct = await db.Product.updateOne({_id:productId},productObj)
+    
+    if (updateProduct === null) {
+        return {
+            status: false,
+            error:"Error while creating product"
+        }
+    }
+    // return {status:true,data:[]}
+    // var productId = createProduct._id
+    var deletePreviousMaterials = await db.Material.updateMany({product_id:productId},{flag_deleted:true,change_log_id:changeLogId._id})
+    if(deletePreviousMaterials.status == false){
+        return errorMessage("Error While Updating Materials")
+    }
+    // material data
     var materialPromise = materialArray.map(async (material) => {
         var materialObj = {
             material_name: material.material_name,
@@ -281,22 +293,7 @@ const addProductModule = async (req) => {
         return createMaterial
     })
 
-    var createdMaterial = await Promise.all(materialPromise)
-
-    var responseObj = {
-        product_name: createProduct.product_name,
-        product_quantity: createProduct.product_qty,
-        runner: createProduct.runner,
-        order_id:orderId,
-    }
-
-    responseObj.material = createdMaterial.map(material => ({
-        material_name: material.material_name,
-        material_color: material.material_color,
-        material_qty:material.material_qty
-    }))
-
-    return responseObj
+    return {status:true,data:[]}
 
 }
 
@@ -356,10 +353,11 @@ const orderDetailModule = async(req) => {
     return {status:true,data:orderObjMap[0]}
 }
 
+
 module.exports = {
     createproductModule: createproductModule,
     getProductModule: getProductModule,
     getOrderListModule: getOrderListModule,
-    addProductModule: addProductModule,
+    updateProductModule: updateProductModule,
     orderDetailModule:orderDetailModule
 }

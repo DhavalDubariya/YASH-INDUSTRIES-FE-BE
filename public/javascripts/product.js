@@ -81,6 +81,7 @@ $("#add-material").on("click",function(event){
 
 
 function removeMaterial(materialDataId) {
+    console.log(materialDataId,':::::::::::::::::::::::::::::::')
     if($('#material').find('tr').length == 1){
         console.log('Cannot Remove Last Row')
         return
@@ -106,45 +107,6 @@ $('#customer-product').on('click',async function(e){
     var form = productForm.serializeArray()
     var forMateForm = keyValueObject(form)
     // console.log(form)
-    var data = [
-        {
-            "name": "product_name",
-            "value": "asdsad"
-        },
-        {
-            "name": "product_quantity",
-            "value": "1"
-        },
-        {
-            "name": "runner",
-            "value": "1"
-        },
-        {
-            "name": "material_name",
-            "value": "1"
-        },
-        {
-            "name": "material_color",
-            "value": "1"
-        },
-        {
-            "name": "material_qty",
-            "value": "1"
-        },
-        {
-            "name": "material_name",
-            "value": "1"
-        },
-        {
-            "name": "material_color",
-            "value": "1"
-        },
-        {
-            "name": "material_qty",
-            "value": "1"
-        }
-    ]
-    
     var materialArray = []
     for(let i=0;i<form.length;i++){
         if(form[i].name == "material_name"){
@@ -158,11 +120,19 @@ $('#customer-product').on('click',async function(e){
     }
     var searchParams = new URLSearchParams(window.location.search);
     var customerId = Array.from(searchParams).filter( x => x[0] == "customerId")[0][1]
+    var productId = Array.from(searchParams).filter( x => x[0] == "productId")[0][1]
     forMateForm["customer_id"] = customerId
+    forMateForm["product_id"] = productId
     forMateForm["material"] = materialArray
     console.log(forMateForm)
+    var type = 'POST'
+    if($('#customer-product').attr('flag-create') == "true"){
+        type = 'POST'
+    }else{
+        type = 'PUT'
+    }
     $.ajax({
-        type: "POST",
+        type: type,
         url: "api/product/product",
         data: JSON.stringify(forMateForm),
         contentType: "application/json",
@@ -189,10 +159,10 @@ function setUpdateProduct(productData) {
     var date = new Date().getTime()
     var materialHtml = ``
     for(let i=0;i<productData.material.length;i++){
-
+        var ramdumNumbar = date + parseInt(Math.random()*1000)
         materialHtml = materialHtml + `
-        <tr style="padding: 0px !important;" material-data-id="${date + parseInt(Math.random()*1000)}">
-        <form id="${date}_material" class="needs-validation" novalidate="">
+        <tr style="padding: 0px !important;" material-data-id="${ramdumNumbar}">
+        <form id="${ramdumNumbar}_material" class="needs-validation" novalidate="">
             <td style="padding: 0px !important;">
             <input style="border-radius: 0px !important;" class="form-control" type="text" name="material_name" id="material_name" placeholder="Name" value="${productData.material[i].material_name}"
                 required />
@@ -209,7 +179,7 @@ function setUpdateProduct(productData) {
             required />
             <div class="valid-feedback">Looks good!</div>
             <div class="invalid-feedback">Please provide quantity.</div></td>
-            <td style="padding: 0.325rem; cursor: pointer;" onclick="removeMaterial(${date +parseInt(Math.random()*1000) })">
+            <td style="padding: 0.325rem; cursor: pointer;" onclick="removeMaterial(${ramdumNumbar})">
             <div>
             <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus-circle text-danger" style="height: 18px; width: 18px;"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="16" y2="12"></line></svg>
             </div>
