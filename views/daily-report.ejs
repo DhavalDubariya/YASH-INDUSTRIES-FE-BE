@@ -45,38 +45,30 @@
                           <div class="modal-header border-translucent p-4">
                             <h5 class="modal-title text-body-highlight fs-6 lh-sm">
                               Daily Report
-                            </h5><button class="btn p-1 text-body" type="button" data-bs-dismiss="modal" aria-label="Close"><span class="fas fa-times fs-9"></span></button>
+                            </h5><button class="btn p-1 text-body" type="button" onclick="closeModel()" data-bs-dismiss="modal" aria-label="Close"><span class="fas fa-times fs-9"></span></button>
                           </div>
                           <div class="modal-body pt-4 pb-2 px-4">
                             <div class="mb-3"><label class="fw-bold mb-2 text-body-highlight" for="leadStatus">CUSTOMER</label>
-                              <select class="form-select" id="single-select-field" data-placeholder="Choose one thing">
+                              <select class="form-select" id="customer-select" style="text-transform: uppercase;" data-placeholder="Choose one thing">
                                 <option>SELECT CUSTOMER</option>
-                                <option>Reactive</option>
-                                <option>Solution</option>
-                                <option>Conglomeration</option>
-                                <option>Algoritm</option>
-                                <option>Holistic</option>
                             </select>
                             </div>
                             <div class="mb-3"><label class="fw-bold mb-2 text-body-highlight" for="createDate">ORDER</label>
-                              <select class="form-select" id="createDate">
+                              <select class="form-select" id="order-select" style="text-transform: uppercase;">
                                 <option>SELECT ORDER</option>
-                                <option value="last7Days">Last 7 Days</option>
-                                <option value="last30Days">Last 30 Days</option>
-                                <option value="chooseATimePeriod">Choose a time period</option>
                               </select>
                             </div>
                             <div class="mb-3"><label class="fw-bold mb-2 text-body-highlight" for="designation">PRODUCT</label>
-                              <select class="form-select" id="designation">
+                              <select class="form-select" id="product-select" style="text-transform: uppercase;">
                                 <option>SELECT PRODUCT</option>
-                                <option value="ceo">CEO</option>
-                                <option value="creativeDirector">Creative Director</option>
-                                <option value="accountant">Accountant</option>
-                                <option value="executiveManager">Executive Manager</option>
                               </select>
                             </div>
                           </div>
-                          <div class="modal-footer d-flex justify-content-end align-items-center px-4 pb-4 border-0 pt-3"><button class="btn btn-sm btn-phoenix-primary px-4 fs-10 my-0" type="submit"> <span class="fas fa-arrows-rotate me-2 fs-10"></span>Reset</button><button class="btn btn-sm btn-primary px-9 fs-10 my-0" type="submit">Done</button></div>
+                          <div class="modal-footer d-flex justify-content-end align-items-center px-4 pb-4 border-0 pt-3">
+                            <button class="btn btn-sm btn-phoenix-primary px-4 fs-10 my-0" onclick="resetCOP()" type="button"> 
+                              <span class="fas fa-arrows-rotate me-2 fs-10"></span>Reset
+                            </button>
+                            <button class="btn btn-sm btn-primary px-9 fs-10 my-0" id="daily-product-btn" onclick="createDailyProcuct()" type="button">CREATE</button></div>
                         </form>
                       </div>
                     </div>

@@ -383,11 +383,30 @@ const getCustomerOrderModule = async(req) => {
     return {status:true,data:result}
 }
 
+const createDailyProductModule = async(req) => {
+    var userId = req.user_id
+    var customerId = req.body.customer_id
+    var orderId = req.body.order_id
+    var productId = req.body.product_id    
+    var changeLogId = (await db.ChangeLog.create({user_id:userId})).toObject()
+    req.body.change_log_id = changeLogId._id
+
+    var createDailyProcuct = await db.DailyProduct.create(req.body)
+        if (createDailyProcuct == null) {
+            return {
+                status: false,
+                error:"Error while creating order"
+            }
+    }
+    return {status:true,data:[]}
+}
+
 module.exports = {
     createproductModule: createproductModule,
     getProductModule: getProductModule,
     getOrderListModule: getOrderListModule,
     updateProductModule: updateProductModule,
     orderDetailModule:orderDetailModule,
-    getCustomerOrderModule:getCustomerOrderModule
+    getCustomerOrderModule:getCustomerOrderModule,
+    createDailyProductModule:createDailyProductModule
 }
