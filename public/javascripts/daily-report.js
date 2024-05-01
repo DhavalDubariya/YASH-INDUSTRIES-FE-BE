@@ -160,6 +160,7 @@ function getCustomerOrderProduct(date) {
 
 
 function setCustomeOrderProduct(copData) {
+    $('#product-count').text(`${copData.length} Product`)
     var copString = ``
     for(let i=0;i<copData.length;i++){
         copString = copString + 
