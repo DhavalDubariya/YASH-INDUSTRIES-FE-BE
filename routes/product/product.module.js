@@ -391,6 +391,15 @@ const createDailyProductModule = async(req) => {
     var changeLogId = (await db.ChangeLog.create({user_id:userId})).toObject()
     req.body.change_log_id = changeLogId._id
 
+    var daillyOrderProduct = await db.DailyProduct.find({history_id:null,flag_deleted:false,customer_id:customerId,order_id:orderId,product_id:productId})
+
+    if(daillyOrderProduct.length != 0){
+        return {
+            status:false,
+            error:"It's already there"
+        }
+    }
+
     var createDailyProcuct = await db.DailyProduct.create(req.body)
         if (createDailyProcuct == null) {
             return {
