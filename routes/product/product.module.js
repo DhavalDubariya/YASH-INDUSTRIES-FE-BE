@@ -398,7 +398,41 @@ const createDailyProductModule = async(req) => {
                 error:"Error while creating order"
             }
     }
-    return {status:true,data:[]}
+
+    req["query"]["iDate"] = req.body.iDate
+    var getDailyProduct = await getDailyProductModule(req)
+    return getDailyProduct
+}
+
+const getDailyProductModule = async(req) => {
+    var iDate = req.query.iDate
+    
+    if(iDate == undefined || iDate == null || iDate == ""){
+        return errorMessage("Invalid Date")
+    }
+
+    var customerOrderProduct = JSON.parse(JSON.stringify(await db.DailyProduct.find({history_id:null,flag_deleted:false,iDate:iDate})))
+
+    if(customerOrderProduct.length == 0){
+        return {
+            status:true,
+            data:[]
+        }
+    }
+
+    var customerDetail = JSON.parse(JSON.stringify(await db.Customer.find({history_id:null,flag_deleted:false,_id:{$in:customerOrderProduct.map( x => x.customer_id )}})))
+
+    var orderDetail = JSON.parse(JSON.stringify(await db.Order.find({history_id:null,flag_deleted:false,_id:{$in:customerOrderProduct.map( x => x.order_id )}})))
+
+    var productDetail = JSON.parse(JSON.stringify(await db.Product.find({history_id:null,flag_deleted:false,_id:{$in:customerOrderProduct.map( x => x.product_id )}})))
+
+    for(let i=0;i<customerOrderProduct.length;i++){
+        customerOrderProduct[i]["customer_name"] = customerDetail.filter( x => x._id == customerOrderProduct[i].customer_id )[0]?.customer_name
+        customerOrderProduct[i]["order_number"] = orderDetail.filter( x => x._id == customerOrderProduct[i].order_id )[0]?.order_no
+        customerOrderProduct[i]["product_name"] = productDetail.filter( x => x._id == customerOrderProduct[i].product_id )[0]?.product_name
+    }
+
+    return {status:true,data:customerOrderProduct}
 }
 
 module.exports = {
@@ -408,5 +442,6 @@ module.exports = {
     updateProductModule: updateProductModule,
     orderDetailModule:orderDetailModule,
     getCustomerOrderModule:getCustomerOrderModule,
-    createDailyProductModule:createDailyProductModule
+    createDailyProductModule:createDailyProductModule,
+    getDailyProductModule:getDailyProductModule
 }

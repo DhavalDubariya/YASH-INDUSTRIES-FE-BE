@@ -12,4 +12,6 @@ router.get("/order-detail",middleware.checkAccessToken, productController.orderD
 
 router.get("/customer-order", productController.getCustomerOrderController)
 router.post("/dayily-product",middleware.checkAccessToken,productController.createDailyProductController)
+router.get("/dayily-product",middleware.checkAccessToken,productController.getDailyProductController)
+
 module.exports = router
