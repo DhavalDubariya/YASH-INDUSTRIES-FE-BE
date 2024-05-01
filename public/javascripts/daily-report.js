@@ -176,7 +176,7 @@ function setCustomeOrderProduct(copData) {
             </td>
         </tr>
         `
-        $('#product-cop-list').empty()
-        $('#product-cop-list').append(copString)
     }
+    $('#product-cop-list').empty()
+    $('#product-cop-list').append(copString)
 }
