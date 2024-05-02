@@ -444,6 +444,35 @@ const getDailyProductModule = async(req) => {
     return {status:true,data:customerOrderProduct}
 }
 
+const genricMachineModule = async(req) => {
+    try{
+    var iDate = req.query.iDate
+    var dayilyProduct = await getDailyProductModule(req)
+    console.log(dayilyProduct)
+    if(dayilyProduct.status == false){
+        return dayilyProduct
+    }
+
+    var machine = JSON.parse(JSON.stringify(await db.Machine.find({flag_deleted:false})))
+
+    if(machine.length == 0){
+        return errorMessage()
+    }
+
+    var result = {
+        status:true,
+        data:{
+            "dayily_product":dayilyProduct.data,
+            "machine":machine
+        }
+    }
+    return result
+    }catch(e){
+        console.log(e)
+    }
+    
+}
+
 module.exports = {
     createproductModule: createproductModule,
     getProductModule: getProductModule,
@@ -452,5 +481,6 @@ module.exports = {
     orderDetailModule:orderDetailModule,
     getCustomerOrderModule:getCustomerOrderModule,
     createDailyProductModule:createDailyProductModule,
-    getDailyProductModule:getDailyProductModule
+    getDailyProductModule:getDailyProductModule,
+    genricMachineModule:genricMachineModule
 }

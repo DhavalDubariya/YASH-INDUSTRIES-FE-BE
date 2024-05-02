@@ -14,4 +14,6 @@ router.get("/customer-order", productController.getCustomerOrderController)
 router.post("/dayily-product",middleware.checkAccessToken,productController.createDailyProductController)
 router.get("/dayily-product",middleware.checkAccessToken,productController.getDailyProductController)
 
+router.get("/genric-machine",middleware.checkAccessToken,productController.genricMachineController)
+
 module.exports = router

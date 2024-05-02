@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html data-navigation-type="default" data-navbar-horizontal-shape="default" lang="en-US" dir="ltr">
+<meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- ===============================================-->
+    <!--    Document Title-->
+    <!-- ===============================================-->
+    <title>Phoenix</title>
+    <%- include('beverages.ejs') %>
+  </head>
+
+  <body>
+    <!-- ===============================================-->
+    <!--    Main Content-->
+    <!-- ===============================================-->
+    <main class="main" id="top">
+      <%- include('navbar.ejs') %>
+      <div class="content">
+        <nav class="mb-2" aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active">Machine Report</li>
+          </ol>
+        </nav>
+        <div class="pb-6">
+          <h2 class="mb-4" id="product-count" ></h2>
+            <div class="row g-3 justify-content-between mb-4">
+
+              <div class="col-md-3 col-sm-6">
+                  <div class="flatpickr-input-container me-2">
+                    <input class="form-control ps-6 datetimepicker" data-date="" id="datepicker" type="text"  />
+                    <span class="uil uil-calendar-alt flatpickr-icon text-body-tertiary"></span>
+                  </div>
+              </div>
+
+              <div class="col-md-3 col-sm-6">
+                <select class="form-select" id="customer-order-product" style="text-transform: uppercase;">
+                  <option>SELECT COP</option>
+                </select>
+              </div>
+
+              <div class="col-md-3 col-sm-6">
+                <select class="form-select" id="select-machine" style="text-transform: uppercase;">
+                  <option>SELECT MACHINE</option>
+                </select>
+              </div>
+
+              <div class="col-md-3 col-sm-6">
+                <div class="form-check form-switch" style="font-size: 25px;" >
+                  <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                </div>                
+              </div>
+            
+            </div>  
+            </div>
+            <div class="table-responsive scrollbar mx-n1 px-1 border-top border-translucent">
+              <table class="table fs-9 mb-0 leads-table">
+                <thead>
+                  <tr>
+                    <th class="sort align-middle ps-4 pe-5 text-uppercase border-end border-translucent" scope="col" data-sort="phone" style="width:15%; min-width: 180px;">
+                      <div class="d-inline-flex flex-center">
+                        <div class="d-flex align-items-center px-1 py-1 bg-primary-subtle rounded me-2"><span class="text-primary-dark" data-feather="grid"></span></div><span>TIME</span>
+                      </div>
+                    </th>
+                    <th class="sort align-middle ps-4 pe-5 text-uppercase border-end border-translucent" scope="col" data-sort="contact" style="width:15%;">
+                      <div class="d-inline-flex flex-center">
+                        <div class="d-flex align-items-center px-1 py-1 bg-info-subtle rounded me-2"><span class="text-info-dark" data-feather="phone"></span></div><span>COUNT</span>
+                      </div>
+                    </th>
+                    <th class="sort align-middle ps-4 pe-5 text-uppercase border-end border-translucent" scope="col" data-sort="company" style="width:15%;">
+                      <div class="d-inline-flex flex-center">
+                        <div class="d-flex align-items-center px-1 py-1 bg-warning-subtle rounded me-2"><span class="text-warning-dark" data-feather="user"></span></div><span>WORKER</span>
+                      </div>
+                    </th>
+                    <th class="sort align-middle ps-4 pe-5 text-uppercase" scope="col" data-sort="date" style="width:15%;">REASON</th>
+                  </tr>
+                </thead>
+                <tbody class="list" id="product-cop-list">
+                  <tr style="padding: 0px !important;" material-data-id="1">
+                    <td style="padding: 0px !important; font-size: 24px; text-align: center;">
+                      <b>8:00</b>
+                    </td>
+                    <td style="padding: 0px !important;">
+                      <input style="border-radius: 0px !important;" class="form-control" pattern="^[1-9]\d*$" type="number" name="material_qty" id="material_qty" placeholder="Quantity" />
+                    </td>
+                    <td style="padding: 0px !important;">
+                      <select class="form-select" id="select-machine" style="text-transform: uppercase; border-radius: 0px;">
+                        <option>SELECT MACHINE</option>
+                        <option>DHAVAL</option>
+                        <option>VIVEK</option>
+                      </select>
+                    </td>
+                    <td style="padding: 0px !important;">
+                      <input style="border-radius: 0px !important;" class="form-control" type="text" name="reason" id="reason_id" placeholder="REASON" />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="row align-items-center justify-content-end py-4 pe-0 fs-9">
+              <div class="col-auto d-flex">
+                <p class="mb-0 d-none d-sm-block me-3 fw-semibold text-body" data-list-info="data-list-info"></p><a class="fw-semibold" href="#!" data-list-view="*">View all<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a><a class="fw-semibold d-none" href="#!" data-list-view="less">View Less<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
+              </div>
+              <div class="col-auto d-flex"><button class="page-link" data-list-pagination="prev"><span class="fas fa-chevron-left"></span></button>
+                <ul class="mb-0 pagination"></ul><button class="page-link pe-0" data-list-pagination="next"><span class="fas fa-chevron-right"></span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <footer class="footer position-absolute">
+          <div class="row g-0 justify-content-between align-items-center h-100">
+            <div class="col-12 col-sm-auto text-center">
+              <p class="mb-0 mt-2 mt-sm-0 text-body">Thank you for creating with Phoenix<span class="d-none d-sm-inline-block"></span><span class="d-none d-sm-inline-block mx-1">|</span><br class="d-sm-none" />2023 &copy;<a class="mx-1" href="https://themewagon.com/">Themewagon</a></p>
+            </div>
+            <div class="col-12 col-sm-auto text-center">
+              <p class="mb-0 text-body-tertiary text-opacity-85">v1.14.0</p>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </main><!-- ===============================================-->
+    <!--    End of Main Content-->
+    <!-- ===============================================-->
+    <script src="/javascripts/machine-report.js" ></script>
+  </body>
+</html>
