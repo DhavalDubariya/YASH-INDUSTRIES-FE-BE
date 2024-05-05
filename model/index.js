@@ -7,6 +7,7 @@ const Product = require('./product')
 const Order  = require('./CustomerOrder')
 const DailyProduct = require('./dayilyproduct')
 const Machine = require('./machine')
+const Worker = require('./worker')
 module.exports = {
     User:User,
     UserAccessToken:UserAccessToken,
@@ -16,5 +17,6 @@ module.exports = {
     Material: Material,
     Order:Order,
     DailyProduct:DailyProduct,
-    Machine:Machine
+    Machine:Machine,
+    Worker:Worker
 }

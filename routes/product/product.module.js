@@ -419,7 +419,7 @@ const getDailyProductModule = async(req) => {
     if(iDate == undefined || iDate == null || iDate == ""){
         return errorMessage("Invalid Date")
     }
-
+    console.log(iDate,':::::::::::::::::::::::::::::::::')
     var customerOrderProduct = JSON.parse(JSON.stringify(await db.DailyProduct.find({history_id:null,flag_deleted:false,iDate:iDate})))
 
     if(customerOrderProduct.length == 0){
@@ -446,12 +446,6 @@ const getDailyProductModule = async(req) => {
 
 const genricMachineModule = async(req) => {
     try{
-    var iDate = req.query.iDate
-    var dayilyProduct = await getDailyProductModule(req)
-    console.log(dayilyProduct)
-    if(dayilyProduct.status == false){
-        return dayilyProduct
-    }
 
     var machine = JSON.parse(JSON.stringify(await db.Machine.find({flag_deleted:false})))
 
@@ -461,16 +455,22 @@ const genricMachineModule = async(req) => {
 
     var result = {
         status:true,
-        data:{
-            "dayily_product":dayilyProduct.data,
-            "machine":machine
-        }
+        data:machine
     }
     return result
     }catch(e){
         console.log(e)
     }
     
+}
+
+const getWorkerModule = async(req) => {
+    var getWorker = JSON.parse(JSON.stringify(await db.Worker.find({flag_deleted:false,history_id:null})))
+    var result = {
+        status:true,
+        data:getWorker
+    }
+    return result
 }
 
 module.exports = {
@@ -482,5 +482,6 @@ module.exports = {
     getCustomerOrderModule:getCustomerOrderModule,
     createDailyProductModule:createDailyProductModule,
     getDailyProductModule:getDailyProductModule,
-    genricMachineModule:genricMachineModule
+    genricMachineModule:genricMachineModule,
+    getWorkerModule:getWorkerModule
 }

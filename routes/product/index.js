@@ -15,5 +15,5 @@ router.post("/dayily-product",middleware.checkAccessToken,productController.crea
 router.get("/dayily-product",middleware.checkAccessToken,productController.getDailyProductController)
 
 router.get("/genric-machine",middleware.checkAccessToken,productController.genricMachineController)
-
+router.get("/worker",middleware.checkAccessToken,productController.getWorkerController)
 module.exports = router
