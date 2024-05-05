@@ -473,6 +473,17 @@ const getWorkerModule = async(req) => {
     return result
 }
 
+const machineReportModule = async(req) => {
+    var iDate = req.query.iDate
+
+    if(iDate == undefined || iDate == null || iDate == ""){
+        return errorMessage("Invalid Date")
+    }
+    
+    await db.MachineReport.create({iDate:new Date(),machine_time:new Date()})
+    var getMachineTime = await db.MachineReport.find({flag_deleted:false,iDate:new Date(),history_id:null})
+}
+
 module.exports = {
     createproductModule: createproductModule,
     getProductModule: getProductModule,
@@ -483,5 +494,6 @@ module.exports = {
     createDailyProductModule:createDailyProductModule,
     getDailyProductModule:getDailyProductModule,
     genricMachineModule:genricMachineModule,
-    getWorkerModule:getWorkerModule
+    getWorkerModule:getWorkerModule,
+    machineReportModule:machineReportModule
 }

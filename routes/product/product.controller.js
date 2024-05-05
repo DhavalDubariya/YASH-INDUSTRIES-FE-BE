@@ -54,6 +54,11 @@ const getWorkerController = async(req,res) => {
   return res.send(result);
 }
 
+const machineReportController = async(req,res) => {
+  const result = await productModule.machineReportModule(req)
+  return res.send(result);
+}
+
 module.exports = {
   createproductController: createproductController,
   getProductModule: getProductModule,
@@ -64,5 +69,6 @@ module.exports = {
   createDailyProductController:createDailyProductController,
   getDailyProductController:getDailyProductController,
   genricMachineController:genricMachineController,
-  getWorkerController:getWorkerController
+  getWorkerController:getWorkerController,
+  machineReportController:machineReportController
 }

@@ -16,4 +16,7 @@ router.get("/dayily-product",middleware.checkAccessToken,productController.getDa
 
 router.get("/genric-machine",middleware.checkAccessToken,productController.genricMachineController)
 router.get("/worker",middleware.checkAccessToken,productController.getWorkerController)
+
+router.get("/machine-report",middleware.checkAccessToken,productController.machineReportController)
+
 module.exports = router
