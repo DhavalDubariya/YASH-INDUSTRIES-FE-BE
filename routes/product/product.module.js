@@ -406,8 +406,8 @@ const createDailyProductModule = async(req) => {
                 status: false,
                 error:"Error while creating order"
             }
-    }
-
+        }
+    await createDailyReport(req.body.iDate,createDailyProcuct._id)
     req["query"]["iDate"] = req.body.iDate
     var getDailyProduct = await getDailyProductModule(req)
     return getDailyProduct
@@ -481,7 +481,37 @@ const machineReportModule = async(req) => {
     }
     
     await db.MachineReport.create({iDate:new Date(),machine_time:new Date()})
-    var getMachineTime = await db.MachineReport.find({flag_deleted:false,iDate:new Date(),history_id:null})
+    var getMachineTime = await JSON.parse(JSON.stringify(await db.MachineReport.find({ flag_deleted: false, iDate: new Date(), history_id: null })))
+    return {status:true,data:getMachineTime}
+}
+
+async function createDailyReport(date,dayilyProductId) { 
+    await db.MachineReport.create([
+    {iDate:date,machine_time:'08:00',daily_product_id:dayilyProductId,flag_day_shift:true,seq_no:1},
+    {iDate:date,machine_time:'09:00',daily_product_id:dayilyProductId,flag_day_shift:true,seq_no:2},
+    {iDate:date,machine_time:'10:00',daily_product_id:dayilyProductId,flag_day_shift:true,seq_no:3},
+    {iDate:date,machine_time:'11:00',daily_product_id:dayilyProductId,flag_day_shift:true,seq_no:4},
+    {iDate:date,machine_time:'12:00',daily_product_id:dayilyProductId,flag_day_shift:true,seq_no:5},
+    {iDate:date,machine_time:'13:00',daily_product_id:dayilyProductId,flag_day_shift:true,seq_no:6},
+    {iDate:date,machine_time:'14:00',daily_product_id:dayilyProductId,flag_day_shift:true,seq_no:7},
+    {iDate:date,machine_time:'15:00',daily_product_id:dayilyProductId,flag_day_shift:true,seq_no:8},
+    {iDate:date,machine_time:'16:00',daily_product_id:dayilyProductId,flag_day_shift:true,seq_no:9},
+    {iDate:date,machine_time:'17:00',daily_product_id:dayilyProductId,flag_day_shift:true,seq_no:10},
+    {iDate:date,machine_time:'18:00',daily_product_id:dayilyProductId,flag_day_shift:true,seq_no:11},
+    {iDate:date,machine_time:'19:00',daily_product_id:dayilyProductId,flag_day_shift:true,seq_no:12},
+    {iDate:date,machine_time:'20:00',daily_product_id:dayilyProductId,flag_day_shift:false,seq_no:1},
+    {iDate:date,machine_time:'21:00',daily_product_id:dayilyProductId,flag_day_shift:false,seq_no:2},
+    {iDate:date,machine_time:'22:00',daily_product_id:dayilyProductId,flag_day_shift:false,seq_no:3},
+    {iDate:date,machine_time:'23:00',daily_product_id:dayilyProductId,flag_day_shift:false,seq_no:4},
+    {iDate:date,machine_time:'24:00',daily_product_id:dayilyProductId,flag_day_shift:false,seq_no:5},
+    {iDate:date,machine_time:'01:00',daily_product_id:dayilyProductId,flag_day_shift:false,seq_no:6},
+    {iDate:date,machine_time:'02:00',daily_product_id:dayilyProductId,flag_day_shift:false,seq_no:7},
+    {iDate:date,machine_time:'03:00',daily_product_id:dayilyProductId,flag_day_shift:false,seq_no:8},
+    {iDate:date,machine_time:'04:00',daily_product_id:dayilyProductId,flag_day_shift:false,seq_no:9},
+    {iDate:date,machine_time:'05:00',daily_product_id:dayilyProductId,flag_day_shift:false,seq_no:10},
+    {iDate:date,machine_time:'06:00',daily_product_id:dayilyProductId,flag_day_shift:false,seq_no:11},
+    {iDate:date,machine_time:'07:00',daily_product_id:dayilyProductId,flag_day_shift:false,seq_no:12}
+    ])   
 }
 
 module.exports = {
