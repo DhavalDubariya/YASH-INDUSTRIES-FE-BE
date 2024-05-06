@@ -386,13 +386,13 @@ const getCustomerOrderModule = async(req) => {
 const createDailyProductModule = async(req) => {
     var userId = req.user_id
     var customerId = req.body.customer_id
-    var orderId = req.body.order_id
+    var orderId = req.body.order_idid
     var productId = req.body.product_id    
     var changeLogId = (await db.ChangeLog.create({user_id:userId})).toObject()
     req.body.change_log_id = changeLogId._id
 
-    var daillyOrderProduct = await db.DailyProduct.find({history_id:null,flag_deleted:false,customer_id:customerId,order_id:orderId,product_id:productId})
-
+    var daillyOrderProduct = JSON.parse(JSON.stringify(await db.DailyProduct.find({history_id:null,flag_deleted:false,customer_id:customerId,order_id:orderId,product_id:productId})))
+    console.log(daillyOrderProduct,':::::::::::::::::::::::::::::::::::::::')
     if(daillyOrderProduct.length != 0){
         return {
             status:false,
