@@ -33,6 +33,7 @@ $(document).ready(function () {
 $('#datepicker').change(function(){
     var date = $('#datepicker').val()
     console.log(date)
+    getCustomerOrderProduct(date)
 })
 
 
@@ -146,9 +147,20 @@ function getDailyTime() {
     $('#product-cop-list').append(timeString)
 }
 
-$('#flexSwitchCheckDefault').change(function (e) { 
+// $('#flexSwitchCheckDefault').change(function (e) { 
+//     var daySwitch = $('#flexSwitchCheckDefault').attr('data-id')
+//     daySwitch = daySwitch == "true" ? $('#flexSwitchCheckDefault').attr('data-id',false) : $('#flexSwitchCheckDefault').attr('data-id',true)
+//     getDailyTime()
+// })
+
+$('#datepicker,#customer-order-product,#select-machine,#flexSwitchCheckDefault').change(function (e) { 
+    var iDate = $('#datepicker').val()
+    var copId = $('#customer-order-product').val()
+    var machineId = $('#select-machine').val()
     var daySwitch = $('#flexSwitchCheckDefault').attr('data-id')
     daySwitch = daySwitch == "true" ? $('#flexSwitchCheckDefault').attr('data-id',false) : $('#flexSwitchCheckDefault').attr('data-id',true)
     getDailyTime()
-})
+    console.log(iDate,copId,machineId,daySwitch)
 
+
+})
