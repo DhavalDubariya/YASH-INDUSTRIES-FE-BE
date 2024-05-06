@@ -130,15 +130,15 @@ function getDailyTime() {
             <b>${timeDataFilter[i].machine_time}</b>
         </td>
         <td style="padding: 0px !important;">
-            <input data-id="${timeDataFilter[i]._id}" style="border-radius: 0px !important;" class="form-control" pattern="^[1-9]\d*$" type="number" name="material_qty" id="material_qty" placeholder="Quantity" />
+            <input data-id="${timeDataFilter[i]._id}" style="border-radius: 0px !important;" class="form-control input-count" pattern="^[1-9]\d*$" type="number" name="material_qty" id="material_qty" placeholder="Quantity" />
         </td>
         <td style="padding: 0px !important;">
-            <select data-id="${timeDataFilter[i]._id}" class="form-select" style="text-transform: uppercase; border-radius: 0px;">
+            <select data-id="${timeDataFilter[i]._id}" class="form-select input-worker" style="text-transform: uppercase; border-radius: 0px;">
                 ${workerString}
             </select>
         </td>
         <td style="padding: 0px !important;">
-            <input data-id="${timeDataFilter[i]._id}" style="border-radius: 0px !important;" class="form-control" type="text" name="reason"  placeholder="REASON" />
+            <input data-id="${timeDataFilter[i]._id}" style="border-radius: 0px !important;" class="form-control input-reason" type="text" name="reason"  placeholder="REASON" />
         </td>
         </tr>
         `
@@ -147,20 +147,26 @@ function getDailyTime() {
     $('#product-cop-list').append(timeString)
 }
 
-// $('#flexSwitchCheckDefault').change(function (e) { 
-//     var daySwitch = $('#flexSwitchCheckDefault').attr('data-id')
-//     daySwitch = daySwitch == "true" ? $('#flexSwitchCheckDefault').attr('data-id',false) : $('#flexSwitchCheckDefault').attr('data-id',true)
-//     getDailyTime()
-// })
+$('#flexSwitchCheckDefault').change(function (e) { 
+    var daySwitch = $('#flexSwitchCheckDefault').attr('data-id')
+    daySwitch = daySwitch == "true" ? $('#flexSwitchCheckDefault').attr('data-id',false) : $('#flexSwitchCheckDefault').attr('data-id',true)
+    getDailyTime()
+})
 
 $('#datepicker,#customer-order-product,#select-machine,#flexSwitchCheckDefault').change(function (e) { 
     var iDate = $('#datepicker').val()
     var copId = $('#customer-order-product').val()
     var machineId = $('#select-machine').val()
     var daySwitch = $('#flexSwitchCheckDefault').attr('data-id')
-    daySwitch = daySwitch == "true" ? $('#flexSwitchCheckDefault').attr('data-id',false) : $('#flexSwitchCheckDefault').attr('data-id',true)
     getDailyTime()
     console.log(iDate,copId,machineId,daySwitch)
-
-
 })
+
+$(document).on('change', '.input-count,.input-worker,.input-reason', function(e) {
+    // Your event handling code here
+    var dataId = $(this).attr('data-id')
+    var productCount = $('#product-cop-list').find(`.input-count[data-id=${dataId}]`).val()
+    var workerId = $('#product-cop-list').find(`.input-worker[data-id=${dataId}]`).find('option:selected').attr('data-id')
+    var reason = $('#product-cop-list').find(`.input-reason[data-id=${dataId}]`).val()
+    console.log(productCount,workerId,reason)
+});
