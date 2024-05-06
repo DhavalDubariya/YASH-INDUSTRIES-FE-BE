@@ -168,5 +168,9 @@ $(document).on('change', '.input-count,.input-worker,.input-reason', function(e)
     var productCount = $('#product-cop-list').find(`.input-count[data-id=${dataId}]`).val()
     var workerId = $('#product-cop-list').find(`.input-worker[data-id=${dataId}]`).find('option:selected').attr('data-id')
     var reason = $('#product-cop-list').find(`.input-reason[data-id=${dataId}]`).val()
-    console.log(productCount,workerId,reason)
+    var iDate = $('#datepicker').val()
+    var copId = $('#customer-order-product').find('option:selected').attr('id')
+    var machineId = $('#select-machine').find('option:selected').attr('id')
+    var daySwitch = $('#flexSwitchCheckDefault').attr('data-id') == "true" ? true : false
+    console.log(productCount, workerId, reason, iDate, copId, machineId, daySwitch)
 });
