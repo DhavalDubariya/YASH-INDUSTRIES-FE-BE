@@ -9,6 +9,7 @@ const DailyProduct = require('./dayilyproduct')
 const Machine = require('./machine')
 const Worker = require('./worker')
 const MachineReport = require('./machineReport')
+const GenricMachine = require('./genric-machine')
 module.exports = {
     User:User,
     UserAccessToken:UserAccessToken,
@@ -20,5 +21,6 @@ module.exports = {
     DailyProduct:DailyProduct,
     Machine:Machine,
     Worker:Worker,
-    MachineReport:MachineReport
+    MachineReport: MachineReport,
+    GenricMachine:GenricMachine
 }
