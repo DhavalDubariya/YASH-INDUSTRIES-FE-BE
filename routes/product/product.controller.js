@@ -64,6 +64,11 @@ const getTimeController = async (req, res) => {
   return res.send(result)
 }
 
+const createMachineReportController = async (req, res) => { 
+  const result = await productModule.createMachineReportModule(req)
+  return res.send(result)
+}
+
 module.exports = {
   createproductController: createproductController,
   getProductModule: getProductModule,

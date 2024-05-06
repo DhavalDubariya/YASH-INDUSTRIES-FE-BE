@@ -18,6 +18,6 @@ router.get("/genric-machine",middleware.checkAccessToken,productController.genri
 router.get("/worker",middleware.checkAccessToken,productController.getWorkerController)
 
 router.get("/machine-report",middleware.checkAccessToken,productController.machineReportController)
-
+router.post("/machine-report",middleware.checkAccessToken,productController.createMachineReportController)
 router.get("/machine-time",middleware.checkAccessToken,productController.getTimeController)
 module.exports = router
