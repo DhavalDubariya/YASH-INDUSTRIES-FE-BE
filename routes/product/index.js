@@ -19,4 +19,5 @@ router.get("/worker",middleware.checkAccessToken,productController.getWorkerCont
 
 router.get("/machine-report",middleware.checkAccessToken,productController.machineReportController)
 
+router.get("/machine-time",middleware.checkAccessToken,productController.getTimeController)
 module.exports = router

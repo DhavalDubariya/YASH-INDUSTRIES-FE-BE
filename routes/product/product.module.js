@@ -485,6 +485,11 @@ const machineReportModule = async(req) => {
     return {status:true,data:getMachineTime}
 }
 
+const getTimeModule = async (req) => { 
+    var getGenricTime = await JSON.parse(JSON.stringify(await db.GenricMachine.find({})))
+    return getGenricTime
+}
+
 async function createDailyReport() { 
     await db.GenricMachine.create([
     {machine_time:'08:00',flag_day_shift:true,seq_no:1},
@@ -525,5 +530,6 @@ module.exports = {
     getDailyProductModule:getDailyProductModule,
     genricMachineModule:genricMachineModule,
     getWorkerModule:getWorkerModule,
-    machineReportModule:machineReportModule
+    machineReportModule: machineReportModule,
+    getTimeModule:getTimeModule
 }
