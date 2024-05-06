@@ -487,7 +487,8 @@ const machineReportModule = async(req) => {
 
 const getTimeModule = async (req) => { 
     var getGenricTime = await JSON.parse(JSON.stringify(await db.GenricMachine.find({})))
-    return getGenricTime
+    var getWorker = JSON.parse(JSON.stringify(await db.Worker.find({flag_deleted:false,history_id:null})))
+    return {status:true,data:getGenricTime,worker:getWorker}
 }
 
 async function createDailyReport() { 
