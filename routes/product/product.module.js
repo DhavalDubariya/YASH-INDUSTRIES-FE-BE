@@ -386,13 +386,13 @@ const getCustomerOrderModule = async(req) => {
 const createDailyProductModule = async(req) => {
     var userId = req.user_id
     var customerId = req.body.customer_id
-    var orderId = req.body.order_id
+    var orderId = req.body.order_idid
     var productId = req.body.product_id    
     var changeLogId = (await db.ChangeLog.create({user_id:userId})).toObject()
     req.body.change_log_id = changeLogId._id
 
-    var daillyOrderProduct = await db.DailyProduct.find({history_id:null,flag_deleted:false,customer_id:customerId,order_id:orderId,product_id:productId})
-
+    var daillyOrderProduct = JSON.parse(JSON.stringify(await db.DailyProduct.find({history_id:null,flag_deleted:false,customer_id:customerId,order_id:orderId,product_id:productId})))
+    console.log(daillyOrderProduct,':::::::::::::::::::::::::::::::::::::::')
     if(daillyOrderProduct.length != 0){
         return {
             status:false,
@@ -401,13 +401,12 @@ const createDailyProductModule = async(req) => {
     }
 
     var createDailyProcuct = await db.DailyProduct.create(req.body)
-        if (createDailyProcuct == null) {
-            return {
-                status: false,
-                error:"Error while creating order"
-            }
+    if (createDailyProcuct == null) {
+        return {
+            status: false,
+            error:"Error while creating order"
+        }
     }
-
     req["query"]["iDate"] = req.body.iDate
     var getDailyProduct = await getDailyProductModule(req)
     return getDailyProduct
@@ -474,14 +473,67 @@ const getWorkerModule = async(req) => {
 }
 
 const machineReportModule = async(req) => {
-    var iDate = req.query.iDate
+    var iDate = req.body.iDate
+    var dayilyProductId = req.body.daily_product_id
+    var flagDayShift = req.body.flag_day_shift
 
     if(iDate == undefined || iDate == null || iDate == ""){
         return errorMessage("Invalid Date")
     }
     
-    await db.MachineReport.create({iDate:new Date(),machine_time:new Date()})
-    var getMachineTime = await db.MachineReport.find({flag_deleted:false,iDate:new Date(),history_id:null})
+    var getMachineTime = await JSON.parse(JSON.stringify(await db.MachineReport.find({ flag_deleted: false, iDate: iDate, history_id: null,daily_product_id })))
+    return {status:true,data:getMachineTime}
+}
+
+const getTimeModule = async (req) => { 
+    var getGenricTime = await JSON.parse(JSON.stringify(await db.GenricMachine.find({})))
+    var getWorker = JSON.parse(JSON.stringify(await db.Worker.find({flag_deleted:false,history_id:null})))
+    return {status:true,data:getGenricTime,worker:getWorker}
+}
+
+async function createDailyReport() { 
+    await db.GenricMachine.create([
+    {machine_time:'08:00',flag_day_shift:true,seq_no:1},
+    {machine_time:'09:00',flag_day_shift:true,seq_no:2},
+    {machine_time:'10:00',flag_day_shift:true,seq_no:3},
+    {machine_time:'11:00',flag_day_shift:true,seq_no:4},
+    {machine_time:'12:00',flag_day_shift:true,seq_no:5},
+    {machine_time:'13:00',flag_day_shift:true,seq_no:6},
+    {machine_time:'14:00',flag_day_shift:true,seq_no:7},
+    {machine_time:'15:00',flag_day_shift:true,seq_no:8},
+    {machine_time:'16:00',flag_day_shift:true,seq_no:9},
+    {machine_time:'17:00',flag_day_shift:true,seq_no:10},
+    {machine_time:'18:00',flag_day_shift:true,seq_no:11},
+    {machine_time:'19:00',flag_day_shift:true,seq_no:12},
+    {machine_time:'20:00',flag_day_shift:false,seq_no:1},
+    {machine_time:'21:00',flag_day_shift:false,seq_no:2},
+    {machine_time:'22:00',flag_day_shift:false,seq_no:3},
+    {machine_time:'23:00',flag_day_shift:false,seq_no:4},
+    {machine_time:'24:00',flag_day_shift:false,seq_no:5},
+    {machine_time:'01:00',flag_day_shift:false,seq_no:6},
+    {machine_time:'02:00',flag_day_shift:false,seq_no:7},
+    {machine_time:'03:00',flag_day_shift:false,seq_no:8},
+    {machine_time:'04:00',flag_day_shift:false,seq_no:9},
+    {machine_time:'05:00',flag_day_shift:false,seq_no:10},
+    {machine_time:'06:00',flag_day_shift:false,seq_no:11},
+    {machine_time:'07:00',flag_day_shift:false,seq_no:12}
+    ])   
+}
+
+const createMachineReportModule = async (req) => { 
+    var iDate = req.body.iDate
+    var copId = req.body.cop_id
+    var machineId = req.body.machine_id
+    var flagDayShift = req.body.flag_day_shift
+    var machineTimeId = req.body.machine_time_id
+    var count = req.body.product_count
+    var workerId = req.body.worker_id
+    var reason = req.body.reason
+
+    if (iDate == undefined || iDate == null || iDate == "" || copId == undefined || copId == null || copId == "" || machineId == undefined || machineId == null || machineId == "" || flagDayShift == undefined || flagDayShift == null || flagDayShift == "" || machineTimeId == undefined || machineTimeId == null || machineTimeId == "") { 
+        return errorMessage("Somthing want wrong")
+    }
+
 }
 
 module.exports = {
@@ -495,5 +547,7 @@ module.exports = {
     getDailyProductModule:getDailyProductModule,
     genricMachineModule:genricMachineModule,
     getWorkerModule:getWorkerModule,
-    machineReportModule:machineReportModule
+    machineReportModule: machineReportModule,
+    getTimeModule: getTimeModule,
+    createMachineReportModule:createMachineReportModule
 }
