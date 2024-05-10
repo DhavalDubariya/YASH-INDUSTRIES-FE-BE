@@ -81,5 +81,6 @@ module.exports = {
   genricMachineController:genricMachineController,
   getWorkerController:getWorkerController,
   machineReportController: machineReportController,
-  getTimeController:getTimeController
+  getTimeController:getTimeController,
+  createMachineReportController:createMachineReportController
 }

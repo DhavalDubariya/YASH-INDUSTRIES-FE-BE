@@ -165,12 +165,52 @@ $('#datepicker,#customer-order-product,#select-machine,#flexSwitchCheckDefault')
 $(document).on('change', '.input-count,.input-worker,.input-reason', function(e) {
     // Your event handling code here
     var dataId = $(this).attr('data-id')
-    var productCount = $('#product-cop-list').find(`.input-count[data-id=${dataId}]`).val()
-    var workerId = $('#product-cop-list').find(`.input-worker[data-id=${dataId}]`).find('option:selected').attr('data-id')
+    var machine_count = $('#product-cop-list').find(`.input-count[data-id=${dataId}]`).val()
+    var worker_id = $('#product-cop-list').find(`.input-worker[data-id=${dataId}]`).find('option:selected').attr('data-id')
     var reason = $('#product-cop-list').find(`.input-reason[data-id=${dataId}]`).val()
     var iDate = $('#datepicker').val()
-    var copId = $('#customer-order-product').find('option:selected').attr('id')
-    var machineId = $('#select-machine').find('option:selected').attr('id')
-    var daySwitch = $('#flexSwitchCheckDefault').attr('data-id') == "true" ? true : false
-    console.log(productCount, workerId, reason, iDate, copId, machineId, daySwitch)
+    var daily_product_id = $('#customer-order-product').find('option:selected').attr('id')
+    var machine_id = $('#select-machine').find('option:selected').attr('id')
+    var flag_day_shift = $('#flexSwitchCheckDefault').attr('data-id') == "true" ? true : false
+    console.log(
+    {iDate,
+    daily_product_id,
+    machine_id,
+    flag_day_shift,
+    machine_time_id:dataId,
+    machine_count,
+    worker_id,
+    reason}
+    )
+
+    $.ajax({
+        type: "POST",
+        url: "api/product/machine-report",
+        data: JSON.stringify({iDate,
+            daily_product_id,
+            machine_id,
+            flag_day_shift,
+            machine_time_id:dataId,
+            product_count,
+            worker_id,
+            reason}),
+        contentType: "application/json",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': sessionStorage.getItem("yi-ssid")
+        },
+        success: function(response){
+            // Handle success
+            console.log("Request successful");
+            console.log(response);
+            if(response.status == true){
+                console.log(response)   
+            }
+        },
+        error: function(xhr, status, error){
+            // Handle errors
+            console.log("Request failed");
+            console.log(xhr.responseText);
+        }
+    });
 });

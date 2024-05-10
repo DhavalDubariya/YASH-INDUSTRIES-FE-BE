@@ -3,6 +3,7 @@ const productDb = require('./product.db')
 const libFunction = require('../../helpers/libFunction');
 const db = require('../../model/index');
 const { json } = require("express");
+const { ObjectId } = require("mongodb");
 
 function errorMessage(params) {
     return {
@@ -522,18 +523,37 @@ async function createDailyReport() {
 
 const createMachineReportModule = async (req) => { 
     var iDate = req.body.iDate
-    var copId = req.body.cop_id
+    var copId = req.body.daily_product_id
     var machineId = req.body.machine_id
     var flagDayShift = req.body.flag_day_shift
     var machineTimeId = req.body.machine_time_id
     var count = req.body.product_count
     var workerId = req.body.worker_id
     var reason = req.body.reason
-
-    if (iDate == undefined || iDate == null || iDate == "" || copId == undefined || copId == null || copId == "" || machineId == undefined || machineId == null || machineId == "" || flagDayShift == undefined || flagDayShift == null || flagDayShift == "" || machineTimeId == undefined || machineTimeId == null || machineTimeId == "") { 
+    var userId = req.user_id
+    if (iDate == undefined || iDate == null || iDate == "" || copId == undefined || copId == null || copId == '' || machineId == undefined || machineId == null || machineId == "" || flagDayShift == undefined || flagDayShift == null || flagDayShift == "" || machineTimeId == undefined || machineTimeId == null || machineTimeId == "") { 
         return errorMessage("Somthing want wrong")
     }
+    var changeLogId = (await db.ChangeLog.create({user_id:userId})).toObject()
 
+    // await db.MachineReport.deleteMany({})
+    req.body.change_log_id = changeLogId._id
+    req.body.worker_id = req.body.worker_id == 'null' || undefined || '' ? null :  req.body.worker_id
+    console.log(req.body)
+    
+    var machineReport = await db.MachineReport.findOne({"machine_time_id":new ObjectId(req.body.machine_time_id),"iDate":new Date(req.body.iDate),"daily_product_id":new ObjectId(req.body.daily_product_id),"machine_id":new ObjectId(req.body.machine_id)})
+    
+    if(machineReport == null){
+        return errorMessage()
+    }
+    
+    var createMachineReport = await db.MachineReport.create(req.body)
+
+    if(createMachineReport == null){
+        return errorMessage()
+    }
+    
+    return {status:true,data:[]}
 }
 
 module.exports = {

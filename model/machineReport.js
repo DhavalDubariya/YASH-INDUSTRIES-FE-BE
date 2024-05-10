@@ -1,15 +1,16 @@
 const mongoose = require('mongoose');
 
 const machineReportSchema = new mongoose.Schema({
-    genric_machine_id: {type:mongoose.Schema.Types.ObjectId,ref:'GenricMachine',require:true},
+    machine_time_id: {type:mongoose.Schema.Types.ObjectId,ref:'GenricMachine',require:true},
     machine_count: {
         type: Number,
         required:false,
         default: null
     },
+    reason:{type: String,default: null},
     iDate:{ type: Date,require:true},
     machine_id:{type:mongoose.Schema.Types.ObjectId,ref:'Machine',require:true},
-    worker_id: {type:mongoose.Schema.Types.ObjectId,ref:'Worker',require:true},
+    worker_id: {type:mongoose.Schema.Types.ObjectId,ref:'Worker',require:false,default: null},
     daily_product_id: {type:mongoose.Schema.Types.ObjectId,ref:'DailyProduct',default: null},
     history_id:  { type: String, default: null },
     flag_deleted: { type: Boolean, default: false },
