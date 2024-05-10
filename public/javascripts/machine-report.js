@@ -232,7 +232,7 @@ function getMachineData () {
                 console.log(response, 'Dhaval')
                 // timeData = response.data
                 // worker = response.worker
-                // getDailyTime()
+                getDailyTimeData(response.data)
             }
         },
         error: function(xhr, status, error) {
@@ -242,4 +242,41 @@ function getMachineData () {
             
         }
     });
+}
+
+function getDailyTimeData(macineTimeData) {
+    var dayNightSwitch = $('#flexSwitchCheckDefault').attr('data-id') 
+    var daySwitch = dayNightSwitch == "true" ? true : false
+    var timeDataFilter = macineTimeData.filter(x => x.flag_day_shift == daySwitch).sort((a, b) => { return a.seq_no - b.seq_no })
+    var workerString = `<option data-id="null">SELECT WORKER</option>`
+    for (let i = 0; i < worker.length;i++) { 
+        workerString = workerString + 
+            `
+                <option class="worker-option" data-id="${worker[i]._id}">${worker[i].worker_name}</option>
+            `
+    }
+    var timeString = ``
+    for (let i = 0; i < timeDataFilter.length;i++){ 
+        timeDataFilter[i].reason == null ? '' : timeDataFilter[i].reason
+        timeString = timeString + `
+        <tr style="padding: 0px !important;" data-id="${timeDataFilter[i]._id}">
+        <td style="padding: 0px !important; font-size: 24px; text-align: center;">
+            <b>${timeDataFilter[i].machine_time}</b>
+        </td>
+        <td style="padding: 0px !important;">
+            <input data-id="${timeDataFilter[i]._id}" value="${timeDataFilter[i].machine_count}" style="border-radius: 0px !important;" class="form-control input-count" pattern="^[1-9]\d*$" type="number" name="material_qty" id="material_qty" placeholder="Quantity" />
+        </td>
+        <td style="padding: 0px !important;">
+            <select data-id="${timeDataFilter[i]._id}" class="form-select input-worker" style="text-transform: uppercase; border-radius: 0px;">
+                ${workerString}
+            </select>
+        </td>
+        <td style="padding: 0px !important;">
+            <input data-id="${timeDataFilter[i]._id}" value="${timeDataFilter[i].reason}" style="border-radius: 0px !important;" class="form-control input-reason" type="text" name="reason"  placeholder="REASON" />
+        </td>
+        </tr>
+        `
+    }
+    $('#product-cop-list').empty()
+    $('#product-cop-list').append(timeString)
 }

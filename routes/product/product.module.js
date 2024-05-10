@@ -531,7 +531,7 @@ const createMachineReportModule = async (req) => {
     var workerId = req.body.worker_id
     var reason = req.body.reason
     var userId = req.user_id
-    if (iDate == undefined || iDate == null || iDate == "" || copId == undefined || copId == null || copId == '' || machineId == undefined || machineId == null || machineId == "" || flagDayShift == undefined || flagDayShift == null || flagDayShift == "" || machineTimeId == undefined || machineTimeId == null || machineTimeId == "") { 
+    if (iDate == undefined || iDate == null || iDate == "" || copId == undefined || copId == null || copId == '' || machineId == undefined || machineId == null || machineId == "" ||  machineTimeId == undefined || machineTimeId == null || machineTimeId == "") { 
         return errorMessage("Somthing want wrong")
     }
     var changeLogId = (await db.ChangeLog.create({user_id:userId})).toObject()
