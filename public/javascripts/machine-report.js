@@ -18,7 +18,7 @@ $(document).ready(function () {
                 console.log(response, 'Dhaval')
                 timeData = response.data
                 worker = response.worker
-                getDailyTime()
+                getDailyTime(true)
             }
         },
         error: function(xhr, status, error) {
@@ -111,7 +111,7 @@ function setMachine(response) {
     $('#select-machine').append(machineString)
 }
 
-function getDailyTime() {
+function getDailyTime(flagLoadData) {
     var dayNightSwitch = $('#flexSwitchCheckDefault').attr('data-id') 
     var daySwitch = dayNightSwitch == "true" ? true : false
     var timeDataFilter = timeData.filter(x => x.flag_day_shift == daySwitch).sort((a, b) => { return a.seq_no - b.seq_no })
@@ -248,16 +248,24 @@ function getDailyTimeData(macineTimeData) {
     var dayNightSwitch = $('#flexSwitchCheckDefault').attr('data-id') 
     var daySwitch = dayNightSwitch == "true" ? true : false
     var timeDataFilter = macineTimeData.filter(x => x.flag_day_shift == daySwitch).sort((a, b) => { return a.seq_no - b.seq_no })
-    var workerString = `<option data-id="null">SELECT WORKER</option>`
-    for (let i = 0; i < worker.length;i++) { 
-        workerString = workerString + 
-            `
-                <option class="worker-option" data-id="${worker[i]._id}">${worker[i].worker_name}</option>
-            `
-    }
     var timeString = ``
     for (let i = 0; i < timeDataFilter.length;i++){ 
-        timeDataFilter[i].reason == null ? '' : timeDataFilter[i].reason
+        workerString = ''
+        var workerString = `<option data-id="null">SELECT WORKER</option>`
+        for (let j = 0; j < worker.length;j++) { 
+            if(worker[j]._id == timeDataFilter[i].worker_id){
+                console.log(worker[j]._id == timeDataFilter[i].worker_id,worker[j]._id,timeDataFilter[i].worker_id)
+                workerString = workerString + `
+                <option class="worker-option" data-id="${worker[j]._id}" selected>${worker[j].worker_name}</option>
+                `
+            }else{
+                workerString = workerString + `
+                <option class="worker-option" data-id="${worker[j]._id}">${worker[j].worker_name}</option>
+                `
+            }
+                
+        }
+        // timeDataFilter[i].reason = timeDataFilter[i].reason == null ? '' : timeDataFilter[i].reason
         timeString = timeString + `
         <tr style="padding: 0px !important;" data-id="${timeDataFilter[i]._id}">
         <td style="padding: 0px !important; font-size: 24px; text-align: center;">
