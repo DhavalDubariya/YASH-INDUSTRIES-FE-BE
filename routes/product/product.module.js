@@ -538,22 +538,38 @@ const createMachineReportModule = async (req) => {
 
     // await db.MachineReport.deleteMany({})
     req.body.change_log_id = changeLogId._id
-    req.body.worker_id = req.body.worker_id == 'null' || undefined || '' ? null :  req.body.worker_id
+    req.body.worker_id = req.body.worker_id == 'null' || undefined || '' ? null :  new ObjectId(req.body.worker_id)
     console.log(req.body)
     
     var machineReport = await db.MachineReport.findOne({"machine_time_id":new ObjectId(req.body.machine_time_id),"iDate":new Date(req.body.iDate),"daily_product_id":new ObjectId(req.body.daily_product_id),"machine_id":new ObjectId(req.body.machine_id)})
     
     if(machineReport == null){
-        return errorMessage()
+        var createMachineReport = await db.MachineReport.create(req.body)
+        console.log(createMachineReport)
+        if(createMachineReport == null){
+            return errorMessage()
+        }
+    }else{
+        req.body.worker_id = req.body.worker_id == 'null' || undefined || '' ? null :  new ObjectId(req.body.worker_id)
+        var updateMachineReport = await db.MachineReport.updateOne({_id:machineReport._id},{"worker_id":req.body.worker_id,"reason":req.body.reason,"machine_count":req.body.machine_count})
+        console.log(updateMachineReport)
+        if(updateMachineReport == null){
+            return errorMessage()
+        }
     }
     
-    var createMachineReport = await db.MachineReport.create(req.body)
-
-    if(createMachineReport == null){
-        return errorMessage()
-    }
+    
     
     return {status:true,data:[]}
+}
+
+const getMachineDataModule = async(req) => {
+    var machineReport = await db.MachineReport.find({"machine_time_id":new ObjectId(req.body.machine_time_id),"iDate":new Date(req.body.iDate),"daily_product_id":new ObjectId(req.body.daily_product_id),"machine_id":new ObjectId(req.body.machine_id)})
+    
+    if(machineReport.length == 0){
+        return {status:true,data:[]}
+    }
+    return {status:true,data:machineReport}
 }
 
 module.exports = {
@@ -569,5 +585,6 @@ module.exports = {
     getWorkerModule:getWorkerModule,
     machineReportModule: machineReportModule,
     getTimeModule: getTimeModule,
-    createMachineReportModule:createMachineReportModule
+    createMachineReportModule:createMachineReportModule,
+    getMachineDataModule:getMachineDataModule
 }

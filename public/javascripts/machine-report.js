@@ -191,7 +191,7 @@ $(document).on('change', '.input-count,.input-worker,.input-reason', function(e)
             machine_id,
             flag_day_shift,
             machine_time_id:dataId,
-            product_count,
+            machine_count,
             worker_id,
             reason}),
         contentType: "application/json",
