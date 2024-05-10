@@ -545,14 +545,14 @@ const createMachineReportModule = async (req) => {
     
     if(machineReport == null){
         var createMachineReport = await db.MachineReport.create(req.body)
-        console.log(createMachineReport)
+        // console.log(createMachineReport)
         if(createMachineReport == null){
             return errorMessage()
         }
     }else{
         req.body.worker_id = req.body.worker_id == 'null' || undefined || '' ? null :  new ObjectId(req.body.worker_id)
         var updateMachineReport = await db.MachineReport.updateOne({_id:machineReport._id},{"worker_id":req.body.worker_id,"reason":req.body.reason,"machine_count":req.body.machine_count})
-        console.log(updateMachineReport)
+        // console.log(updateMachineReport)
         if(updateMachineReport == null){
             return errorMessage()
         }
@@ -564,12 +564,26 @@ const createMachineReportModule = async (req) => {
 }
 
 const getMachineDataModule = async(req) => {
-    var machineReport = await db.MachineReport.find({"machine_time_id":new ObjectId(req.body.machine_time_id),"iDate":new Date(req.body.iDate),"daily_product_id":new ObjectId(req.body.daily_product_id),"machine_id":new ObjectId(req.body.machine_id)})
-    
-    if(machineReport.length == 0){
-        return {status:true,data:[]}
-    }
-    return {status:true,data:machineReport}
+    var getGenricTime = await JSON.parse(JSON.stringify(await db.GenricMachine.find({})))
+    var machineReport = await JSON.parse(JSON.stringify(await db.MachineReport.find({"iDate":new Date(req.body.iDate),"daily_product_id":new ObjectId(req.body.daily_product_id),"machine_id":new ObjectId(req.body.machine_id)})))
+    console.log(machineReport,'-------------------')
+    var result = getGenricTime.map( x => {
+         var machineFilter = machineReport.filter(y => y.machine_time_id == x._id)
+         var machineDataObj = {
+            machine_count:null,
+            reason:null,
+            worker_id:null
+        }
+        if(machineFilter.length != 0){
+            machineDataObj.machine_count = machineFilter[0].machine_count
+            machineDataObj.reason = machineFilter[0].reason
+            machineDataObj.worker_id = machineFilter[0].worker_id
+        }
+        return {...x,...machineDataObj}
+    })
+    var getWorker = JSON.parse(JSON.stringify(await db.Worker.find({flag_deleted:false,history_id:null})))
+    return {status:true,data:result,worker:getWorker}
+    // return {status:true,data:result}
 }
 
 module.exports = {

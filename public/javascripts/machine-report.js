@@ -154,12 +154,7 @@ $('#flexSwitchCheckDefault').change(function (e) {
 })
 
 $('#datepicker,#customer-order-product,#select-machine,#flexSwitchCheckDefault').change(function (e) { 
-    var iDate = $('#datepicker').val()
-    var copId = $('#customer-order-product').val()
-    var machineId = $('#select-machine').val()
-    var daySwitch = $('#flexSwitchCheckDefault').attr('data-id')
-    getDailyTime()
-    console.log(iDate,copId,machineId,daySwitch)
+    getMachineData()
 })
 
 $(document).on('change', '.input-count,.input-worker,.input-reason', function(e) {
@@ -214,3 +209,37 @@ $(document).on('change', '.input-count,.input-worker,.input-reason', function(e)
         }
     });
 });
+
+function getMachineData () {
+    var iDate = $('#datepicker').val()
+    var daily_product_id = $('#customer-order-product').find('option:selected').attr('id')
+    var machine_id = $('#select-machine').find('option:selected').attr('id')
+    var flag_day_shift = $('#flexSwitchCheckDefault').attr('data-id') == "true" ? true : false
+    $.ajax({
+        url: `api/product/machine-data`,
+        type: "POST",
+        data: JSON.stringify({iDate,
+        daily_product_id,
+        machine_id,
+        flag_day_shift}),
+        contentType: "application/json",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': sessionStorage.getItem("yi-ssid")
+        }, // Replace with your data
+        success: function(response) {
+            if(response.status == true){
+                console.log(response, 'Dhaval')
+                // timeData = response.data
+                // worker = response.worker
+                // getDailyTime()
+            }
+        },
+        error: function(xhr, status, error) {
+            // playSound(false)
+        },
+        complete: function() {
+            
+        }
+    });
+}
