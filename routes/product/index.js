@@ -23,4 +23,5 @@ router.get("/machine-time",middleware.checkAccessToken,productController.getTime
 
 router.post("/machine-data",middleware.checkAccessToken,productController.getMachineDataController)
 
+router.post("/dispatch-order",middleware.checkAccessToken,productController.dispatchOrderController)
 module.exports = router

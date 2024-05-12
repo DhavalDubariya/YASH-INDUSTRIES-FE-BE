@@ -1,6 +1,7 @@
 var customerDetail
 var globalData
 $(document).ready(async function() {
+    $('#datepicker').val((moment(new Date()).format()).split('T')[0])
     var searchParams = new URLSearchParams(window.location.search);
     console.log(Array.from(searchParams),'::::::::::::::::::::::::::::::::::')
     var queryParams = Array.from(searchParams).map( x => { return `${x[0]}=${x[1]}`})
@@ -81,16 +82,16 @@ function setProductList(productList) {
         var productId = productList[i]._id
         productListString = productListString +  `
 
-        <tr class="hover-actions-trigger btn-reveal-trigger position-static">
-        <td style="padding: 4px 0px 0px 25px;text-align: center;font-size: 22px;" class="name align-middle white-space-nowrap ps-0">
+      <tr data-id="${productId}" class="hover-actions-trigger btn-reveal-trigger position-static">
+        <td style="padding: 4px 0px 0px 25px;text-align: center;font-size: 22px;" data-id="${productId}" class="product-id align-middle white-space-nowrap ps-0">
            <b> ${productName} </b>
         </td>
         <td style="padding: 0px !important;">
-            <input style="border-radius: 0px !important;" class="form-control input-count" pattern="^[1-9]\d*$" type="number" name="material_qty" id="material_qty" placeholder="Quantity" />
+            <input data-id="${productId}" style="border-radius: 0px !important;" class="form-control input-count" pattern="^[1-9]\d*$" type="number" name="material_qty" id="material_qty" placeholder="Quantity" />
         </td>
         <td style="position: relative;padding: 0px !important;" class="align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight">
         <div class="form-check form-switch" style="font-size: 25px;position: absolute;top:0%;left: 50%;" >
-            <input data-id=true class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+            <input data-id="${productId}" data-id=true class="form-check-input input-chack" type="checkbox" role="switch" id="flexSwitchCheckDefault">
         </div>
         </td>
       </tr>
@@ -98,6 +99,19 @@ function setProductList(productList) {
         `
         // console.log(customerList)
     }
+    productListString = productListString + `
+    <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+        <td style="padding: 0px !important;" class="name align-middle white-space-nowrap ps-0">
+            <input style="border-radius: 0px !important;" class="form-control" pattern="^[1-9]\d*$" type="number" disabled/>
+        </td>
+        <td style="padding: 0px !important;">
+            <input style="border-radius: 0px !important;" class="form-control" pattern="^[1-9]\d*$" type="number" name="material_qty" id="sum-material" disabled/>
+        </td>
+        <td style="position: relative;padding: 0px !important;" class="align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight">
+            <input style="border-radius: 0px !important;" class="form-control" pattern="^[1-9]\d*$" type="number" name="material_qty" id="material_qty" disabled/>
+        </td>
+    </tr>
+    `
     $('#product-list').empty()
     $('#product-list').append(productListString)
 }
@@ -114,4 +128,60 @@ $('#dispatch-product').on('click',function(e){
     var customerId = $('#customer-id').val()
     var orderId = $('#order-id').val()
     window.location = `/dispatch-order?customerId=${customerId}&orderId=${orderId}`
+})
+
+$(document).on('change', '.input-count,.input-chack', function(e) {
+    var chackDataItem = Array.from(Array.from($('.input-chack')).filter(x => x.checked)).map(element => $(element).attr('data-id'));
+    var sum = 0
+    var sumOfQty = (chackDataItem.map( x => parseInt($(`.input-count[data-id='${x}']`).val()))).filter( x => isNaN(x) == false ).map( x => sum = sum + x )
+    console.log(sum)
+    $('#sum-material').val(sum)
+});
+
+
+$(document).on('click','#dispatch-order',function(e){
+    var chackDataItem = Array.from(Array.from($('.input-chack')).filter(x => x.checked)).map(element => $(element).attr('data-id'));
+    var iDate = $('#datepicker').val()
+    var driverName = ($('#driver_name').val()).trim()
+    var numberPlate = ($('#number_plate').val()).trim()
+    var orderId = $('#order-id').val()
+    var productArray = []
+    for(let i=0;i<chackDataItem.length;i++){
+        var itemCount = chackDataItem.map( x => parseInt($(`.input-count[data-id='${x}']`).val())).filter( x => isNaN(x) == false && parseInt(x) > 0 )
+        var materialObj = {
+            "product_id":chackDataItem[i],
+            "product_count":itemCount[0]
+        }
+        productArray.push(materialObj)
+    }
+    var result = {
+        "iDate":iDate,
+        "driver_name":driverName,
+        "number_plate":numberPlate,
+        "products":productArray,
+        "order_id":orderId
+    }
+    
+    $.ajax({
+    url: "api/product/dispatch-order",
+    type: "POST",
+    contentType: "application/json",
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': sessionStorage.getItem("yi-ssid")
+    },
+    data: JSON.stringify(result), // Replace with your data
+    success: function(response) {
+        console.log(response)
+        if(response.status == true){
+            console.log(':::::::::::::::::::::::::::;')
+        }
+    },
+    error: function(xhr, status, error) {
+        
+    },
+    complete: function() {
+        hideLoader()
+    }
+    });
 })

@@ -586,6 +586,27 @@ const getMachineDataModule = async(req) => {
     // return {status:true,data:result}
 }
 
+const dispatchOrderModule = async(req) => {
+    var userId = req.user_id
+    var iDate = req.body.iDate
+    var driver_name = req.body.driver_name
+    var number_plate = req.body.number_plate
+    var products = req.body.products
+    var order_id = req.body.order_id
+    var changeLogId = (await db.ChangeLog.create({user_id:userId})).toObject()
+
+    console.log(req.body) 
+    if(iDate == undefined || iDate == null || iDate == '' || driver_name == '' || driver_name == null || driver_name == undefined || number_plate == '' || number_plate == undefined || number_plate == null || order_id == null || order_id == undefined || order_id == '' || products.length == 0){
+        return errorMessage()
+    }
+    req.body.change_log_id = changeLogId._id
+    var dispatchOrder = await db.DispatchOrder.create(req.body)
+    if(dispatchOrder == null){
+        return dispatchOrder
+    }
+    return {status:true,data:[]}
+}
+
 module.exports = {
     createproductModule: createproductModule,
     getProductModule: getProductModule,
@@ -600,5 +621,6 @@ module.exports = {
     machineReportModule: machineReportModule,
     getTimeModule: getTimeModule,
     createMachineReportModule:createMachineReportModule,
-    getMachineDataModule:getMachineDataModule
+    getMachineDataModule:getMachineDataModule,
+    dispatchOrderModule:dispatchOrderModule
 }

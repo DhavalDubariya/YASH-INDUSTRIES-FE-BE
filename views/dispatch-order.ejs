@@ -24,13 +24,13 @@
           <ol class="breadcrumb mb-0">
             <li class="breadcrumb-item"><a href="/">Home</a></li>
             <li class="breadcrumb-item"><a href="/customer">Customer</a></li>
-            <li class="breadcrumb-item active">Order Detail</li>
+            <li class="breadcrumb-item active">Dispatch Order</li>
           </ol>
         </nav>
         <div class="mb-9">
           <div class="row align-items-center justify-content-between g-3 mb-4">
             <div class="col-auto">
-              <h2 class="mb-0">Order Detail</h2>
+              <h2 class="mb-0">Dispatch Order</h2>
             </div>
             <div class="col-auto">
               <div class="row g-3">
@@ -98,12 +98,16 @@
                     data-sort="contact" ># Runner (Gm)</th>
                   </tr>
                 </thead>
-                <tbody style="align-items: center;" class="list" id="product-list">
+                <tbody style="align-items: center;" class="list product-dispatch" id="product-list">
                  
 
                 </tbody>
               </table>
             </div>
+            <div class="col-auto">
+              <button id="dispatch-order" style="width: 100%;" class="btn btn-phoenix-success"><span class="fa-solid fa-file-export fs-9 me-2"></span>Dispatch</button>
+            </div>
+
           </div>
           </div>
         </div>
@@ -134,7 +138,7 @@
                   data-sort="contact" style="width:20%;"># Quantity</th>
                 </tr>
               </thead>
-              <tbody class="list" id="material-list">
+              <tbody class="list" id="material-list" >
                   
 
               </tbody>
