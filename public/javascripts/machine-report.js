@@ -200,10 +200,16 @@ $(document).on('change', '.input-count,.input-worker,.input-reason', function(e)
             console.log(response);
             if(response.status == true){
                 console.log(response)   
+                showTost(true)
+            }
+            if(response.status == false){
+                console.log(response)   
+                showTost(false)
             }
         },
         error: function(xhr, status, error){
             // Handle errors
+            showTost(false)
             console.log("Request failed");
             console.log(xhr.responseText);
         }
@@ -234,9 +240,14 @@ function getMachineData () {
                 // worker = response.worker
                 getDailyTimeData(response.data)
             }
+            if(response.status == false){
+                showTost(false)
+            }
         },
         error: function(xhr, status, error) {
             // playSound(false)
+            showTost(false)
+
         },
         complete: function() {
             

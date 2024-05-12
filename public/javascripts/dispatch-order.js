@@ -174,11 +174,12 @@ $(document).on('click','#dispatch-order',function(e){
     success: function(response) {
         console.log(response)
         if(response.status == true){
-            console.log(':::::::::::::::::::::::::::;')
+            showTost(true)
         }
+        showTost(false)
     },
     error: function(xhr, status, error) {
-        
+        showTost(false)
     },
     complete: function() {
         hideLoader()

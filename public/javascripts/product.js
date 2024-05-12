@@ -157,9 +157,13 @@ $('#customer-product').on('click',async function(e){
             if(response.status == true){
                 window.location = `order-detail?customerId=${response.data.customer_id}&orderId=${response.data.order_id}`
             }
+            if(response.status == false){
+                showTost(false)
+            }
         },
         error: function(xhr, status, error){
             // Handle errors
+            showTost(false)
             console.log("Request failed");
             console.log(xhr.responseText);
         }

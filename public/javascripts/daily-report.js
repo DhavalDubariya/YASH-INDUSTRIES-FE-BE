@@ -124,9 +124,13 @@ function createDailyProcuct(){
                 $('#close-button').click()
                 setCustomeOrderProduct(response.data)
             }
+            if(response.status == false){
+                showTost(false)
+            }
         },
         error: function(xhr, status, error){
             // Handle errors
+            showTost(false)
             console.log("Request failed");
             console.log(xhr.responseText);
         }

@@ -69,3 +69,18 @@ $(document).ready(function(){
     }
   });
 })
+
+function showTost(flagTost){
+  if(flagTost == true){
+    $('#toast-status').empty('').append('Success')
+    $('#toast-message').empty('').append('Successfully executed.')
+    $('#myToast').find('rect').attr('fill','#007aff')
+  }else{
+    $('#toast-status').empty('').append('Failure')
+    $('#toast-message').empty('').append('Something went wrong please try again.')
+    $('#myToast').find('rect').attr('fill','Red')
+  }
+  var toastEl = document.getElementById('myToast');
+  var toast = new bootstrap.Toast(toastEl);
+  toast.show();
+}

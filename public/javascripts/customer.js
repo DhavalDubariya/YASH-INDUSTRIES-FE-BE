@@ -22,7 +22,10 @@ $(document).ready(function() {
             success: function(response) {
                 console.log(response)
                 if(response.status == false){
-                    
+                    showTost(false)
+                }
+                if(response.status == true){
+                    showTost(true)
                 }
                 setCustomerDetail(response.data)
                 playSound(true)
@@ -31,7 +34,7 @@ $(document).ready(function() {
                 $('#customer-popup')[0].reset();
             },
             error: function(xhr, status, error) {
-                
+                showTost(false)
             },
             complete: function() {
                 hideLoader()
@@ -55,7 +58,11 @@ $(document).ready(function() {
             success: function(response) {
                 console.log(response)
                 if(response.status == false){
+                    showTost(false)
                     return
+                }
+                if(response.status == true){
+                    showTost(true)
                 }
                 // setCustomerDetail(response.data)
                 customerDetail = form
@@ -67,6 +74,7 @@ $(document).ready(function() {
             },
             error: function(xhr, status, error) {
                 playSound(false)
+                showTost(false)
             },
             complete: function() {
                 hideLoader()
