@@ -124,3 +124,10 @@ $('#creaet-product').on('click',function(e){
     var orderId = $('#order-id').val()
     window.location = `/product?customerId=${customerId}&orderId=${orderId}`
 })
+
+$('#dispatch-product').on('click',function(e){
+    e.preventDefault()
+    var customerId = $('#customer-id').val()
+    var orderId = $('#order-id').val()
+    window.location = `/dispatch-order?customerId=${customerId}&orderId=${orderId}`
+})

@@ -38,4 +38,8 @@ router.get('/order-detail',function(req,res,next){
 router.get('/machine-report',function(req,res,next){
   res.render('machine-report',{ title: 'Daily Report' })
 })
+
+router.get('/dispatch-order',function(req,res,next){
+  res.render('dispatch-order',{ title: 'Daily Report' })
+})
 module.exports = router;
