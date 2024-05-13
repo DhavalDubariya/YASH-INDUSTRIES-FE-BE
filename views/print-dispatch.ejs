@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invoice Template</title>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<style>
+body {
+    font-family: 'Arial', sans-serif;
+    padding: 20px;
+    background: white;  
+    color: black;
+}
+
+.invoice {
+    border: 2px solid black;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+#mainTable th,#mainTable td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+
+header, footer {
+    text-align: left;
+}
+
+header h2, header p, footer p {
+    margin: 5px 0;
+}
+
+</style>
+</head>
+<body>
+  <div class="invoice" id="invoice">
+    <header>
+        <h2>M/s.: Vij's Composite</h2>
+        <table>
+            <tr>
+                <td>Order No</td>
+                <td>:</td>
+                <td><b>#1806</b></td>
+            </tr>
+            <tr>
+                <td>Date</td>
+                <td>:</td>
+                <td><b>01/01/2024</b></td>
+            </tr>
+        </table>
+    </header>
+    <table id="mainTable" style="width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    border: 1px solid black;">
+        <thead>
+            <tr>
+                <th width="5%" >No</th>
+                <th width="50%">Description</th>
+                <th width="10%">Qty.</th>
+                <th width="10%">Rate</th>
+                <th width="10%">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            
+        </tbody>
+    </table>
+    <table>
+        <tr>
+            <td>Dispatch Time</td>
+            <td>:</td>
+            <td>14:15 pm</td>
+        </tr>
+        <tr>
+            <td>Driver Name</td>
+            <td>:</td>
+            <td>Bhala Bhai</td>
+        </tr>
+        <tr>
+            <td>Number Plate</td>
+            <td>:</td>
+            <td>GJ-36-2810</td>
+        </tr>
+        <tr>
+            <td>Issued By</td>
+            <td>:</td>
+            <td>Yash Dubariya</td>
+        </tr>
+    </table>
+  </div>
+
+  <script>
+    $(document).ready(async function() {
+        var searchParams = new URLSearchParams(window.location.search);
+        var dispatchId = Array.from(searchParams).filter( x => x[0] == "dispatchId")[0][1]
+        var invoiceData = null
+        await $.ajax({
+        url: `api/product/dispatch-order`,
+        type: "GET",
+        contentType: "application/json",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': sessionStorage.getItem("yi-ssid")
+        }, // Replace with your data
+        success: function(response) {
+            console.log(response)
+            if(response.status == true){
+                invoiceData = response.data.filter( x => x._id == dispatchId )[0]
+            }
+        },
+        error: function(xhr, status, error) {
+            // playSound(false)
+            
+        },
+        complete: function() {
+            
+        }
+        });
+    
+    // Populate header section
+    $('#invoice header h2').text("M/s.: " + invoiceData.company_name);
+    $('#invoice header table tr:eq(0) td:eq(2)').html("<b>#"+invoiceData.order_no+"</b>");
+    $('#invoice header table tr:eq(1) td:eq(2)').html("<b>"+(new Date(invoiceData.iDate)).toLocaleDateString().split('/').reverse().join('-')+"</b>");
+
+    // Populate product section
+    var productsTable = $('#mainTable tbody');
+    var sum = 0
+    $.each(invoiceData.products, function(index, product) {
+        productsTable.append('<tr>' +
+            '<td>' + (index+1) + '</td>' +
+            '<td>' + product.product_name + '</td>' +
+            '<td>' + product.product_qty + '</td>' +
+            '<td>' + '' + '</td>' +
+            '<td>' + '' + '</td>' +
+            '</tr>');
+      sum = sum + product.product_qty
+    });
+    productsTable.append(`<tr>
+                <td></td>
+                <td><b>Total</b></td>
+                <td><b>${sum}</b></td>
+                <td></td>
+                <td></td>
+    </tr>`)
+    // Populate footer section
+    $('table:last tr:eq(0) td:eq(2)').text(invoiceData.timestamp.split('T')[1].split('Z')[0].split(':').slice(0,2).join(':'));
+    $('table:last tr:eq(1) td:eq(2)').text(invoiceData.driver_name);
+    $('table:last tr:eq(2) td:eq(2)').text(invoiceData.number_plate);
+    $('table:last tr:eq(3) td:eq(2)').text("Yash Dubariya");
+});
+
+  </script>
+</body>
+</html>

@@ -47,4 +47,8 @@ router.get('/dispatch',function(req,res,next){
   res.render('dispatch',{ title: 'Daily Report' })
 })
 
+router.get('/print-dispatch',function(req,res,next){
+  res.render('print-dispatch',{ title: 'Daily Report' })
+})
+
 module.exports = router;
