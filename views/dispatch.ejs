@@ -29,53 +29,7 @@
         <div class="pb-6">
           <h2 class="mb-4" id="product-count" ></h2>
           <div id="lealsTable" data-list='{"valueNames":["name","email","phone","contact","company","date"],"page":10,"pagination":true}'>
-            <div class="row g-3 justify-content-between mb-4">
-              <div class="col-auto">
-                <div class="d-flex">
-                  <div class="flatpickr-input-container me-2"><input class="form-control ps-6 datetimepicker" data-date="" id="datepicker" type="text"  />
-                    <span class="uil uil-calendar-alt flatpickr-icon text-body-tertiary"></span>
-                  </div>
-                  <button class="btn px-3 btn-phoenix-secondary" type="button" data-bs-toggle="modal" data-bs-target="#filterModal" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent">
-                    <span class="fab fa-slack text-primary"  style="height: 14px;" data-fa-transform="down-3"></span>
-                  </button>
-                  <div class="modal fade" id="filterModal" tabindex="-1">
-                    <div class="modal-dialog modal-dialog-centered">
-                      <div class="modal-content border border-translucent">
-                        <form id="addEventForm" autocomplete="off">
-                          <div class="modal-header border-translucent p-4">
-                            <h5 class="modal-title text-body-highlight fs-6 lh-sm">
-                              Daily Report
-                            </h5><button class="btn p-1 text-body" type="button" id="close-button" data-bs-dismiss="modal" aria-label="Close"><span class="fas fa-times fs-9"></span></button>
-                          </div>
-                          <div class="modal-body pt-4 pb-2 px-4">
-                            <div class="mb-3"><label class="fw-bold mb-2 text-body-highlight" for="leadStatus">CUSTOMER</label>
-                              <select class="form-select" id="customer-select" style="text-transform: uppercase;" data-placeholder="Choose one thing">
-                                <option>SELECT CUSTOMER</option>
-                            </select>
-                            </div>
-                            <div class="mb-3"><label class="fw-bold mb-2 text-body-highlight" for="createDate">ORDER</label>
-                              <select class="form-select" id="order-select" style="text-transform: uppercase;">
-                                <option>SELECT ORDER</option>
-                              </select>
-                            </div>
-                            <div class="mb-3"><label class="fw-bold mb-2 text-body-highlight" for="designation">PRODUCT</label>
-                              <select class="form-select" id="product-select" style="text-transform: uppercase;">
-                                <option>SELECT PRODUCT</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div class="modal-footer d-flex justify-content-end align-items-center px-4 pb-4 border-0 pt-3">
-                            <button class="btn btn-sm btn-phoenix-primary px-4 fs-10 my-0" onclick="resetCOP()" type="button"> 
-                              <span class="fas fa-arrows-rotate me-2 fs-10"></span>Reset
-                            </button>
-                            <button class="btn btn-sm btn-primary px-9 fs-10 my-0" id="daily-product-btn" onclick="createDailyProcuct()" type="button">CREATE</button></div>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>  
-            </div>
+
             <div class="table-responsive scrollbar mx-n1 px-1 border-top border-translucent">
               <table class="table fs-9 mb-0 leads-table">
                 <thead>
