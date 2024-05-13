@@ -79,6 +79,11 @@ const dispatchOrderController = async(req,res) => {
   return res.send(result)
 }
 
+const getdispatchOrderController = async(req,res) => {
+  const result = await productModule.getdispatchOrderModule(req)
+  return res.send(result)
+}
+
 module.exports = {
   createproductController: createproductController,
   getProductModule: getProductModule,
@@ -94,5 +99,6 @@ module.exports = {
   getTimeController:getTimeController,
   createMachineReportController:createMachineReportController,
   getMachineDataController:getMachineDataController,
-  dispatchOrderController:dispatchOrderController
+  dispatchOrderController:dispatchOrderController,
+  getdispatchOrderController:getdispatchOrderController
 }

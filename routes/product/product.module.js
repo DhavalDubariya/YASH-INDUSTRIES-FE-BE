@@ -607,6 +607,36 @@ const dispatchOrderModule = async(req) => {
     return {status:true,data:[]}
 }
 
+const getdispatchOrderModule = async(req) => {
+    var dispatchOrder = await JSON.parse(JSON.stringify(await db.DispatchOrder.find({history_id:null,flag_deleted:false})))
+    var productName = await db.Product.find({ _id :{$in: dispatchOrder.map( x => x.products.map( y => y.product_id )).flat()} })
+    // console.log(productName)
+    var orderDetail = await JSON.parse(JSON.stringify(await db.Order.find({ _id :{$in: dispatchOrder.map( x => x.order_id)} })))
+    // console.log(orderDetail)
+    var customerDetail = await JSON.parse(JSON.stringify(await db.Customer.find({ _id :{$in: orderDetail.map( x => x.customer_id)} })))
+    orderDetail = orderDetail.map( x => {
+        var customerDetailFilter = customerDetail.filter( y => y._id == x.customer_id )
+        x["customer_name"] = customerDetailFilter[0]?.customer_name
+        x["company_name"] = customerDetailFilter[0]?.company_name
+        return x
+    })
+    var dataArray = []
+    for(let i=0;i<dispatchOrder.length;i++){
+        var productArray = []
+        dispatchOrder[i]["order_no"] = orderDetail.filter(x => x._id == dispatchOrder[i].order_id)[0]?.order_no
+        dispatchOrder[i]["customer_name"] = orderDetail.filter(x => x._id == dispatchOrder[i].order_id)[0]?.customer_name
+        dispatchOrder[i]["company_name"] = orderDetail.filter(x => x._id == dispatchOrder[i].order_id)[0]?.company_name
+        for(let j=0;j<dispatchOrder[i].products.length;j++){
+            var productFilter = productName.filter( x => x._id == dispatchOrder[i].products[j].product_id)
+            productFilter[0].product_qty = dispatchOrder[i].products[j].product_count
+            productArray.push(productFilter[0])
+        }
+        dispatchOrder[i]["products"] = productArray
+        dataArray.push(dispatchOrder[i])
+    }
+    return {status:true,data:dataArray}
+}
+
 module.exports = {
     createproductModule: createproductModule,
     getProductModule: getProductModule,
@@ -622,5 +652,6 @@ module.exports = {
     getTimeModule: getTimeModule,
     createMachineReportModule:createMachineReportModule,
     getMachineDataModule:getMachineDataModule,
-    dispatchOrderModule:dispatchOrderModule
+    dispatchOrderModule:dispatchOrderModule,
+    getdispatchOrderModule:getdispatchOrderModule
 }

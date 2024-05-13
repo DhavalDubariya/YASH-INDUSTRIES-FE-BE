@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html data-navigation-type="default" data-navbar-horizontal-shape="default" lang="en-US" dir="ltr">
+<meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- ===============================================-->
+    <!--    Document Title-->
+    <!-- ===============================================-->
+    <title>Phoenix</title>
+    <%- include('beverages.ejs') %>
+  </head>
+
+  <body>
+    <!-- ===============================================-->
+    <!--    Main Content-->
+    <!-- ===============================================-->
+    <main class="main" id="top">
+      <%- include('navbar.ejs') %>
+      <div class="content">
+        <nav class="mb-2" aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active">Daily Report</li>
+          </ol>
+        </nav>
+        <div class="pb-6">
+          <h2 class="mb-4" id="product-count" ></h2>
+          <div id="lealsTable" data-list='{"valueNames":["name","email","phone","contact","company","date"],"page":10,"pagination":true}'>
+            <div class="row g-3 justify-content-between mb-4">
+              <div class="col-auto">
+                <div class="d-flex">
+                  <div class="flatpickr-input-container me-2"><input class="form-control ps-6 datetimepicker" data-date="" id="datepicker" type="text"  />
+                    <span class="uil uil-calendar-alt flatpickr-icon text-body-tertiary"></span>
+                  </div>
+                  <button class="btn px-3 btn-phoenix-secondary" type="button" data-bs-toggle="modal" data-bs-target="#filterModal" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent">
+                    <span class="fab fa-slack text-primary"  style="height: 14px;" data-fa-transform="down-3"></span>
+                  </button>
+                  <div class="modal fade" id="filterModal" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content border border-translucent">
+                        <form id="addEventForm" autocomplete="off">
+                          <div class="modal-header border-translucent p-4">
+                            <h5 class="modal-title text-body-highlight fs-6 lh-sm">
+                              Daily Report
+                            </h5><button class="btn p-1 text-body" type="button" id="close-button" data-bs-dismiss="modal" aria-label="Close"><span class="fas fa-times fs-9"></span></button>
+                          </div>
+                          <div class="modal-body pt-4 pb-2 px-4">
+                            <div class="mb-3"><label class="fw-bold mb-2 text-body-highlight" for="leadStatus">CUSTOMER</label>
+                              <select class="form-select" id="customer-select" style="text-transform: uppercase;" data-placeholder="Choose one thing">
+                                <option>SELECT CUSTOMER</option>
+                            </select>
+                            </div>
+                            <div class="mb-3"><label class="fw-bold mb-2 text-body-highlight" for="createDate">ORDER</label>
+                              <select class="form-select" id="order-select" style="text-transform: uppercase;">
+                                <option>SELECT ORDER</option>
+                              </select>
+                            </div>
+                            <div class="mb-3"><label class="fw-bold mb-2 text-body-highlight" for="designation">PRODUCT</label>
+                              <select class="form-select" id="product-select" style="text-transform: uppercase;">
+                                <option>SELECT PRODUCT</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="modal-footer d-flex justify-content-end align-items-center px-4 pb-4 border-0 pt-3">
+                            <button class="btn btn-sm btn-phoenix-primary px-4 fs-10 my-0" onclick="resetCOP()" type="button"> 
+                              <span class="fas fa-arrows-rotate me-2 fs-10"></span>Reset
+                            </button>
+                            <button class="btn btn-sm btn-primary px-9 fs-10 my-0" id="daily-product-btn" onclick="createDailyProcuct()" type="button">CREATE</button></div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>  
+            </div>
+            <div class="table-responsive scrollbar mx-n1 px-1 border-top border-translucent">
+              <table class="table fs-9 mb-0 leads-table">
+                <thead>
+                  <tr>
+                    <th class="sort align-middle ps-4 pe-5 text-uppercase border-end border-translucent" scope="col" data-sort="phone" style="width:15%; min-width: 180px;">
+                      <div class="d-inline-flex flex-center">
+                        <div class="d-flex align-items-center px-1 py-1 bg-primary-subtle rounded me-2"><span class="text-primary-dark" data-feather="user"></span></div><span>CUSTOMER</span>
+                      </div>
+                    </th>
+                    <th class="sort align-middle ps-4 pe-5 text-uppercase border-end border-translucent" scope="col" data-sort="contact" style="width:15%;">
+                      <div class="d-inline-flex flex-center">
+                        <div class="d-flex align-items-center px-1 py-1 bg-info-subtle rounded me-2"><span class="text-info-dark" data-feather="phone"></span></div><span>ORDER</span>
+                      </div>
+                    </th>
+                    <th class="sort align-middle ps-4 pe-5 text-uppercase border-end border-translucent" scope="col" data-sort="company" style="width:15%;">
+                      <div class="d-inline-flex flex-center">
+                        <div class="d-flex align-items-center px-1 py-1 bg-warning-subtle rounded me-2"><span class="text-warning-dark" data-feather="grid"></span></div><span>DISPATCH DATE</span>
+                      </div>
+                    </th>
+                    <th class="sort align-middle ps-4 pe-5 text-uppercase" scope="col" data-sort="date" style="width:15%;">DELETE</th>
+                  </tr>
+                </thead>
+                <tbody class="list" id="product-cop-list">
+
+                </tbody>
+              </table>
+            </div>
+            <div class="row align-items-center justify-content-end py-4 pe-0 fs-9">
+              <div class="col-auto d-flex">
+                <p class="mb-0 d-none d-sm-block me-3 fw-semibold text-body" data-list-info="data-list-info"></p><a class="fw-semibold" href="#!" data-list-view="*">View all<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a><a class="fw-semibold d-none" href="#!" data-list-view="less">View Less<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
+              </div>
+              <div class="col-auto d-flex"><button class="page-link" data-list-pagination="prev"><span class="fas fa-chevron-left"></span></button>
+                <ul class="mb-0 pagination"></ul><button class="page-link pe-0" data-list-pagination="next"><span class="fas fa-chevron-right"></span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </main><!-- ===============================================-->
+    <!--    End of Main Content-->
+    <!-- ===============================================-->
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x" style="z-index: 9999999">
+      <div id="myToast" class="toast hide" role="alert" aria-live="assertive" >
+        <div class="toast-header">
+          <svg class="bd-placeholder-img rounded me-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#007aff"></rect></svg>
+          <strong class="me-auto" id="toast-status" ></strong>
+          <!-- <small>11 mins ago</small> -->
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="toast-message" >
+          
+        </div>
+      </div>
+    </div>
+    <script src="/javascripts/dispatch.js" ></script>
+  </body>
+</html>

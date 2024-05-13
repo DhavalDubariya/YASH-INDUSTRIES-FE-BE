@@ -42,4 +42,9 @@ router.get('/machine-report',function(req,res,next){
 router.get('/dispatch-order',function(req,res,next){
   res.render('dispatch-order',{ title: 'Daily Report' })
 })
+
+router.get('/dispatch',function(req,res,next){
+  res.render('dispatch',{ title: 'Daily Report' })
+})
+
 module.exports = router;
