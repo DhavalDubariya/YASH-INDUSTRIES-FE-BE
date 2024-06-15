@@ -1,33 +1,19 @@
 var timeData = []
 var worker = []
-$(document).ready(function () {
+$(document).ready(async function () {
+    showLoader(true)
     $('#datepicker').val((moment(new Date()).format()).split('T')[0])
     console.log((moment(new Date()).format()).split('T')[0])
-    getCustomerOrderProduct((moment(new Date()).format()).split('T')[0])
-    getMachine()
-    $.ajax({
-        url: `api/product/machine-time`,
-        type: "GET",
-        contentType: "application/json",
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': sessionStorage.getItem("yi-ssid")
-        }, // Replace with your data
-        success: function(response) {
-            if(response.status == true){
-                console.log(response, 'Dhaval')
-                timeData = response.data
-                worker = response.worker
-                getDailyTime(true)
-            }
-        },
-        error: function(xhr, status, error) {
-            // playSound(false)
-        },
-        complete: function() {
-            
-        }
-        });
+    
+    await Promise.all([
+        await getCustomerOrderProduct((moment(new Date()).format()).split('T')[0]),
+        await getMachine(),
+        await getMachinGeneric()
+    ])
+    setTimeout(function (){
+        getMachineData()
+        hideLoader()
+    },2000)
 })
 
 $('#datepicker').change(function(){
@@ -37,7 +23,7 @@ $('#datepicker').change(function(){
 })
 
 
-function getMachine() {
+async function getMachine() {
     $.ajax({
         url: `api/product/genric-machine`,
         type: "GET",
@@ -62,7 +48,7 @@ function getMachine() {
 }
 
 
-function getCustomerOrderProduct(date) {
+async function getCustomerOrderProduct(date) {
     $.ajax({
         url: `api/product/dayily-product?iDate=${date}`,
         type: "GET",
@@ -201,6 +187,11 @@ $(document).on('change', '.input-count,.input-worker,.input-reason', function(e)
             if(response.status == true){
                 console.log(response)   
                 showTost(true)
+                var machineCount = 0 
+                var machineCountSum = Array.from($('.input-count')).map( x => {if(isNaN(parseInt(x.value)) == false){
+                    machineCount = machineCount + parseInt(x.value)
+                }})
+                $('#machine-count-sum').text(machineCount)
             }
             if(response.status == false){
                 console.log(response)   
@@ -256,10 +247,12 @@ function getMachineData () {
 }
 
 function getDailyTimeData(macineTimeData) {
+    console.log(macineTimeData,'TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT')
     var dayNightSwitch = $('#flexSwitchCheckDefault').attr('data-id') 
     var daySwitch = dayNightSwitch == "true" ? true : false
     var timeDataFilter = macineTimeData.filter(x => x.flag_day_shift == daySwitch).sort((a, b) => { return a.seq_no - b.seq_no })
     var timeString = ``
+    var machineCount = 0
     for (let i = 0; i < timeDataFilter.length;i++){ 
         workerString = ''
         var workerString = `<option data-id="null">SELECT WORKER</option>`
@@ -276,7 +269,7 @@ function getDailyTimeData(macineTimeData) {
             }
                 
         }
-        // timeDataFilter[i].reason = timeDataFilter[i].reason == null ? '' : timeDataFilter[i].reason
+        timeDataFilter[i].reason = timeDataFilter[i].reason == null || '' || undefined ? '' : timeDataFilter[i].reason
         timeString = timeString + `
         <tr style="padding: 0px !important;" data-id="${timeDataFilter[i]._id}">
         <td style="padding: 0px !important; font-size: 24px; text-align: center;">
@@ -295,7 +288,53 @@ function getDailyTimeData(macineTimeData) {
         </td>
         </tr>
         `
+        machineCount = machineCount + timeDataFilter[i].machine_count
+        // console.log('Dhaval',machineCount)
     }
+    
+    timeString = timeString +  `
+        <tr style="padding: 0px !important;">
+        <td style="text-align:center;font-size: 25px;">
+            <b>Total</b>
+        </td>
+        <td style="text-align:center;font-size: 25px;" > 
+            <b id="machine-count-sum" >${machineCount}</b>
+        </td>
+        <td style="padding: 0px !important;">
+            
+        </td>
+        <td style="padding: 0px !important;">
+            
+        </td>
+        </tr>
+    `
+    console.log('value change :::::::::::::::::::::::::::')
     $('#product-cop-list').empty()
     $('#product-cop-list').append(timeString)
+}
+
+async function getMachinGeneric() {
+    $.ajax({
+        url: `api/product/machine-time`,
+        type: "GET",
+        contentType: "application/json",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': sessionStorage.getItem("yi-ssid")
+        }, // Replace with your data
+        success: function(response) {
+            if(response.status == true){
+                console.log(response, 'Dhaval')
+                timeData = response.data
+                worker = response.worker
+                getDailyTime(true)
+            }
+        },
+        error: function(xhr, status, error) {
+            // playSound(false)
+        },
+        complete: function() {
+            
+        }
+    });
 }
