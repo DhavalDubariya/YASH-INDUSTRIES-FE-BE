@@ -3,7 +3,7 @@ const productDb = require('./product.db')
 const libFunction = require('../../helpers/libFunction');
 const db = require('../../model/index');
 const { json } = require("express");
-const { ObjectId } = require("mongodb");
+const { ObjectId, Db } = require("mongodb");
 
 function errorMessage(params) {
     return {
@@ -637,6 +637,46 @@ const getdispatchOrderModule = async(req) => {
     return {status:true,data:dataArray}
 }
 
+const getDailyMachineReportModule = async(req) => {
+    const iDate = req.query.iDate
+    var machine = await JSON.parse(JSON.stringify(await db.Machine.find({flag_deleted:false})))
+    var getGenricTime = await JSON.parse(JSON.stringify(await db.GenricMachine.find({})))
+    var machineReport = await JSON.parse(JSON.stringify(await db.MachineReport.find({"iDate":new Date(iDate)})))
+    var getWorker = await JSON.parse(JSON.stringify(await db.Worker.find({flag_deleted:false,history_id:null})))
+    var getDailyProduct = await JSON.parse(JSON.stringify(await db.DailyProduct.find({flag_deleted:false,history_id:null,iDate:new Date(iDate)})))
+    if(getDailyProduct.length != 0){
+        var product = await JSON.parse(JSON.stringify(await db.Product.find({_id:{$in:getDailyProduct.map( x => x.product_id )}})))
+        console.log(product)
+    }
+
+    var dataArray = []
+    for(let i=0;i<machine.length;i++){
+
+        for(let j=0;j<getDailyProduct.length;j++){
+            // getDailyProduct
+        }
+
+        machine[i]["machine_time"] = getGenricTime.map( x => {
+            var machineFilter = machineReport.filter(y => y.machine_time_id == x._id && y.machine_id == machine[i]._id )
+            console.log(machineFilter)
+            var machineDataObj = {
+               machine_count:null,
+               reason:null,
+               worker_name:null
+           }
+           if(machineFilter.length != 0){
+               machineDataObj.machine_count = machineFilter[0].machine_count
+               machineDataObj.reason = machineFilter[0].reason
+               machineDataObj.worker_name = getWorker.filter( y => y._id == machineFilter[0].worker_id )[0]?.worker_name
+           }
+           return {...x,...machineDataObj}
+       }) 
+       dataArray.push(machine[i])
+    }
+
+    return {status:true,data:dataArray}
+}
+
 module.exports = {
     createproductModule: createproductModule,
     getProductModule: getProductModule,
@@ -653,5 +693,6 @@ module.exports = {
     createMachineReportModule:createMachineReportModule,
     getMachineDataModule:getMachineDataModule,
     dispatchOrderModule:dispatchOrderModule,
-    getdispatchOrderModule:getdispatchOrderModule
+    getdispatchOrderModule:getdispatchOrderModule,
+    getDailyMachineReportModule:getDailyMachineReportModule
 }

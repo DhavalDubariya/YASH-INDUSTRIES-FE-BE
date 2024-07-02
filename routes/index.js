@@ -51,4 +51,11 @@ router.get('/print-dispatch',function(req,res,next){
   res.render('print-dispatch',{ title: 'Daily Report' })
 })
 
+router.get('/daily-machine-report',function(req,res,next){
+  res.render('daily-machine-report',{ title: 'Daily Machine Report' })
+})
+
+router.get('/test',function(req,res,next){
+  res.render('test',{ title: 'Daily Report' })
+})
 module.exports = router;
