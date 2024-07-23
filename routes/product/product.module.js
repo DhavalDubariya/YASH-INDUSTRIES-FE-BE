@@ -4,7 +4,8 @@ const libFunction = require('../../helpers/libFunction');
 const db = require('../../model/index');
 const { json } = require("express");
 const { ObjectId, Db } = require("mongodb");
-
+const fs = require('fs')
+const path = require('path')
 function errorMessage(params) {
     return {
         status: false,
@@ -669,6 +670,7 @@ const getDailyMachineReportModule = async(req) => {
                     "machine_time_id": getGenricTime[k]._id,
                     "machine_time": getGenricTime[k].machine_time,
                     "flag_day_shift": getGenricTime[k].flag_day_shift,
+                    "machine_time_seq": getGenricTime[k].seq_no,
                     "machine_report":[]
                 }
                 // console.log(getGenricTime[k]._id,machine[i]._id,getDailyProduct[j]._id)
@@ -684,20 +686,97 @@ const getDailyMachineReportModule = async(req) => {
                         "machine_count": machineFilter[0].machine_count,
                         "reason": machineFilter[0].reason,
                         "iDate": machineFilter[0].iDate,
-                        "worker_id": machineFilter[0].worker_id
+                        "worker_id": machineFilter[0].worker_id,
+                        "worker_name": getWorker.filter( x => x._id ==  machineFilter[0].worker_id )[0]?.worker_name
                     }
                     machineTimeObj.machine_report.push(machineReportObj)
                 }
                 dayilyProductObj.machine_time.push(machineTimeObj)
             }
             if(flagInsert == true){
+                dayilyProductObj.machine_time.sort( (x,y) => x.machine_time_seq - y.machine_time_seq )
                 dataObj.daily_product.push(dayilyProductObj)
             }
         }
         dataArray.push(dataObj)
     }
+    data = dataArray
+    // tableData = JSON.stringify(tableData)
+    var tableDataStrucher = fs.readFileSync(path.join(__dirname,'../../public/table-strachure.html'),'utf8')
+    
+    var tableString = ``
+    for(let i=0;i<data.length;i++){
+        // console.log(data[i].machine_name,'::::::::::::::::::')
+        // var tableData = tableData.replaceAll('{{machineName}}',data[i].machine_name)
+        for(let j=0;j<data[i].daily_product.length;j++){
+          
+          var tableData = fs.readFileSync(path.join(__dirname,'../../public/table-strachure-table.html'),'utf8')
+          
+          
 
-    return {status:true,data:dataArray}
+          machinCount = ``
+          machinWorker = ``
+          machineReason = ``
+          
+          tableData = tableData.replaceAll('{{machinName}}',data[i].machine_name)
+          tableData = tableData.replaceAll('{{productName}}',data[i].daily_product[j].product_name)
+
+          var machineTime = data[i].daily_product[j].machine_time.filter( x => x.flag_day_shift == true )
+          for(let k=0;k<machineTime.length;k++){
+            // console.log(machineTime[k].machine_time.length)
+            machinCount = machinCount + `
+              <td  class="sort align-middle ps-4 pe-5 text-uppercase border-end border-translucent">
+                ${machineTime[k].machine_report.length == 0 ? '' : machineTime[k].machine_report[0].machine_count}
+              </td>
+            `
+            machinWorker = machinWorker + `
+              <td  class="sort align-middle ps-4 pe-5 text-uppercase border-end border-translucent">
+                ${machineTime[k].machine_report.length == 0 ? '' : machineTime[k].machine_report[0].worker_name == null ? '' : machineTime[k].machine_report[0].worker_name}
+              </td>
+            `
+            machineReason = machineReason + `
+              <td  class="sort align-middle ps-4 pe-5 text-uppercase border-end border-translucent">
+                ${machineTime[k].machine_report.length == 0 ? '' : (machineTime[k].machine_report[0].reason == (null || ''))  ? '' : machineTime[k].machine_report[0].reason}
+              </td>
+            `
+          }
+          tableData = tableData.replaceAll('{{machinCount}}',machinCount)
+          tableData = tableData.replaceAll('{{machinWorker}}',machinWorker)
+          tableData = tableData.replaceAll('{{machineReason}}',machineReason)
+
+          var machineNightCount = ``
+          var machinNightWorker = ``
+          var machinNightReason = ``
+
+          var machineNightTime = data[i].daily_product[j].machine_time.filter( x => x.flag_day_shift == false)
+          for(let k=0;k<machineNightTime.length;k++){
+            // console.log(machineNightTime[k].machine_time.length)
+            machineNightCount = machineNightCount + `
+              <td  class="sort align-middle ps-4 pe-5 text-uppercase border-end border-translucent">
+                ${machineNightTime[k].machine_report.length == 0 ? '' : machineNightTime[k].machine_report[0].machine_count}
+              </td>
+            `
+            machinNightWorker = machinNightWorker + `
+              <td  class="sort align-middle ps-4 pe-5 text-uppercase border-end border-translucent">
+                ${machineNightTime[k].machine_report.length == 0 ? '' : machineNightTime[k].machine_report[0].worker_name == null ? '' : machineNightTime[k].machine_report[0].worker_name}
+              </td>
+            `
+            machinNightReason = machinNightReason + `
+              <td  class="sort align-middle ps-4 pe-5 text-uppercase border-end border-translucent">
+                ${machineNightTime[k].machine_report.length == 0 ? '' : (machineNightTime[k].machine_report[0].reason == (null || ''))  ? '' : machineNightTime[k].machine_report[0].reason}
+              </td>
+            `
+          }
+    
+          tableData = tableData.replaceAll('{{machineNightCount}}',machineNightCount)
+          tableData = tableData.replaceAll('{{machineNightWorker}}',machinNightWorker)
+          tableData = tableData.replaceAll('{{machineNightReason}}',machinNightReason)
+        }
+        tableString = tableString + tableData
+    }
+    //   console.log(tableString)
+    tableDataStrucher.replace('{{tableStrachure}}',tableString)
+    return tableString
 }
 
 module.exports = {
