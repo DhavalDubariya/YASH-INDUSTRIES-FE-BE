@@ -701,32 +701,29 @@ const getDailyMachineReportModule = async(req) => {
         dataArray.push(dataObj)
     }
     data = dataArray
-    // tableData = JSON.stringify(tableData)
-    var tableDataStrucher = fs.readFileSync(path.join(__dirname,'../../public/table-strachure.html'),'utf8')
     
-    var tableString = ``
+    var tableArray = []
     for(let i=0;i<data.length;i++){
         // console.log(data[i].machine_name,'::::::::::::::::::')
         // var tableData = tableData.replaceAll('{{machineName}}',data[i].machine_name)
         for(let j=0;j<data[i].daily_product.length;j++){
-          
-          var tableData = fs.readFileSync(path.join(__dirname,'../../public/table-strachure-table.html'),'utf8')
-          
-          
-
-          machinCount = ``
-          machinWorker = ``
-          machineReason = ``
-          
-          tableData = tableData.replaceAll('{{machinName}}',data[i].machine_name)
-          tableData = tableData.replaceAll('{{productName}}',data[i].daily_product[j].product_name)
+        var tableDataStrucher = fs.readFileSync(path.join(__dirname,'../../public/table-strachure-table.html'),'utf8')
+          console.log(data[i].machine_name)
+          console.log(data[i].daily_product[j].product_name)
+          tableDataStrucher = tableDataStrucher.replaceAll('{{machinName}}',data[i].machine_name)
+          tableDataStrucher = tableDataStrucher.replaceAll('{{productName}}',data[i].daily_product[j].product_name)
 
           var machineTime = data[i].daily_product[j].machine_time.filter( x => x.flag_day_shift == true )
+          var machinCount = ''
+          var machinWorker = ''
+          var machineReason = ''
+          var machinCountTotal = 0
           for(let k=0;k<machineTime.length;k++){
             // console.log(machineTime[k].machine_time.length)
+            machinCountTotal = machinCountTotal + (machineTime[k].machine_report.length == 0 ? 0 : machineTime[k].machine_report[0].machine_count == null ? 0 : machineTime[k].machine_report[0].machine_count)
             machinCount = machinCount + `
               <td  class="sort align-middle ps-4 pe-5 text-uppercase border-end border-translucent">
-                ${machineTime[k].machine_report.length == 0 ? '' : machineTime[k].machine_report[0].machine_count}
+                ${machineTime[k].machine_report.length == 0 ? '' : machineTime[k].machine_report[0].machine_count == null ? '' : machineTime[k].machine_report[0].machine_count}
               </td>
             `
             machinWorker = machinWorker + `
@@ -740,20 +737,23 @@ const getDailyMachineReportModule = async(req) => {
               </td>
             `
           }
-          tableData = tableData.replaceAll('{{machinCount}}',machinCount)
-          tableData = tableData.replaceAll('{{machinWorker}}',machinWorker)
-          tableData = tableData.replaceAll('{{machineReason}}',machineReason)
-
-          var machineNightCount = ``
-          var machinNightWorker = ``
-          var machinNightReason = ``
+          tableDataStrucher = tableDataStrucher.replaceAll('{{machinCount}}',machinCount)
+          tableDataStrucher = tableDataStrucher.replaceAll('{{machinWorker}}',machinWorker)
+          tableDataStrucher = tableDataStrucher.replaceAll('{{machineReason}}',machineReason)
+          tableDataStrucher = tableDataStrucher.replaceAll('{{machinCountTotal}}',machinCountTotal)
 
           var machineNightTime = data[i].daily_product[j].machine_time.filter( x => x.flag_day_shift == false)
+          var machineNightCount = ''
+          var machinNightWorker = ''
+          var machinNightReason = ''
+          var machinNightCountTotal = 0
+
           for(let k=0;k<machineNightTime.length;k++){
+            machinNightCountTotal = machinNightCountTotal + (machineNightTime[k].machine_report.length == 0 ? 0 : machineNightTime[k].machine_report[0].machine_count == null ? 0 : machineNightTime[k].machine_report[0].machine_count)
             // console.log(machineNightTime[k].machine_time.length)
             machineNightCount = machineNightCount + `
               <td  class="sort align-middle ps-4 pe-5 text-uppercase border-end border-translucent">
-                ${machineNightTime[k].machine_report.length == 0 ? '' : machineNightTime[k].machine_report[0].machine_count}
+                ${machineNightTime[k].machine_report.length == 0 ? '' : machineNightTime[k].machine_report[0].machine_count == null ? '' : machineNightTime[k].machine_report[0].machine_count}
               </td>
             `
             machinNightWorker = machinNightWorker + `
@@ -768,15 +768,16 @@ const getDailyMachineReportModule = async(req) => {
             `
           }
     
-          tableData = tableData.replaceAll('{{machineNightCount}}',machineNightCount)
-          tableData = tableData.replaceAll('{{machineNightWorker}}',machinNightWorker)
-          tableData = tableData.replaceAll('{{machineNightReason}}',machinNightReason)
+          tableDataStrucher = tableDataStrucher.replaceAll('{{machineNightCount}}',machineNightCount)
+          tableDataStrucher = tableDataStrucher.replaceAll('{{machineNightWorker}}',machinNightWorker)
+          tableDataStrucher = tableDataStrucher.replaceAll('{{machineNightReason}}',machinNightReason)
+          tableDataStrucher = tableDataStrucher.replaceAll('{{machinNightCountTotal}}',machinNightCountTotal)
+
+
+          tableArray.push(tableDataStrucher)
         }
-        tableString = tableString + tableData
     }
-    //   console.log(tableString)
-    tableDataStrucher.replace('{{tableStrachure}}',tableString)
-    return tableString
+    return tableArray.join('')
 }
 
 module.exports = {
