@@ -229,7 +229,7 @@ function getMachineData () {
                 console.log(response, 'Dhaval')
                 // timeData = response.data
                 // worker = response.worker
-                getDailyTimeData(response.data)
+                getDailyTimeData(response.data,response.rejection)
             }
             if(response.status == false){
                 showTost(false)
@@ -246,7 +246,7 @@ function getMachineData () {
     });
 }
 
-function getDailyTimeData(macineTimeData) {
+function getDailyTimeData(macineTimeData,rejection) {
     console.log(macineTimeData,'TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT')
     var dayNightSwitch = $('#flexSwitchCheckDefault').attr('data-id') 
     var daySwitch = dayNightSwitch == "true" ? true : false
@@ -309,6 +309,10 @@ function getDailyTimeData(macineTimeData) {
         </tr>
     `
     console.log('value change :::::::::::::::::::::::::::')
+    var rejectionCount = rejection.filter( x => x.flag_day_shift == daySwitch )
+    rejectionCount = rejectionCount.length == 0 ? 0 : rejectionCount[0].rejection_count
+    $('#rejection-count').val(rejectionCount)
+    // console.log(macineTimeData,']]]]]]]]]]]]]]]]]]]]]]]]]]',rejectionCount)
     $('#product-cop-list').empty()
     $('#product-cop-list').append(timeString)
 }
@@ -335,6 +339,54 @@ async function getMachinGeneric() {
         },
         complete: function() {
             
+        }
+    });
+}
+
+$('#rejection-count').change(function(e) {
+    rejectionCount()
+})
+
+function rejectionCount () {
+    var iDate = $('#datepicker').val()
+    var daily_product_id = $('#customer-order-product').find('option:selected').attr('id')
+    var machine_id = $('#select-machine').find('option:selected').attr('id')
+    var flag_day_shift = $('#flexSwitchCheckDefault').attr('data-id') == "true" ? true : false
+    var rejection_count = $('#rejection-count').val()
+    console.log(iDate,daily_product_id,machine_id,flag_day_shift,rejection_count)
+
+    $.ajax({
+        type: "POST",
+        url: "api/product/rejection-count",
+        data: JSON.stringify({iDate,
+            daily_product_id,
+            machine_id,
+            flag_day_shift,
+            rejection_count,
+        }),
+        contentType: "application/json",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': sessionStorage.getItem("yi-ssid")
+        },
+        success: function(response){
+            // Handle success
+            console.log("Request successful");
+            console.log(response);
+            if(response.status == true){
+                console.log(response)   
+                showTost(true)
+            }
+            if(response.status == false){
+                console.log(response)   
+                showTost(false)
+            }
+        },
+        error: function(xhr, status, error){
+            // Handle errors
+            showTost(false)
+            console.log("Request failed");
+            console.log(xhr.responseText);
         }
     });
 }

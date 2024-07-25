@@ -11,6 +11,7 @@ const Worker = require('./worker')
 const MachineReport = require('./machineReport')
 const GenricMachine = require('./genric-machine')
 const DispatchOrder = require('./dispatchOrder')
+const RejectionReport = require('./rejection')
 module.exports = {
     User:User,
     UserAccessToken:UserAccessToken,
@@ -24,5 +25,6 @@ module.exports = {
     Worker:Worker,
     MachineReport: MachineReport,
     GenricMachine:GenricMachine,
-    DispatchOrder:DispatchOrder
+    DispatchOrder:DispatchOrder,
+    RejectionReport:RejectionReport
 }

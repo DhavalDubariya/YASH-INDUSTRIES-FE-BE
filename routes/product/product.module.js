@@ -583,7 +583,8 @@ const getMachineDataModule = async(req) => {
         return {...x,...machineDataObj}
     })
     var getWorker = JSON.parse(JSON.stringify(await db.Worker.find({flag_deleted:false,history_id:null})))
-    return {status:true,data:result,worker:getWorker}
+    var rejectionReport = await JSON.parse(JSON.stringify(await db.RejectionReport.find({"iDate":new Date(req.body.iDate),"daily_product_id":new ObjectId(req.body.daily_product_id),"machine_id":new ObjectId(req.body.machine_id)})))
+    return {status:true,data:result,worker:getWorker,rejection:rejectionReport}
     // return {status:true,data:result}
 }
 
@@ -648,7 +649,7 @@ const getDailyMachineReportModule = async(req) => {
     
     var product = await JSON.parse(JSON.stringify(await db.Product.find({_id:{$in:getDailyProduct.map( x => x.product_id )}})))
         // console.log(product)
-    
+    var rejection = await JSON.parse(JSON.stringify(await db.RejectionReport.find({flag_deleted:false,history_id:null,"iDate":new Date(iDate)})))
     // console.log(machineReport)
     var dataArray = []
     for(let i=0;i<machine.length;i++){
@@ -662,7 +663,8 @@ const getDailyMachineReportModule = async(req) => {
                 "product_id":getDailyProduct[j].product_id,
                 "daily_product_id":getDailyProduct[j]._id,
                 "product_name":product.filter( x => x._id ==  getDailyProduct[j].product_id)[0]?.product_name,
-                "machine_time":[]
+                "machine_time":[],
+                "rejection":rejection.filter( x => x.daily_product_id == getDailyProduct[j]._id)
             }
             var flagInsert = []
             for(k=0;k<getGenricTime.length;k++){
@@ -714,6 +716,8 @@ const getDailyMachineReportModule = async(req) => {
           tableDataStrucher = tableDataStrucher.replaceAll('{{productName}}',data[i].daily_product[j].product_name)
 
           var machineTime = data[i].daily_product[j].machine_time.filter( x => x.flag_day_shift == true )
+          var rejectionCount = data[i].daily_product[j].rejection.filter( x => x.flag_day_shift == true )
+          rejectionCount = rejectionCount.length == 0 ? 0 : rejectionCount[0].rejection_count
           var machinCount = ''
           var machinWorker = ''
           var machineReason = ''
@@ -740,9 +744,12 @@ const getDailyMachineReportModule = async(req) => {
           tableDataStrucher = tableDataStrucher.replaceAll('{{machinCount}}',machinCount)
           tableDataStrucher = tableDataStrucher.replaceAll('{{machinWorker}}',machinWorker)
           tableDataStrucher = tableDataStrucher.replaceAll('{{machineReason}}',machineReason)
-          tableDataStrucher = tableDataStrucher.replaceAll('{{machinCountTotal}}',machinCountTotal)
-
+          tableDataStrucher = tableDataStrucher.replaceAll('{{machinCountTotal}}',(machinCountTotal-rejectionCount))
+          tableDataStrucher = tableDataStrucher.replaceAll('{{rejectionCount}}',rejectionCount)
+          
           var machineNightTime = data[i].daily_product[j].machine_time.filter( x => x.flag_day_shift == false)
+          var rejectionNightCount = data[i].daily_product[j].rejection.filter( x => x.flag_day_shift == false )
+          rejectionNightCount = rejectionNightCount.length == 0 ? 0 : rejectionNightCount[0].rejection_count
           var machineNightCount = ''
           var machinNightWorker = ''
           var machinNightReason = ''
@@ -771,13 +778,49 @@ const getDailyMachineReportModule = async(req) => {
           tableDataStrucher = tableDataStrucher.replaceAll('{{machineNightCount}}',machineNightCount)
           tableDataStrucher = tableDataStrucher.replaceAll('{{machineNightWorker}}',machinNightWorker)
           tableDataStrucher = tableDataStrucher.replaceAll('{{machineNightReason}}',machinNightReason)
-          tableDataStrucher = tableDataStrucher.replaceAll('{{machinNightCountTotal}}',machinNightCountTotal)
+          tableDataStrucher = tableDataStrucher.replaceAll('{{machinNightCountTotal}}',(machinNightCountTotal-rejectionNightCount))
+          tableDataStrucher = tableDataStrucher.replaceAll('{{rejectionNightCount}}',rejectionNightCount)
 
 
           tableArray.push(tableDataStrucher)
         }
     }
     return tableArray.join('')
+}
+
+const rejectionCountModule = async(req) => {
+    var iDate = req.body.iDate
+    var copId = req.body.daily_product_id
+    var machineId = req.body.machine_id
+    var flagDayShift = req.body.flag_day_shift
+    var count = req.body.rejection_count
+    
+    var userId = req.user_id
+    if (iDate == undefined || iDate == null || iDate == "" || copId == undefined || copId == null || copId == '' || machineId == undefined || machineId == null || machineId == "") { 
+        return errorMessage("Somthing want wrong")
+    }
+    var changeLogId = (await db.ChangeLog.create({user_id:userId})).toObject()
+
+    // await db.MachineReport.deleteMany({})
+    req.body.change_log_id = changeLogId._id
+
+    var rejectionReport = await db.RejectionReport.findOne({"iDate":new Date(req.body.iDate),"daily_product_id":new ObjectId(req.body.daily_product_id),"machine_id":new ObjectId(req.body.machine_id),"flag_day_shift":flagDayShift})
+    
+    if(rejectionReport == null){
+        var createRejectionReport = await db.RejectionReport.create(req.body)
+        // console.log(createMachineReport)
+        if(createRejectionReport == null){
+            return errorMessage()
+        }
+    }else{
+        var updateRejectionReport = await db.RejectionReport.updateOne({_id:rejectionReport._id},{"rejection_count":req.body.rejection_count})
+        // console.log(updateMachineReport)
+        if(updateRejectionReport == null){
+            return errorMessage()
+        }
+    }
+
+    return {status:true,data:[]}
 }
 
 module.exports = {
@@ -797,5 +840,6 @@ module.exports = {
     getMachineDataModule:getMachineDataModule,
     dispatchOrderModule:dispatchOrderModule,
     getdispatchOrderModule:getdispatchOrderModule,
-    getDailyMachineReportModule:getDailyMachineReportModule
+    getDailyMachineReportModule:getDailyMachineReportModule,
+    rejectionCountModule:rejectionCountModule
 }
