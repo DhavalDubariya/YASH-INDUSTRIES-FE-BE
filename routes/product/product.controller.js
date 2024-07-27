@@ -94,6 +94,11 @@ const rejectionCountController = async(req,res) => {
   return res.send(result)
 }
 
+const stockTackController = async(req,res) => {
+  const result = await productModule.stockTackModule(req)
+  return res.send(result)
+}
+
 module.exports = {
   createproductController: createproductController,
   getProductModule: getProductModule,
@@ -112,5 +117,6 @@ module.exports = {
   dispatchOrderController:dispatchOrderController,
   getdispatchOrderController:getdispatchOrderController,
   getDailyMachineReportController:getDailyMachineReportController,
-  rejectionCountController:rejectionCountController
+  rejectionCountController:rejectionCountController,
+  stockTackController:stockTackController
 }

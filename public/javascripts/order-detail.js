@@ -76,6 +76,7 @@ function setProductList(productList) {
         var productName = productList[i].product_name
         var productQty = productList[i].product_qty
         var runner = productList[i].runner
+        var productionCount = productList[i].production_count
         // var materialLength = productList[i]
         var customerId = productList[i].customer_id
         var productId = productList[i]._id
@@ -93,6 +94,9 @@ function setProductList(productList) {
         </td>
         <td class="align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight"><a
           class="text-body-highlight" style="font-size: 18px; text-align: center !important ; padding: 0 25px;">${runner}</a>
+        </td>
+        <td class="align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight"><a
+          class="text-body-highlight" style="font-size: 18px; text-align: center !important ; padding: 0 25px;">${productionCount}</a>
         </td>
         <td
           class="company align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 border-end border-translucent fw-semibold text-body-highlight">

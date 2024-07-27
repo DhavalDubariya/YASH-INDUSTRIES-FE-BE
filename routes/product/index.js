@@ -29,4 +29,6 @@ router.get("/dispatch-order",productController.getdispatchOrderController)
 router.get("/daily-machine-report",productController.getDailyMachineReportController)
 router.post("/rejection-count",middleware.checkAccessToken,productController.rejectionCountController)
 
+router.post("/stock-tack",middleware.checkAccessToken,productController.stockTackController)
+
 module.exports = router

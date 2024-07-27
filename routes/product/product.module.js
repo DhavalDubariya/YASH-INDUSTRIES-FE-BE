@@ -330,6 +330,24 @@ const orderDetailModule = async(req) => {
 
     var productMatirial = JSON.parse(JSON.stringify(await db.Material.find({history_id:null,flag_deleted:false,product_id:{ $in: productCount.map( x => x._id )}} )))
     
+    var dayilyProduct = JSON.parse(JSON.stringify(await db.DailyProduct.find({history_id:null,flag_deleted:false,product_id:{ $in: productCount.map( x => x._id )}})))
+    var machineCount = 0
+    var dayilyProductMap = []
+    if(dayilyProduct.length != 0){
+        var machineProductCount = JSON.parse(JSON.stringify(await db.MachineReport.find({flag_deleted:false,history_id:null,daily_product_id:{$in:dayilyProduct.map(x => x._id)}})))
+        // console.log(machineProductCount)
+        dayilyProductMap = dayilyProduct.map( x => {
+            x["machineProductCount"] = machineProductCount.filter( y => y.daily_product_id == x._id )
+            console.log(dayilyProductMap.map(y => y._id).includes(x._id))
+            if(dayilyProductMap.map(y => y._id).includes(x._id)==false){
+                if(x["machineProductCount"].length != 0){
+                    return x
+                }
+            }
+        }).filter( x => x != null )
+        // console.log(dayilyProductMap[0])
+    }
+
     userDetail = changeLogId.map( x => {
         var userDetailFilter = userDetail.filter( y => y._id == x.user_id ) 
         if(userDetailFilter.length != 0 ){
@@ -344,9 +362,18 @@ const orderDetailModule = async(req) => {
         x["user_name"] = userDetail.filter( y => y._id == x.change_log_id)[0]?.user_detail.name
         x["timestamp"] = await libFunction.formatDateTimeLib(x.timestamp)
         x["product"] = productCount.map( y => {
+            var productFinalCount = 0
+            var productionCount = dayilyProductMap.filter( z => z.product_id == y._id )
+            if(productionCount.length != 0){
+                var machineProductCount = productionCount.map( z => z.machineProductCount ).flat()
+                if(machineProductCount.length != 0){
+                    machineProductCount.map( z => productFinalCount = productFinalCount + z.machine_count )
+                }
+            }
             var materialFilter = productMatirial.filter( z => y._id == z.product_id )
             y["material"] = materialFilter
             y["customer_id"] = customerId
+            y["production_count"] = productFinalCount
             return y
         })
         delete x.history_id
@@ -823,6 +850,10 @@ const rejectionCountModule = async(req) => {
     return {status:true,data:[]}
 }
 
+const stockTackModule = async(req) => {
+
+}
+
 module.exports = {
     createproductModule: createproductModule,
     getProductModule: getProductModule,
@@ -841,5 +872,6 @@ module.exports = {
     dispatchOrderModule:dispatchOrderModule,
     getdispatchOrderModule:getdispatchOrderModule,
     getDailyMachineReportModule:getDailyMachineReportModule,
-    rejectionCountModule:rejectionCountModule
+    rejectionCountModule:rejectionCountModule,
+    stockTackModule:stockTackModule
 }
