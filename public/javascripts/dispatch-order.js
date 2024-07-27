@@ -87,11 +87,11 @@ function setProductList(productList) {
            <b> ${productName} </b>
         </td>
         <td style="padding: 0px !important;">
-            <input data-id="${productId}" style="border-radius: 0px !important;" class="form-control input-count" pattern="^[1-9]\d*$" type="number" name="material_qty" id="material_qty" placeholder="Quantity" />
+            <input data-id="${productId}" style="border-radius: 0px !important;" class="form-control input-count dispatch-input" pattern="^[1-9]\d*$" type="number" name="material_qty" id="material_qty" placeholder="Quantity" />
         </td>
         <td style="position: relative;padding: 0px !important;" class="align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight">
         <div class="form-check form-switch" style="font-size: 25px;position: absolute;top:0%;left: 50%;" >
-            <input data-id="${productId}" data-id=true class="form-check-input input-chack" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+            <input data-id="${productId}" data-id=true class="form-check-input input-chack dispatch-check" type="checkbox" role="switch" id="flexSwitchCheckDefault">
         </div>
         </td>
       </tr>
@@ -140,19 +140,23 @@ $(document).on('change', '.input-count,.input-chack', function(e) {
 
 
 $(document).on('click','#dispatch-order',function(e){
-    var chackDataItem = Array.from(Array.from($('.input-chack')).filter(x => x.checked)).map(element => $(element).attr('data-id'));
+    var chackDataItem = Array.from(Array.from($('.dispatch-check')).filter(x => x.checked)).map(element => $(element).attr('data-id'));
     var iDate = $('#datepicker').val()
     var driverName = ($('#driver_name').val()).trim()
     var numberPlate = ($('#number_plate').val()).trim()
     var orderId = $('#order-id').val()
     var productArray = []
     for(let i=0;i<chackDataItem.length;i++){
-        var itemCount = chackDataItem.map( x => parseInt($(`.input-count[data-id='${x}']`).val())).filter( x => isNaN(x) == false && parseInt(x) > 0 )
+        var itemCount = chackDataItem.map( x => parseInt($(`.dispatch-input[data-id='${x}']`).val())).filter( x => isNaN(x) == false && parseInt(x) > 0 )
         var materialObj = {
             "product_id":chackDataItem[i],
             "product_count":itemCount[0]
         }
         productArray.push(materialObj)
+    }
+    if(productArray.length == 0 || driverName == '' || driverName == null || driverName == undefined || numberPlate == '' || numberPlate == undefined || numberPlate == null){
+        console.log(productArray,driverName,numberPlate)
+        return
     }
     var result = {
         "iDate":iDate,
@@ -174,9 +178,11 @@ $(document).on('click','#dispatch-order',function(e){
     success: function(response) {
         console.log(response)
         if(response.status == true){
+            window.location = "/dispatch"
             showTost(true)
+        }else{
+            showTost(false)
         }
-        showTost(false)
     },
     error: function(xhr, status, error) {
         showTost(false)

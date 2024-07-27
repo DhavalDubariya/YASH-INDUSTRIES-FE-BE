@@ -80,6 +80,7 @@ function setProductList(productList) {
         // var materialLength = productList[i]
         var customerId = productList[i].customer_id
         var productId = productList[i]._id
+        var dispatchCount = productList[i].dispatch_count
         productListString = productListString +  `
 
         <tr class="hover-actions-trigger btn-reveal-trigger position-static">
@@ -97,6 +98,9 @@ function setProductList(productList) {
         </td>
         <td class="align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight"><a
           class="text-body-highlight" style="font-size: 18px; text-align: center !important ; padding: 0 25px;">${productionCount}</a>
+        </td>
+        <td class="align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight"><a
+          class="text-body-highlight" style="font-size: 18px; text-align: center !important ; padding: 0 25px;">${dispatchCount}</a>
         </td>
         <td
           class="company align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 border-end border-translucent fw-semibold text-body-highlight">

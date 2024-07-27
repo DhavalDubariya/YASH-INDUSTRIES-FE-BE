@@ -338,7 +338,7 @@ const orderDetailModule = async(req) => {
         // console.log(machineProductCount)
         dayilyProductMap = dayilyProduct.map( x => {
             x["machineProductCount"] = machineProductCount.filter( y => y.daily_product_id == x._id )
-            console.log(dayilyProductMap.map(y => y._id).includes(x._id))
+            // console.log(dayilyProductMap.map(y => y._id).includes(x._id))
             if(dayilyProductMap.map(y => y._id).includes(x._id)==false){
                 if(x["machineProductCount"].length != 0){
                     return x
@@ -347,6 +347,8 @@ const orderDetailModule = async(req) => {
         }).filter( x => x != null )
         // console.log(dayilyProductMap[0])
     }
+
+    var dispatchProduct = JSON.parse(JSON.stringify(await db.DispatchOrder.find({history_id:null,flag_deleted:false,order_id:{ $in: orderObj.map( x => x._id )}})))
 
     userDetail = changeLogId.map( x => {
         var userDetailFilter = userDetail.filter( y => y._id == x.user_id ) 
@@ -370,10 +372,23 @@ const orderDetailModule = async(req) => {
                     machineProductCount.map( z => productFinalCount = productFinalCount + z.machine_count )
                 }
             }
+
+            var dispatchProductCount = 0
+            if(dispatchProduct.length != 0){
+                var dispatchProductMap = dispatchProduct.map( z => z.products).flat()
+                if(dispatchProductMap.length != 0){
+                   var dispatchProductMapFilter = dispatchProductMap.filter( z => z.product_id == y._id )
+                   if(dispatchProductMapFilter.length != 0){
+                        dispatchProductMapFilter.map( z => dispatchProductCount = dispatchProductCount + z.product_count )
+                   }
+                }
+            } 
+
             var materialFilter = productMatirial.filter( z => y._id == z.product_id )
             y["material"] = materialFilter
             y["customer_id"] = customerId
             y["production_count"] = productFinalCount
+            y["dispatch_count"] = dispatchProductCount
             return y
         })
         delete x.history_id
