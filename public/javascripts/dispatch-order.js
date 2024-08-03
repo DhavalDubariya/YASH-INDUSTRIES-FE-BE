@@ -147,10 +147,11 @@ $(document).on('click','#dispatch-order',function(e){
     var orderId = $('#order-id').val()
     var productArray = []
     for(let i=0;i<chackDataItem.length;i++){
-        var itemCount = chackDataItem.map( x => parseInt($(`.dispatch-input[data-id='${x}']`).val())).filter( x => isNaN(x) == false && parseInt(x) > 0 )
+        var itemCount = $(`.dispatch-input[data-id='${chackDataItem[i]}']`).val() 
+        itemCount = isNaN(itemCount) == false && parseInt(itemCount) > 0 ? itemCount : 0 
         var materialObj = {
             "product_id":chackDataItem[i],
-            "product_count":itemCount[0]
+            "product_count":itemCount
         }
         productArray.push(materialObj)
     }
@@ -158,6 +159,8 @@ $(document).on('click','#dispatch-order',function(e){
         console.log(productArray,driverName,numberPlate)
         return
     }
+    console.log(productArray)
+    return productArray
     var result = {
         "iDate":iDate,
         "driver_name":driverName,

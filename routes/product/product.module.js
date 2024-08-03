@@ -660,6 +660,8 @@ const dispatchOrderModule = async(req) => {
 
 const getdispatchOrderModule = async(req) => {
     var dispatchOrder = await JSON.parse(JSON.stringify(await db.DispatchOrder.find({history_id:null,flag_deleted:false})))
+    dispatchOrder = dispatchOrder.filter(x => x._id == '66adf9eab8c93ccbfe185d2b')
+    console.log(dispatchOrder[0].products)
     var productName = await db.Product.find({ _id :{$in: dispatchOrder.map( x => x.products.map( y => y.product_id )).flat()} })
     // console.log(productName)
     var orderDetail = await JSON.parse(JSON.stringify(await db.Order.find({ _id :{$in: dispatchOrder.map( x => x.order_id)} })))
@@ -679,6 +681,7 @@ const getdispatchOrderModule = async(req) => {
         dispatchOrder[i]["company_name"] = orderDetail.filter(x => x._id == dispatchOrder[i].order_id)[0]?.company_name
         for(let j=0;j<dispatchOrder[i].products.length;j++){
             var productFilter = productName.filter( x => x._id == dispatchOrder[i].products[j].product_id)
+            console.log(dispatchOrder[i].products[j].product_count,':::::::::::::;;;')
             productFilter[0].product_qty = dispatchOrder[i].products[j].product_count
             productArray.push(productFilter[0])
         }
