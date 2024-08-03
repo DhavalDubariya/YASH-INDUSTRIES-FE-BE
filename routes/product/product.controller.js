@@ -99,6 +99,12 @@ const stockTackController = async(req,res) => {
   return res.send(result)
 }
 
+const deleteDispatchOrderController = async(req,res) => {
+  const result = await productModule.deleteDispatchOrderModule(req)
+  return res.send(result)
+}
+
+
 module.exports = {
   createproductController: createproductController,
   getProductModule: getProductModule,
@@ -118,5 +124,6 @@ module.exports = {
   getdispatchOrderController:getdispatchOrderController,
   getDailyMachineReportController:getDailyMachineReportController,
   rejectionCountController:rejectionCountController,
-  stockTackController:stockTackController
+  stockTackController:stockTackController,
+  deleteDispatchOrderController:deleteDispatchOrderController
 }

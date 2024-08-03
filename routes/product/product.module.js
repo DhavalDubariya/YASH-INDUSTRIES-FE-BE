@@ -660,7 +660,7 @@ const dispatchOrderModule = async(req) => {
 
 const getdispatchOrderModule = async(req) => {
     var dispatchOrder = await JSON.parse(JSON.stringify(await db.DispatchOrder.find({history_id:null,flag_deleted:false})))
-    dispatchOrder = dispatchOrder.filter(x => x._id == '66adf9eab8c93ccbfe185d2b')
+    // dispatchOrder = dispatchOrder.filter(x => x._id == '66adf9eab8c93ccbfe185d2b')
     console.log(dispatchOrder[0].products)
     var productName = await db.Product.find({ _id :{$in: dispatchOrder.map( x => x.products.map( y => y.product_id )).flat()} })
     // console.log(productName)
@@ -879,6 +879,18 @@ const stockTackModule = async(req) => {
 
 }
 
+const deleteDispatchOrderModule = async(req) => {
+    var dispatchId = req.query.dispatchId
+
+    if(dispatchId == undefined || dispatchId == null || dispatchId == ""){
+        return errorMessage()
+    }
+
+    await db.DispatchOrder.updateOne({_id:dispatchId},{flag_deleted:true})
+
+    return {status:true}
+}
+
 module.exports = {
     createproductModule: createproductModule,
     getProductModule: getProductModule,
@@ -898,5 +910,6 @@ module.exports = {
     getdispatchOrderModule:getdispatchOrderModule,
     getDailyMachineReportModule:getDailyMachineReportModule,
     rejectionCountModule:rejectionCountModule,
-    stockTackModule:stockTackModule
+    stockTackModule:stockTackModule,
+    deleteDispatchOrderModule:deleteDispatchOrderModule
 }

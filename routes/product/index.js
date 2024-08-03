@@ -31,4 +31,6 @@ router.post("/rejection-count",middleware.checkAccessToken,productController.rej
 
 router.post("/stock-tack",middleware.checkAccessToken,productController.stockTackController)
 
+router.delete("/dispatch-order",middleware.checkAccessToken,productController.deleteDispatchOrderController)
+
 module.exports = router
