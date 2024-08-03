@@ -102,6 +102,9 @@ function setProductList(productList) {
         <td class="align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight"><a
           class="text-body-highlight" style="font-size: 18px; text-align: center !important ; padding: 0 25px;">${dispatchCount}</a>
         </td>
+        <td class="align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight"><a
+          class="text-body-highlight" style="font-size: 18px; text-align: center !important ; padding: 0 25px;">${(productionCount-dispatchCount)}</a>
+        </td>
         <td
           class="company align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 border-end border-translucent fw-semibold text-body-highlight">
           <b>

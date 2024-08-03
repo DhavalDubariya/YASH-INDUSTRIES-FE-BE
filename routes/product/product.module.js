@@ -336,11 +336,15 @@ const orderDetailModule = async(req) => {
     if(dayilyProduct.length != 0){
         var machineProductCount = JSON.parse(JSON.stringify(await db.MachineReport.find({flag_deleted:false,history_id:null,daily_product_id:{$in:dayilyProduct.map(x => x._id)}})))
         // console.log(machineProductCount)
+        var rejectionProduct = JSON.parse(JSON.stringify(await db.RejectionReport.find({history_id:null,flag_deleted:false,daily_product_id:{$in:dayilyProduct.map(x => x._id)}})))
+
         dayilyProductMap = dayilyProduct.map( x => {
             x["machineProductCount"] = machineProductCount.filter( y => y.daily_product_id == x._id )
             // console.log(dayilyProductMap.map(y => y._id).includes(x._id))
+            x["rejectionProduct"] = rejectionProduct.filter( y => y.daily_product_id == x._id )
             if(dayilyProductMap.map(y => y._id).includes(x._id)==false){
                 if(x["machineProductCount"].length != 0){
+                    x["machineProductCount"][0]["rejectionProduct"] = x["rejectionProduct"]
                     return x
                 }
             }
@@ -366,9 +370,11 @@ const orderDetailModule = async(req) => {
         x["product"] = productCount.map( y => {
             var productFinalCount = 0
             var productionCount = dayilyProductMap.filter( z => z.product_id == y._id )
+            var rejectionCount = 0
             if(productionCount.length != 0){
                 var machineProductCount = productionCount.map( z => z.machineProductCount ).flat()
                 if(machineProductCount.length != 0){
+                    machineProductCount.map( z => z.rejectionProduct ).flat().map( z => z?.rejection_count ).filter( z => z != undefined ).map( z => rejectionCount = rejectionCount + z )
                     machineProductCount.map( z => productFinalCount = productFinalCount + z.machine_count )
                 }
             }
@@ -383,12 +389,13 @@ const orderDetailModule = async(req) => {
                    }
                 }
             } 
-
+            console.log(productFinalCount,rejectionCount,'::::::::::::::::::::')
             var materialFilter = productMatirial.filter( z => y._id == z.product_id )
             y["material"] = materialFilter
             y["customer_id"] = customerId
-            y["production_count"] = productFinalCount
+            y["production_count"] = (productFinalCount-rejectionCount)
             y["dispatch_count"] = dispatchProductCount
+            y["rejection_count"] = rejectionCount
             return y
         })
         delete x.history_id
