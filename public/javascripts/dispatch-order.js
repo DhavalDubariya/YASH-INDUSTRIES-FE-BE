@@ -160,7 +160,7 @@ $(document).on('click','#dispatch-order',function(e){
         return
     }
     console.log(productArray)
-    return productArray
+    // return productArray
     var result = {
         "iDate":iDate,
         "driver_name":driverName,
