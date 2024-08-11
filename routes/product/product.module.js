@@ -732,9 +732,9 @@ const getDailyMachineReportModule = async(req) => {
                 // console.log(machineFilter,':::::::::::::::::')
                 if(machineFilter.length != 0){
                     if(machineFilter[0].machine_count == 0 && (machineFilter[0].reason == null || machineFilter[0].reason.trim() == '' || machineFilter[0].worker_id == null)){
-                        flagInsert = false
+                        // flagInsert = false
                     }else{
-                        flagInsert = true
+                        flagInsert.push(true)
                     }
                     var machineReportObj = {
                         "machine_count": machineFilter[0].machine_count,
@@ -747,7 +747,7 @@ const getDailyMachineReportModule = async(req) => {
                 }
                 dayilyProductObj.machine_time.push(machineTimeObj)
             }
-            if(flagInsert == true){
+            if(flagInsert.length != 0){
                 dayilyProductObj.machine_time.sort( (x,y) => x.machine_time_seq - y.machine_time_seq )
                 dataObj.daily_product.push(dayilyProductObj)
             }
