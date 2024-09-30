@@ -891,6 +891,26 @@ const deleteDispatchOrderModule = async(req) => {
     return {status:true}
 }
 
+const unitModule = async(req) => {
+    var iDate = req.body.iDate
+    var unitCount = req.body.unit_count
+    var machineId =  req.body.machine_id
+    if(iDate == undefined || iDate == null || iDate == "" || unitCount == undefined || unitCount == null || unitCount == "" || machineId == undefined || machineId == null || machineId == ""){
+        return errorMessage()
+    }
+
+    var unitModule = await db.Unit.findOne({iDate:iDate})
+
+    if(unitModule == null){
+        console.log('::::::::::::::')
+        await db.Unit.create(req.body)
+    }else{
+        console.log('--------------')
+        await db.Unit.updateOne({_id:unitModule._id},req.body)
+    }
+    return {status:true,data:"Data updated successfully."}
+}
+
 module.exports = {
     createproductModule: createproductModule,
     getProductModule: getProductModule,
@@ -911,5 +931,6 @@ module.exports = {
     getDailyMachineReportModule:getDailyMachineReportModule,
     rejectionCountModule:rejectionCountModule,
     stockTackModule:stockTackModule,
-    deleteDispatchOrderModule:deleteDispatchOrderModule
+    deleteDispatchOrderModule:deleteDispatchOrderModule,
+    unitModule:unitModule
 }

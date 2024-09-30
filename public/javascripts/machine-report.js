@@ -390,3 +390,37 @@ function rejectionCount () {
         }
     });
 }
+
+$('#unit-count').change(function(e){
+    var iDate =  $('#datepicker').val()
+    var unitCount =  $('#unit-count').val()
+    var machineId = $('#select-machine').find('option:selected').attr('id')
+    $.ajax({
+        url: `api/product/unit`,
+        type: "POST",
+        data: JSON.stringify({"iDate":iDate,"unit_count":unitCount,"machine_id":machineId}),
+        contentType: "application/json",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': sessionStorage.getItem("yi-ssid")
+        }, // Replace with your data
+        success: function(response) {
+            if(response.status == true){
+                console.log(response, 'Dhaval')
+                // timeData = response.data
+                // worker = response.worker
+            }
+            if(response.status == false){   
+                showTost(false)
+            }
+        },
+        error: function(xhr, status, error) {
+            // playSound(false)
+            showTost(false)
+
+        },
+        complete: function() {
+            
+        }
+    });
+})

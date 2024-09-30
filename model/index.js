@@ -12,6 +12,7 @@ const MachineReport = require('./machineReport')
 const GenricMachine = require('./genric-machine')
 const DispatchOrder = require('./dispatchOrder')
 const RejectionReport = require('./rejection')
+const Unit = require('./unit')
 module.exports = {
     User:User,
     UserAccessToken:UserAccessToken,
@@ -26,5 +27,6 @@ module.exports = {
     MachineReport: MachineReport,
     GenricMachine:GenricMachine,
     DispatchOrder:DispatchOrder,
-    RejectionReport:RejectionReport
+    RejectionReport:RejectionReport,
+    Unit:Unit
 }
