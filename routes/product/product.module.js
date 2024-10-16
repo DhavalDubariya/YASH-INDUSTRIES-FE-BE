@@ -633,7 +633,8 @@ const getMachineDataModule = async(req) => {
     })
     var getWorker = JSON.parse(JSON.stringify(await db.Worker.find({flag_deleted:false,history_id:null})))
     var rejectionReport = await JSON.parse(JSON.stringify(await db.RejectionReport.find({"iDate":new Date(req.body.iDate),"daily_product_id":new ObjectId(req.body.daily_product_id),"machine_id":new ObjectId(req.body.machine_id)})))
-    return {status:true,data:result,worker:getWorker,rejection:rejectionReport}
+    var unitCount = await JSON.parse(JSON.stringify(await db.Unit.find({"iDate":new Date(req.body.iDate),"machine_id":new ObjectId(req.body.machine_id)})))
+    return {status:true,data:result,worker:getWorker,rejection:rejectionReport,unit_count:unitCount}
     // return {status:true,data:result}
 }
 
@@ -703,6 +704,7 @@ const getDailyMachineReportModule = async(req) => {
         // console.log(product)
     var rejection = await JSON.parse(JSON.stringify(await db.RejectionReport.find({flag_deleted:false,history_id:null,"iDate":new Date(iDate)})))
     // console.log(machineReport)
+    var machineUnit = await JSON.parse(JSON.stringify(await db.Unit.find({flag_deleted:false})))
     var dataArray = []
     for(let i=0;i<machine.length;i++){
         var dataObj =  {

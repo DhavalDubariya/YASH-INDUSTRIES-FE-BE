@@ -22,7 +22,7 @@ $('#datepicker').change(function(){
     getCustomerOrderProduct(date)
 })
 
-
+var machineData
 async function getMachine() {
     $.ajax({
         url: `api/product/genric-machine`,
@@ -85,6 +85,7 @@ function setCustomeOrderProduct(copData) {
 }
 
 function setMachine(response) {
+    machineData = response
     var machineString = ``
     for(let i=0;i<response.length;i++){
         console.log(response[i],':::::::::::::')
@@ -229,7 +230,7 @@ function getMachineData () {
                 console.log(response, 'Dhaval')
                 // timeData = response.data
                 // worker = response.worker
-                getDailyTimeData(response.data,response.rejection)
+                getDailyTimeData(response.data,response.rejection,response.unit_count)
             }
             if(response.status == false){
                 showTost(false)
@@ -246,7 +247,7 @@ function getMachineData () {
     });
 }
 
-function getDailyTimeData(macineTimeData,rejection) {
+function getDailyTimeData(macineTimeData,rejection,unitCount) {
     console.log(macineTimeData,'TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT')
     var dayNightSwitch = $('#flexSwitchCheckDefault').attr('data-id') 
     var daySwitch = dayNightSwitch == "true" ? true : false
@@ -311,7 +312,11 @@ function getDailyTimeData(macineTimeData,rejection) {
     console.log('value change :::::::::::::::::::::::::::')
     var rejectionCount = rejection.filter( x => x.flag_day_shift == daySwitch )
     rejectionCount = rejectionCount.length == 0 ? 0 : rejectionCount[0].rejection_count
+    var machine_id = $('#select-machine').find('option:selected').attr('id')
+    var unitCount = unitCount.filter( x => x.machine_id == machine_id)
+    unitCount = unitCount.length == 0 ? 0 : unitCount[0].unit_count
     $('#rejection-count').val(rejectionCount)
+    $('#unit-count').val(unitCount)
     // console.log(macineTimeData,']]]]]]]]]]]]]]]]]]]]]]]]]]',rejectionCount)
     $('#product-cop-list').empty()
     $('#product-cop-list').append(timeString)

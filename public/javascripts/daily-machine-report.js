@@ -21,6 +21,9 @@ $('#datepicker').change(async function(){
 
 
 async function getCustomerOrderProduct(date) {
+    if(window.location.href.includes('daily-machine-print') == true){
+        date = window.location.href.split('iDate=')[1]
+    }
     $.ajax({
         url: `api/product/daily-machine-report?iDate=${date}`,
         type: "GET",
