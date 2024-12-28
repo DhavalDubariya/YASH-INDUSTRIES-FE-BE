@@ -32,5 +32,7 @@ router.post("/rejection-count",middleware.checkAccessToken,productController.rej
 router.post("/stock-tack",middleware.checkAccessToken,productController.stockTackController)
 
 router.delete("/dispatch-order",middleware.checkAccessToken,productController.deleteDispatchOrderController)
-router.post("/unit",middleware.checkAccessToken,productController.unitController)
+router.post("/unit", middleware.checkAccessToken, productController.unitController)
+
+router.get("/order-dispatch",middleware.checkAccessToken, productController.orderDispatchController)
 module.exports = router

@@ -913,6 +913,33 @@ const unitModule = async(req) => {
     return {status:true,data:"Data updated successfully."}
 }
 
+const orderDispatchModule = async (req) => { 
+    const customer = JSON.parse(JSON.stringify(await db.Customer.find({ history_id: null, flag_deleted: false })))
+    
+    if (customer.length == 0) { 
+        return errorMessage()
+    }
+
+    var orderDetail = JSON.parse(JSON.stringify(await db.Order.find({ history_id: null, flag_deleted: false })))
+    
+    if (orderDetail.length == 0) { 
+        return errorMessage()
+    }
+
+    var productCount = JSON.parse(JSON.stringify(await db.Product.find({ history_id: null, flag_deleted: false, order_id: { $in: orderDetail.map(x => x._id) } })))
+    
+    var dataArray = []
+    for (let i = 0; i < orderDetail.length;i++) { 
+        orderDetail[i]["customer_detail"] = customer.filter(x => x._id == orderDetail[i].customer_id)[0]
+        orderDetail[i]["product_count"] = productCount.filter(x => x.order_id == orderDetail[i]._id).length
+        if (orderDetail[i]["customer_detail"] != undefined) {
+            dataArray.push(orderDetail[i])
+        }
+    }
+
+    return {status:true,data:dataArray}
+}
+
 module.exports = {
     createproductModule: createproductModule,
     getProductModule: getProductModule,
@@ -934,5 +961,6 @@ module.exports = {
     rejectionCountModule:rejectionCountModule,
     stockTackModule:stockTackModule,
     deleteDispatchOrderModule:deleteDispatchOrderModule,
-    unitModule:unitModule
+    unitModule: unitModule,
+    orderDispatchModule:orderDispatchModule
 }

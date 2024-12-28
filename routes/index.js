@@ -59,6 +59,10 @@ router.get('/daily-machine-print',function(req,res,next){
   res.render('daily-machine-report-2',{ title: 'Daily Machine Report' })
 })
 
+router.get('/order-dispatch',function(req,res,next){
+  res.render('order-dispatch',{ title: 'Daily Machine Report' })
+})
+
 router.get('/test',function(req,res,next){
   res.render('test',{ title: 'Daily Report' })
 })
