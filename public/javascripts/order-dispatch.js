@@ -59,7 +59,7 @@ function setOrderDetail(data) {
             </td>
         <td
             class="company align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 border-end border-translucent fw-semibold text-body-highlight">
-                <a target="_blank" href="/order-detail?customerId=${customerId}&orderId=${orderId}" class="btn btn-phoenix-success me-4 material-button">
+                <a  href="/order-detail?customerId=${customerId}&orderId=${orderId}" class="btn btn-phoenix-success me-4 material-button">
                     DISPATCH
                 </a>
             </td>
