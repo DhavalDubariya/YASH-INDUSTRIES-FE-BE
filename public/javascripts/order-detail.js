@@ -30,9 +30,15 @@ $(document).ready(async function() {
     });
 
     $('.material-button').click(function(e){
-        var productId = e.target.getAttribute("data-id")
+      var productId = e.target.getAttribute("data-id")
+      console.log(globalData,'::::::::::: globalData')
         var globalDataFilter = globalData.filter( x => x._id == productId)[0]?.material
         console.log(globalDataFilter)
+        var productQty = globalData.filter(x => x._id == productId)[0]?.product_qty
+        var runnerQty = globalData.filter(x => x._id == productId)[0]?.runner
+        var productionCount = globalData.filter(x => x._id == productId)[0]?.production_count
+        var totalQty = (((productQty + runnerQty) * productionCount)/1000)
+      
         var materialString = ``
         for(let i=0;i<globalDataFilter.length;i++){
             var materialName = globalDataFilter[i].material_name
@@ -52,6 +58,10 @@ $(document).ready(async function() {
                 <td
                     class="company align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 border-end border-translucent fw-semibold text-body-highlight" style="font-size: 18px; text-align: center !important ; padding: 0 25px;">
                     <b>${materialQty}</b>
+                </td>
+                <td
+                    class="company align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 border-end border-translucent fw-semibold text-body-highlight" style="font-size: 18px; text-align: center !important ; padding: 0 25px;">
+                    <b>${totalQty}</b>
                 </td>
             </tr>
             `

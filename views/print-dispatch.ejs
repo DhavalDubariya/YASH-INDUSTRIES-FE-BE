@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Invoice Template</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js" ></script>
 <style>
 body {
     font-family: 'Arial', sans-serif;
@@ -125,7 +126,7 @@ header h2, header p, footer p {
     // Populate header section
     $('#invoice header h2').text("M/s.: " + invoiceData.company_name);
     $('#invoice header table tr:eq(0) td:eq(2)').html("<b>#"+invoiceData.order_no+"</b>");
-    $('#invoice header table tr:eq(1) td:eq(2)').html("<b>"+(new Date(invoiceData.iDate)).toLocaleDateString().split('/').reverse().join('-')+"</b>");
+    $('#invoice header table tr:eq(1) td:eq(2)').html("<b>"+(moment(invoiceData.iDate).format('DD MMM YYYY'))+"</b>");
 
     // Populate product section
     var productsTable = $('#mainTable tbody');
