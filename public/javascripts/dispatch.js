@@ -32,7 +32,7 @@ function setDispatch(copData) {
         <tr class="hover-actions-trigger btn-reveal-trigger position-static">
             <td class="align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent">${copData[i].customer_name}</td>
             <td class="align-middle white-space-nowrap fw-semibold ps-4 border-end border-translucent"># ${copData[i].order_no}</td>
-            <td class="align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight">${(copData[i].iDate.split('T')[0])}</td>
+            <td class="align-middle white-space-nowrap ps-4 border-end border-translucent fw-semibold text-body-highlight">${(moment(copData[i].iDate).format('DD MMM YYYY'))}</td>
             <td class="company align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 border-end border-translucent fw-semibold text-body-highlight">
             <a target="_blank" href="/print-dispatch?dispatchId=${copData[i]._id}" class="btn btn-phoenix-success me-4 material-button" data-id="${copData[i]._id}">PRINT</a>
             <a target="_blank" onclick="deletePrint('${copData[i]._id}')" class="btn btn-phoenix-danger me-4 material-button">DELETE</a>
