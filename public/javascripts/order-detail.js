@@ -61,7 +61,7 @@ $(document).ready(async function() {
                 </td>
                 <td
                     class="company align-middle white-space-nowrap text-body-tertiary text-opacity-85 ps-4 border-end border-translucent fw-semibold text-body-highlight" style="font-size: 18px; text-align: center !important ; padding: 0 25px;">
-                    <b>${totalQty?.toFixed(2)}</b>
+                    <b>${materialQty - totalQty?.toFixed(2)}</b>
                 </td>
             </tr>
             `
