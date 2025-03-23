@@ -689,6 +689,7 @@ const getdispatchOrderModule = async(req) => {
         dispatchOrder[i]["products"] = productArray
         dataArray.push(dispatchOrder[i])
     }
+    dataArray = dataArray.sort((x,y) => ((new Date(y.timestamp).getTime()) - (new Date(x.timestamp).getTime())) )
     return {status:true,data:dataArray}
 }
 
