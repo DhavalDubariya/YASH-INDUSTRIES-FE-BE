@@ -141,20 +141,35 @@ header h2, header p, footer p {
             '</tr>');
       sum = sum + product.product_qty
     });
+    if(invoiceData.products.length < 5){
+        for(let i=0;i<(5 - invoiceData.products.length);i++){
+            productsTable.append(`<tr>
+                <td></td>
+                <td>-</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>`)
+        }
+    }
     productsTable.append(`<tr>
                 <td></td>
                 <td><b>Total</b></td>
                 <td><b>${sum}</b></td>
                 <td></td>
                 <td></td>
-    </tr>`)
+    </tr>
+    `)
     // Populate footer section
-    $('table:last tr:eq(0) td:eq(2)').text(invoiceData.timestamp.split('T')[1].split('Z')[0].split(':').slice(0,2).join(':'));
+    $('table:last tr:eq(0) td:eq(2)').text(moment(new Date(new Date(invoiceData.timestamp).getTime())).format('hh:mm A'));
     $('table:last tr:eq(1) td:eq(2)').text(invoiceData.driver_name);
     $('table:last tr:eq(2) td:eq(2)').text(invoiceData.number_plate);
     $('table:last tr:eq(3) td:eq(2)').text("Yash Dubariya");
 });
-
+    setTimeout(()=>{
+        $("body").append($('#invoice').clone(true))
+    },4000)
+    
   </script>
 </body>
 </html>

@@ -704,12 +704,40 @@ const getDailyMachineReportModule = async(req) => {
         // console.log(product)
     var rejection = await JSON.parse(JSON.stringify(await db.RejectionReport.find({flag_deleted:false,history_id:null,"iDate":new Date(iDate)})))
     // console.log(machineReport)
-    var machineUnit = await JSON.parse(JSON.stringify(await db.Unit.find({flag_deleted:false})))
+    var machineUnit = await JSON.parse(JSON.stringify(await db.Unit.find({flag_deleted:false,unit_count : {$gt:0},iDate:{$lte:new Date(iDate)}})))
+
+
+    // Group data by machine_id
+    const groupedData = {};
+    machineUnit.forEach(entry => {
+        if (!groupedData[entry.machine_id]) {
+            groupedData[entry.machine_id] = [];
+        }
+        groupedData[entry.machine_id].push(entry);
+    });
+
+    // Process each machine_id to get the last two dates and calculate the difference
+    const machineUnitRresult = [];
+    for (const machine_id in groupedData) {
+        groupedData[machine_id].sort((a, b) => new Date(b.iDate) - new Date(a.iDate));
+        if (groupedData[machine_id].length >= 2) {
+            const latest = groupedData[machine_id][0];
+            const secondLatest = groupedData[machine_id][1];
+            machineUnitRresult.push({
+                machine_id: machine_id,
+                diff_unit_count: latest.unit_count - secondLatest.unit_count
+            });
+        }
+    }
+
+
+    // return machineUnitRresult
     var dataArray = []
     for(let i=0;i<machine.length;i++){
         var dataObj =  {
             "machine_id":machine[i]._id,
             "machine_name":machine[i].machine_name,
+            "unit_diff":machineUnitRresult.filter( x => x.machine_id == machine[i]._id)[0]?.diff_unit_count,
             "daily_product":[]
         }
         for(let j=0;j<getDailyProduct.length;j++){
@@ -768,6 +796,7 @@ const getDailyMachineReportModule = async(req) => {
           console.log(data[i].daily_product[j].product_name)
           tableDataStrucher = tableDataStrucher.replaceAll('{{machinName}}',data[i].machine_name)
           tableDataStrucher = tableDataStrucher.replaceAll('{{productName}}',data[i].daily_product[j].product_name)
+          tableDataStrucher = tableDataStrucher.replaceAll('{{machinUnit}}',data[i]?.unit_diff)
 
           var machineTime = data[i].daily_product[j].machine_time.filter( x => x.flag_day_shift == true )
           var rejectionCount = data[i].daily_product[j].rejection.filter( x => x.flag_day_shift == true )
